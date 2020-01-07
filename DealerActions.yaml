@@ -1,0 +1,234 @@
+annot:
+  author: Sanjay Mittal
+  name: DealerActions
+  start date: Jan. 11, 2019
+  type: ConfigKB
+  desc: "Models for dealer actions. Thse are part of auto bots"
+  topModel:
+models:
+- model: 'Search Inventory'
+  askUser:
+    welcomeMsg: "Search Inventory function will be available soon"
+  constraints:
+  - constr: "When model is activated"
+    type: rule
+    if: (isAssignedCS(para _active))
+    then: (assert(tellUser "Search Inventory function will be available soon"))
+
+- model: "Trade-In Value"
+  parameters:
+    - para: Year
+      dataType: int
+      domain: (1992,2019)
+      activityStatus: required
+      askUser:
+        msg: "Please enter the year your verhicle was built"
+
+    - para: Make
+      activityStatus: required
+      askUser:
+        msg: "What is the make (manufacturer) of your vehicle?"
+
+    - para: Model
+      activityStatus: required
+      askUser:
+        msg: "What is the model?"
+
+    - para: Mileage
+      dataType: int
+      domain: (0,400000)
+      activityStatus: required
+      askUser:
+        msg: "How many miles on the odometer?"
+
+    - para: ZipCode
+      dataType: int
+      activityStatus: required
+      askUser:
+        msg: "What is your zip code?"
+
+    - para: Condition
+      domain: [Fair, Good, 'Very Good','Excellent' ]
+      activityStatus: required
+      askUser:
+        msg: "What is the condition of your vehicle?"
+
+  constraints:
+    - constr: "asked condition, print msg"
+      type: rule
+      if: (isAsked(para Condition))
+      then: (assert(tellUser "We can give you an estimated trade-in value after KBB Integration is done"))
+
+
+- model: 'Find Dealership'
+  parameters:
+  - para: CarManufacturer
+    domain: [Acura, Audi, BMW, Ford, Honda, Lexus, 'Mercedes Benz', Tesla, Toyota]
+    activityStatus: required
+    askUser:
+      msg: "Please select the car company you are interested in"
+
+  - para: ZipCode
+    dataType: int
+    activityStatus: required
+    askUser:
+      msg: "Please enter your zip code"
+
+  constraints:
+  - constr: "Once zip is known"
+    type: rule
+    if: (isAssigned(para ZipCode))
+    then: (assert(tellUser "Dealer lookup not implemented yet"))
+
+- model: 'Contact Sales'
+  parameters:
+#  - para: CarModel
+#    desc: 'This should be passed from the calling model'
+  - para: BuyOrLease
+    domain: ['Buy New Car', 'Lease New Car', 'Buy Pre-Owned', 'Not Decided']
+    activityStatus: required
+    askUser:
+      msg: "Are you looking to buy or lease"
+
+  - para: TimeFrame
+    domain: ['Very Soon', 'Within a month', 'Within 3 months']
+    activityStatus: required
+    askUser:
+      msg: "How soon will you decide to buy your car"
+
+  - para: SalesAction
+    domain: [(model 'Talk To Sales'), (model 'Call Me'), (model 'Add to Mailing List')]
+    activityStatus: required
+    askUser:
+      msg: "Please tell us how our sales dept. should respond to your needs"
+
+  constraints:
+  - constr: "Welcome msg"
+    type: rule
+    if: (isAssignedCS(para _active))
+    then: (assert(tellUser "Please answer a few questions about your needs so we can serve you best"))
+  - constr: 'Buy very soon --> have sales call me'
+    type: rule
+    if: (eq(para TimeFrame) 'Very Soon')
+    then: (assert(eq(para SalesAction) (model 'Call Me')))
+
+- model: 'Talk To Sales'
+  constraints:
+  - constr: "Welcome msg"
+    type: rule
+    if: (isAssignedCS(para _active))
+    then: (assert(tellUser "We will connect you with a sales person shortly."))
+
+- model: 'Call Me'
+  parameters:
+  - para: Name
+    dataType: symbolic
+    activityStatus: required
+    askUser:
+      msg: "Please tell us your name"
+    nlp:
+      extractor:
+        name: namex
+
+  - para: PhoneNumber
+    dataType: symbolic
+    activityStatus: required
+    askUser:
+      msg: "Please tell us a number to call you at"
+    nlp:
+      extractor:
+        name: phone_number_x
+
+  - para: TimeToCall
+    dataType: arbit
+    activityStatus: required
+    askUser:
+      msg: "Please tell us a a good time to call you"
+
+  constraints:
+  - constr: "Welcome Msg"
+    type: rule
+    if: (isAssignedCS(para _active))
+    then: (assert(tellUser "Please give us the following information and we will be haopy to schedule a call."))
+  - constr: "Action Msg"
+    type: rule
+    if: (isAssignedCS(para TimeToCall))
+    then: (assert(tellUserFormat "One of our sales specialists will call you at {} during {}" (para PhoneNumber) (para TimeToCall)))
+
+- model: 'Sales Appointment'
+  baseModel: 'Call Me'
+
+- model: 'Add to Mailing List'
+  parameters:
+  - para: Name
+    dataType: symbolic
+    activityStatus: required
+    askUser:
+      msg: "Please tell us your name"
+    nlp:
+      extractor:
+        name: namex
+
+  - para: EmailAddress
+    dataType: symbolic
+    activityStatus: required
+    askUser:
+      msg: "Please tell us your email address"
+    nlp:
+      extractor:
+        name: emailx
+
+  constraints:
+  - constr: "Action Msg"
+    type: rule
+    if: (isAssigned(para EmailAddress))
+    then: (assert(tellUserFormat "We will add you to our mailing list and keep you informed of special offers" ))
+
+- model: 'Contact Service'
+  parameters:
+  - para: ServiceAction
+    domain: ['Recall Notice', 'Scheduled Maintenance', 'Some Malfunction']
+    activityStatus: required
+    askUser:
+      msg: "Please tell us about your service needs"
+
+  - para: PickupOrRental
+    domain: ['Need Loaner', 'Need pickup from home', 'Own Transportation']
+    activityStatus: required
+    askUser:
+      msg: "Do you need a loaner or help with pickup from your place"
+
+  constraints:
+  - constr: "Service appt w/o loaner car"
+    type: rule
+    if:
+      - and: (isAssigned(para PickupOrRental))
+      - and: (neq (para PickupOrRental) 'Need Loaner')
+    then: (assert(tellUser "Our next available service appointment will be tomorrow."))
+
+  - constr: "Service appt w/ loaner car"
+    type: rule
+    if:
+      - and: (isAssigned(para PickupOrRental))
+      - and: (eq (para PickupOrRental) 'Need Loaner')
+    then: (assert(tellUser "Our next available service appointment will be in 3 days."))
+
+- model: 'Schedule Test Drive'
+  parameters:
+  - para: CarModel
+    desc: 'This is selected at the main model and passed here'
+    activityStatus: required
+
+  constraints:
+  - constr: 'Welcome msg'
+    type: rule
+    if: (isAssigned (para _active))
+    then: (assert(tellUserFormat "Congratulations on selecting {}. We will be happy to schedule a test drive." (para CarModel:_key)))
+
+- model: 'Contact Parts'
+  constraints:
+  - constr: "Default Contact Parts Msg"
+    type: rule
+    if: (isAssignedCS(para _active))
+    then: (assert(tellUser "You can call our parts dept at +15105551212. We will soon have online assistance too. "))
+

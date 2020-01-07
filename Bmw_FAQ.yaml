@@ -1,0 +1,333 @@
+annot:
+  author: Priti Mittal
+  name: Bmw_FAQ.yaml
+  start date: June 29, 2018
+  type: KB
+  minCF: 0.6
+  noMatchAns: |
+              Sorry, I dont have a good answer for your question.
+              Please try rephrasing or try with different words.
+  stem: True
+  desc: FAQ about Bmw cars
+groups:
+- group:
+  - q: Is BMW European or american
+  - q: bmw european
+  - q: BMW
+  - a: |
+      Yes it is beautifully designed Eropean German car. Custom colors. Exclusive materials. Personalized details.
+       Anything is possible in the world of BMW Individual. A virtually limitless range of options,
+        from one-of-a-kind paint finishes to bespoke interior materials, lets you create a custom vehicle that’s
+         as unique as you. Or grab attention with an exclusive Limited Edition BMW. The choice is all yours.
+
+- group:
+  - q: what is shimmering range color?
+  - q: Shimmering means?
+  - q: what is shimmering
+  - a: |
+       Infinite color nuances define and differentiate BMW Individual paint finishes. The impressive
+       options include a ready-made range of eleven beautiful tones, from red-flecked Ruby Black Metallic
+       to color-shifting Tanzanite Blue Metallic. Every color is the perfect complement to an expression of
+        individuality.
+
+
+- group:
+  - q: what do you mean by Matte or Metallic
+  - q: Matte
+  - q: Metallic
+  - a: |
+       The right paint finish can boldly emphasize a powerful design, or radiate a special brilliance.
+        Matte finishes add striking definition to the boldly sculpted surfaces of a BMW,
+        while the inimitable sheen of a Metallic paint refracts natural light into a lasting impression.
+
+- group:
+  - q: what are fine touches in bmw
+  - q:
+  - a: |
+      Intricate, delicate inlays. Dazzling, embedded diamonds. The finest wood. BMW Individual interior trims
+      are made from the world’s most precious materials and provide an artist’s decorative touch.
+      Choose a material with special personal significance – or one that will take your passengers’ breath away.
+
+- group:
+  - q: What are limited editions in bmw?
+  - q: bmw limited edition?
+  - a: |
+       BMW Limited Edition vehicles are rare gems in an exclusive collection. This is where a vision becomes
+        reality.
+
+
+- group:
+  - q: What is M series?
+  - q: What is m models
+  - a: |
+      Packed with power normally reserved for the track, M generates performance unlike anything else.
+      Make yours a one of a kind with the custom exterior paints, interior elements,
+       and trim materials of BMW Individual.
+
+
+- group:
+  - q: what is m2
+  - a: Delivering a perfected formula of balance, steering, and power-to-weight ratio, the M2 Coupe is a true driver's car.
+
+- group:
+  - q: what is m3
+  - a: |
+        As one of the most beloved M vehicles, the iconic M3 Sedan is constantly
+        raising the bar for high-performance vehicles.
+
+- group:
+  - q: sports activity vehicle
+  - a: |
+      A Sports Activity Vehicle® should do more than just get you there. It should thrill you at every turn.
+      You should feel the power of 228 horses barrelling down the highway. Rush from 0–60 in as quick as 6.3
+      seconds. Take control with an 8-speed STEPTRONIC Automatic Transmission that provides the
+      optimal balance of acceleration and fuel consumption. Because that's just how BMW engineers a
+      Sports Activity Vehicle.
+
+- group:
+  - q: BMW x1 series
+  - a: |
+      The latest BMW X1 builds on the tradition of safety started by its forebears. And the optional Driving
+       Assistance Package, with its automated safety features and Automated high beams keep you worry-free
+       wherever the road takes you.
+
+- group:
+  - q:  Led headlights
+  - a: |
+      LED Headlights with Cornering Lights  let you see beyond what's in front of you. Cornering
+      Lights offer side illumination at low speeds, making it easier to see into corners, while long-lasting
+      LED headlamps provide bright light with low-energy consumption.
+
+- group:
+  - q: What is raised power seats and enhanced uphostery
+  - a: |
+      Enhanced upholstery and raised Power Front Seats  put you comfortably in control. Enjoy the feel of
+      standard SensaTec upholstery – or add optional Sport Seats and Dakota Leather in a range of shades to
+      make every trip more pleasurable.
+
+- group:
+  - q: How do I find my Vehicle Identification Number (VIN) or Production Number?
+  - a: |
+      Your VIN is located on the driver's side dashboard where the windshield glass meets the hood.
+      To obtain the Production Number, all you have to do is contact the BMW center where you made
+      your purchase.
+
+- group:
+  - q: How do I track my new BMW?
+  - a: |
+      You can track your vehicle online at bmwusa.com. First, set up a BMW Owner account using your new
+      BMW’s production number to verify your ownership. After your account is set up, log in and select
+       “Track your BMW” from the navigation. You will be able to see where it is in the process.
+
+- group:
+  - q: What other information is available in My BMW?
+  - a: |
+      The My BMW section contains model-specific vehicle information for any BMWs you may own, including
+      suggested maintenance schedules (if available), owner’s manuals and an interactive video
+      gallery of vehicle features. You can also find insurance information and see our tips for lease end.
+
+
+- group:
+  - q: What is Integral Active Steering
+  - a: |
+        Integral Active Steering enhances driving dynamics by adding rear-wheel Active Steering. At high speeds,
+         the rear wheels steer in the same direction as the front, increasing stability for the driver and
+         riding comfort for passengers. At low speeds, rear wheel steering is reversed, reducing the turning
+          circle and dramatically improving maneuverability.
+
+
+- group:
+  - q: What is weight distribution?
+  - a: |
+     Every BMW is designed with near-perfect 50/50 weight distribution. This balanced chassis stays
+     stable and planted in any situation – and enables you to maneuver quickly and confidently
+     in emergency situations.
+
+- group:
+  - q: What is driving assistance plus package?
+  - q: driving assistance
+  - a: |
+      This suite of features includes Active Lane Keeping Assistant and Traffic Jam Assistant – allowing
+       for up to 50 seconds of hands-off, worry-free driving – while Active Cruise Control with Stop & Go
+        keeps you moving in highway conditions.
+
+
+
+- group:
+  - q:  BMW 5 Series features?
+  - q:  bmw 5
+  - a: |
+       The BMW 5 Series features technology that’s easy to use and keeps you connected. Intelligent Voice
+        Control understands natural speech patterns to fulfill any command, and optional Gesture Control
+         uses simple hand motions to control navigation, communication and entertainment.
+
+- group:
+  - q: M4 Convertible Edition 30 Jahre
+  - q:  M4 limited edition
+  - a:  |
+      For three decades, BMW M convertibles have defined the exciting feeling of freedom. The highly
+      exclusive M4 Convertible Edition 30 Jahre is a tribute to performance and pleasure that’s sure
+      to fascinate and inspire.
+
+
+- group:
+  - q: M2 Coupe Black Shadow Edition
+  - q: M2 limited edition
+  - a: |
+      This limited-production BMW M2 Coupe Black Shadow Edition delivers an M unlike any other.
+      Boasting exclusive black features and the relentless M performance that inspired a cult following
+       decades ago.
+
+- group:
+  - q: M3 CS
+  - q: M3 limited addition
+  - a: |
+      The all-new BMW M3 CS takes on the mantle of the most powerful M3 ever built. And with a limited
+      number of vehicles coming to the US, it’s one of the most exclusive M vehicles you’ll see on
+      the market or on the road.
+
+- group:
+  - q: M4 CS
+  - q: M4 limited addition
+  - a: |
+      It’s not every day that you encounter a vehicle perfectly suited for road and track, that combines
+      high-octane thrills with sporty drivability and leaves you feeling breathless after every encounter.
+      Then again, it’s not every day that you encounter the BMW M4 CS
+
+- group:
+  - q: M5 First Edition
+  - a: |
+      Quite literally the vehicle that exemplifies the road less traveled, the M5 First Edition takes
+      BMW’s classic thrill-ride and limits the admission. An exclusive finish, a pristine interior,
+      and a production count of only 400 worldwide make it one of the most distinguished and dynamic
+      cars on the road.
+
+
+- group:
+  - q:  30 Jahre M3
+  - a: |
+      Paying homage to the legendary first generation BMW E30 M3, the 30 Jahre M3 dazzles in an exclusive
+      Macao Blue metallic exterior – flashing by as it reaches 0-60 in 3.8 seconds. With only 150 vehicles
+      in the U.S., this cobalt marvel is a unique and rare future classic.
+
+- group:
+  - q: Dynamic Stability Control
+  - a: |
+      At the center of the chassis control systems, this feature ensures stability and maximized
+      traction. At the first signs of oversteering or understeering, it keeps the vehicle on course
+      even in adverse driving conditions or tough surfaces. So you feel greater dynamism –
+      and greater safety – on every bend in the road.
+
+- group:
+  - q: iDrive system
+  - a: |
+      The intuitive interface of the latest iDrive system make in-car entertainment simply enjoyable.
+      And the optional Navigation feature includes natural language understanding, so you can
+      simply say where you want to go – and let your BMW do the rest.
+
+- group:
+  - q: The Full-Color Head-up Display projects driving information
+  - q: head up display
+  - a: |
+      The Full-Color Head-up Display projects driving information directly onto your windshield. A
+      touch-sensitive iDrive controller makes navigation simple, while an impressive, optional 8.8-inch
+      BMW ConnectedDrive display keeps everything you need in plain sight.
+
+- group:
+  - q:  The inverted kidney grilles
+  - q:  x2
+  - a: |
+      The inverted kidney grilles create a bold new look, for a fresh take on a distinctive icon.
+      Positioned low like a coupe, the chrome frame and black high-gloss bars of the grille add to
+      the focused, energetic appearance of the X2 — barely containing the power within.
+- group:
+  - q:  Eye-catching alloy wheels
+  - q: alloy wheels
+  - a: |
+      Eye-catching alloy wheels, ranging from standard 18" to a generous 20", draw the attention down
+      to where the rubber meets the road. With four styles to choose from — including an M-specific 20"
+      option — the X2 steals the show in any configuration.
+- group:
+  - q:  x3
+  - q: xdrive
+  - a: |
+      Every All-New BMW X3 comes with an 8-speed Steptronic Sport Automatic Transmission with shift
+      paddles, tuned specifically to match the engine’s performance characteristics. Driving dynamism
+      and efficiency is noticeably improved with xDrive, BMW’s intelligent all-wheel-drive system –
+      standard on the X3 xDrive30i and M40i.
+
+- group:
+  - q:  Seamless interface
+  - a: |
+      A seamless interface. The optional Navigation system, featuring the latest version of iDrive,
+       puts a driver’s world at your fingertips with an intuitive interface that responds to touch,
+       voice commands, or optional Gesture Control. Essential driving information appears on the
+       optional 8.8-inch instrument screen – or the 12.3-inch screen of the optional Dynamic Digital
+        Instrument Cluster, available with the Executive Tier.
+- group:
+  - q:  x4
+  - q: sports activity coupe x4
+  - a: |
+       When competition is a way of life, second best is not an option. The All–New BMW X4 is a Sports
+        Activity Coupe® that makes an impact every time, and anywhere. The combination of aggression
+        and agility, sportiness and grace lets the BMW X4 conquer all challenges with ease, while
+         driver and passengers ride in unequalled comfort.
+- group:
+  - q:  x5
+  - q: sports activity coupe x5
+  - a: |
+       When competition is a way of life, second best is not an option. The All–New BMW X4 is a Sports
+        Activity Coupe® that makes an impact every time, and anywhere. The combination of aggression and
+        agility, sportiness and grace lets the BMW X4 conquer all challenges with ease, while driver
+         and passengers ride in unequalled comfort.
+
+- group:
+  - q:  x6
+  - a: |
+      The raw energy of the X6 is balanced by innovative handling and suspension technology that deliver
+      optimized driving dynamics, with an 8-speed Sport Automatic Transmission to channel all that power.
+      The result is sporty agility that will take you by surprise. Drive it as hard as you want –
+      the X6 can handle any road and ask for more.
+
+- group:
+  - q: Does BMW have electrical cars
+  - a: |
+       Make the seamless switch to electric driving with flexible, innovative BMW charging
+       programs. Designed to satisfy your every need for home and public charging, all BMW
+       i3 and i8 vehicles come with an occasional use cord, plus the option to have a home charging
+       station installed. A vast network of over 44,000 public charging stations2—plus 2 years
+       of free charging with your ChargeNow card—improve your potential for adventure.
+
+- group:
+  - q:  BMW i8
+  - a: |
+       The BMW i8 Coupe and i8 Roadster are the ultimate evolution of plug-in hybrid technology.
+       Housed in sleek, sculpted frames that scream power, these design icons exude energy,
+        efficiency, and exhilaration in every moment.
+
+- group:
+  - q: z4
+  - q: Z4
+  - a: |
+       The Z4 Roadster was designed to make every single drive an indulgence. Its stunning
+       hardtop and elongated hood combine with breathtaking power to create an almost addictive
+        open-top experience that's sure to leave you with your odometer as your only alibi.The
+        Z4 is among the few roadsters that look as good with the top up as they do with it
+       down. Its hardtop can open or close in 19 seconds, even at speeds up to 25 mph, and seams
+        perfectly with its long hood to create a unified, flowing exterior that screams muscle,
+        yet manages to stay lean.
+- group:
+  - q: convertibles
+  - q: bmw convertibles
+  - a: |
+       Z4, M4, 430i Convertible, 440i Convertible
+- group:
+  - q:
+  - a: |
+- group:
+  - q:
+  - a: |
+
+- group:
+  - q:
+  - a: |
