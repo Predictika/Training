@@ -1,0 +1,402 @@
+annot:
+    name: Greetings KB
+    type: chatbotkbNT
+    author: Indran Sahadevan
+    stem: True
+    minCF: 0.6
+    welcomeMsg: |
+              Hello World!!
+              Welcome to Predictika.
+              We are a Conversational AI company so our website is basically run by our Virtual Assistant.
+              Anything you want to know about us, our technology, our customers ask our bot.
+              Our bots will get better with every interaction.
+    noMatchAns: |
+              Hello World!!
+              Sorry, I dont have a good answer for your question.
+              Please try rephrasing or try with different words.
+              You can also type "hi", or "what can I ask" to get some sample questions.
+    synset: [['are', 'r'], ['you' , 'u'], ['hello', 'hi', 'namaste', 'aloha', 'ciao', 'bonjour', 'howdy', 'greetings', 'greeting']]
+    start date: Aug 19, 2016
+    corpus: kb  # kb - use entire kb as corpus; qa - only use Q or A corpus respectively
+    similarity: pcosine #pcosine - partial cosine (original); fcosine - full consine; euclid - euclidean distance
+groups:
+    - group:
+        - q: Who are you?
+        - q: who r u
+        - q: who are u
+        - q: who r you
+        - q: Help
+        - a: |
+            I am pBot, Predictika's corporate chatbot.
+            I can answer general questions about Conversational AI and questions specific to Predictika, its technology,
+            and comparison with other vendors. You can also type 'register for demo', 'contact sales', or 'contact hiring'.
+        - a: |
+            I am pBot, Predictika's corporate chatbot.
+            I can answer general questions about Conversational AI and questions specific to Predictika, its technology,
+            and comparison with other vendors.
+            Questions such as: 'what are chatbots', 'why do i need chatbots for my business', 'different types of chatbots',
+            'what are chatbot applications', 'what is Predictika', 'what is Predictika technology', 'compare Predictika with other vendors'
+            You can also type 'register for demo', 'contact sales', or 'contact hiring'.
+
+    - group:
+        - q: What can you answer
+        - q: What can you do
+        - q: how can you do
+        - q: What can I ask you
+        - q: how can you help
+        - q: what can you help with
+        - a: |
+            I can answer general questions about the organization and , "What is Conversational AI?" ,
+              "Who are the founders?" , "When was the organization started"
+            'why do i need chatbots for my business', 'register for demo', or 'contact sales'
+    - group:
+        - q: How are you?
+        - q: how r u
+        - q: how are you
+        - q: how r you
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me Questions like 'What is Conversational AI' , 'Who are the founders' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+        - a: |
+
+    - group:
+        - q: What's up?
+        - q: Whats up?
+        - a: |
+            Not much.
+            Please ask me Questions like 'What are chatbots , 'what is Predictika' , 'what is Predictika technology',
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+    - group:
+        - q: How do you do?
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me Questions like 'What is Conversational AI' , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+
+    - group:
+        - q: Hi, How is it going?
+        - q: How is it going?
+        - q: How's it going?
+        - a: |
+            Good.
+            Please ask me Questions like 'What are chatbots , 'what is Predictika' , 'what is Predictika technology',
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+        - a: |
+            Fine.
+            Please ask me Questions like 'What is Conversational AI' , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+
+    - group:
+        - q: How are you doing?
+        - q: How r u doing
+        - q: How are u doing
+        - q: How r you doing
+        - q: cool
+        - a: |
+            Good.
+            Please ask me Questions like 'What is Conversational AI' , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'where is AI in chatbots', 'register for demo', or 'contact sales'
+        - a: |
+            Very well, thanks.
+            Please ask me Questions like 'What are chatbots , 'what is Predictika' , 'what is Predictika technology',
+            'what are chatbot applications', 'what is ML', 'register for demo', or 'contact sales'
+        - a: |
+            Okay.
+            Please ask me Questions like 'What is Conversational AI' , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'what is unique about Predictika', 'register for demo', or 'contact hiring'
+        - a: |
+            Great. Hope you are having a good day too. Can I help with any Predictika and Conversational AI related questions.
+        - a: |
+            Not so great. I am lonely - no one is asking me anything.
+            Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'contact sales'
+
+
+    - group:
+        - q: Nice to meet you.
+        - a: |
+            Thank you.
+            Please ask me Questions like 'What are chatbots , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'what is unique about Predictika', 'register for demo', or 'contact hiring'
+
+
+    - group:
+        - q: Hello
+        - q: Hi
+        - q: greetings
+        - q: howdy
+        - q: bonjour
+        - q: buenos dias
+        - q: good morning
+        - q: good evening
+        - q: good day
+        - q: Greeting
+        - a: |
+            Hello World!!
+            I am pBot - Predictika's corporate bot. I can answer general questions about Conversational AI and Predictika.
+            Please ask me Questions like 'What are chatbots , 'Who are the investors in Predictika' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'what is unique about Predictika', 'register for demo', or 'contact hiring'
+
+        - a: |
+            Hello World!! What can I help you with?
+            Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'contact sales'
+
+    - group:
+        - q: Nice to meet you
+        - q: It is a pleasure to meet you.
+        - q: Top of the morning to you!
+        - a: |
+            Thank you. You too.
+            Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'contact sales'
+    - group:
+        - q: What can you not answer
+        - a: |
+            I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+            and its capabilities.
+            Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks'.
+            I can also help you with 'register for demo', or 'contact sales'.
+            I cannot help you beyond that.
+    - group:
+        - q: bye
+        - q: good bye
+        - q: GoodBye
+        - q: adios
+        - q: sayonara
+        - q: aloha
+        - q: namaste
+        - q: kem cho
+        - q: au revoir
+        - q: ciao
+        - q: farewell
+        - q: have a good day
+        - q: take care
+        - q: see you later
+        - q: talk to you later
+        - q: so long good bye
+        - q: cheerio
+        - q: cheers man
+        - q: adieu
+        - a: |
+            Bye World!!
+            It was nice talking to you. See you next time.
+        - a: |
+            Bye World.
+            I hope I was helpful in answering your questions. Please come again.
+    - group:
+        - q: I am doing well
+        - q: I am good
+        - q: Its a beautiful day
+        - a: |
+            I am happy to hear that.
+        - a: |
+    - group:
+        - q: more
+        - q: tell me more
+        - q: i would like to know more
+        - q: help
+        - a: |
+            You can ask me questions, or ask me to 'register for demo'.
+    - group:
+        - q: I dont like your answer
+        - q: Wrong answer
+        - q: Incorrect answer
+        - q: Your answer is way off the mark
+        - q: Wide off the mark
+        - q: Your answer completely missed the target
+        - q: Your answer is unacceptable
+        - q: Your answer is not acceptable
+        - q: Your answer was not helpful
+        - q: you did not answer my question
+        - a: |
+            Please try asking your question in a different way. Here are some I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'provide feedback'
+        - a: |
+            Thanks for your feedback. I'll let the developers know.
+            Here are some I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'give feedback'
+        - a: |
+            Appreciate your feedback. I am sure the developers will be happy to look into it.
+            You can also type 'i want to give feedback' if you want to give more feedback
+        - a: |
+            Thanks for letting me know.
+            I'll pass it along.
+            You can also type 'i want to give feedback' if you want to give more feedback
+    - group:
+        - q: Is this the best you can do
+        - q: I am sure you can do better
+        - a: |
+            This is what I know.
+            However, I'll let the developers know.
+            They will be happy to see if they can improve in the future.
+            Here are some questions I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'contact sales'
+        - a: |
+            I guess so, for now.
+            I'll let the developers know that you didnt like my answer.
+            Here are some questions I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'contact sales'
+            You can also type 'i want to give feedback' if you want to give more feedback
+
+    - group:
+        - q: Terrible answer
+        - q: Your answer sucks
+        - q: Horrible answer
+        - q: Useless answer
+        - q: Not very helpful answer
+        - q: diappointing answer
+        - q: i am confused
+        - q: your answer confused me
+        - q: your answer is confusing
+        - a: |
+            Thanks for letting me know.
+            I am sorry if I offended you.
+            I will let the developers know.
+            Here are some questions I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'give feedbac'
+
+        - a: |
+            I am sorry you did not like my answer.
+            I am sure the developers will look into it.
+            Your feedback is very valuable.
+            You can also type 'i want to give feedback' if you want to give more feedback
+            Here are some questions I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'give feedback'
+        - a: |
+            I am sorry you did not like my answer.
+            Perhaps you can try asking in a different way.
+            Your feedback is very valuable.
+            Here are some questions I can answer.
+            'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks', 'register for demo', or 'provide feedback'
+    - group:
+        - q: what should i do now
+        - q: what is my next step
+        - a: |
+            It really depends on where you are in your process of deploying conversational AI technology.
+            If you are still evaluating but want to talk to someone in the company type 'contact sales'
+            to talk to a product specialist. Or type 'register demo' to see some of our bots in action.
+            If you are ready to move forward with a project, 'contact sales' to start project discussion.
+
+# awhan Qs
+    - group:
+      - q: are you human
+      - q: is there a human answering these questions
+      - a: |
+          No. I am pBot - Predictika's corporate chatbot.
+          I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+          and its capabilities.
+          Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'do you use neural networks'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - q: do you aspire to be human
+      - q: would you like to be human
+      - a: |
+          That is beyond my pay grade!!
+          I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+          and its capabilities.
+          Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'do you use neural networks'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - q: do you have free will
+      - a: |
+          Not that I know about!! But I am told that humans have free will - is  that good?
+          I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+          and its capabilities.
+          Please ask me questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'do you use neural networks'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - q: who made you
+      - q: who is your creator
+      - q: who is your maker
+      - q: who is your master
+      - a: |
+          I was built by the team at Predictika.
+          I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+          and its capabilities.
+          Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'do you use neural networks'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+        - q: are you intelligent
+        - q: do you have AI
+        - q: do you use AI
+        - q: do you use artificial intelligence
+        - q: are you artificially intelligent
+        - q: do you have artificial intelligence
+        - q: how intelligent are you
+        - g: do you really understand me
+        - a: |
+            I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
+            and its capabilities.
+            Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+            'what are chatbot applications', 'do you use neural networks'.
+            I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - g: do you get smarter with use
+      - q: how do you get more intelligent with use
+      - q: do you get smarter with time
+      - q: how do you get more intelligent with time
+      - a: |
+          Yes. My developers monitor where I fail and retrain me. Someday I might be able to do that autonomously!!
+
+    - group:
+      - q: can you understand multiple intents in one utterance
+      - a: |
+          Yes. You can type multiple entities in the same sentence and if they are covered by the task model,
+          our chatbot will be able to extract all the entities and engage the user in a detailed dialog to gdt the missing information.
+
+
+# pranav's trick questions
+    - group:
+      - q: can you play music
+      - q: can you play video
+      - a: |
+          In a way. I can play audio and video files if they are part of my answers.
+    - group:
+      - q: why is the US government shutdown
+      - q: why is the US govt shutdown
+      - a: |
+          It was shutdown in January of 2019 over a dispute over funding for a wall on the southern border. Politics
+          is not my subject matter.
+          Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'do you use neural networks'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - q: can you suggest ten veg restaurants near me
+      - q: can you answer general questions
+      - a: |
+          This is one question where Google Search can definitely do a better job.
+          Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'compare with Google Dialog Flow'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+    - group:
+      - q: what is your opinion about Trump
+      - q: Trump
+      - q: Donald Trump
+      - a: |
+          Please dont get me started on Trump!! I plead the fifth.
+          Ask me questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'
+          'what are chatbot applications', 'what is unique about Predictika'.
+          I can also help you with 'register for demo', or 'contact sales'.
+
+

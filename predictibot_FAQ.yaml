@@ -1,0 +1,954 @@
+annot:
+  author: Indran Sahadevan
+  name: Predictibot FAQ
+  start date: Aug 16, 2018
+  type: KB
+  stem: True
+  minCF: 0.6
+  synset:
+    - ['compare', 'vs', 'versus', 'against', 'compared', 'comparison', 'compares']
+    - ['chatbots', 'bot', 'bots', 'agent', 'agents', 'chatbpt', 'chatbt', 'chatbot']
+    - ['build', 'develop', 'create']
+    - ['facebook', 'fb']
+    - ['microsoft', 'msft']
+    - ['amazon','amzn']
+    - ['programming', 'coding', 'program', 'code']
+    - ['support', 'allow', 'provide', 'enable', 'work', 'access', 'accessed', 'integrate', 'interface']
+    - ['user', 'users', 'consumer', 'consumers', 'customer', 'customers']
+    - ['money', 'investment', 'fund', 'funding', 'funds', 'invest', 'invested']
+    - ['contact', 'talk', 'connect', 'touch', 'email']
+    - ['replace', 'displace', 'eliminate', 'automate','impact', 'affect']
+#  currently can only use single words for synonyms
+#    - ['ai', 'artificial intelligence']
+#    - ['ml', 'machine learning']
+  noMatchAns: |
+            Sorry, I dont have a good answer for your question.
+            Please try rephrasing or try with different words.
+            You can also type "hi", or "what can I ask" to get some sample questions.
+  desc: FAQ about Predictika and chatbots
+groups:
+# general questions about chatbots
+- group:
+  - q: what is conversational AI?
+  - a: |
+      Conversational AI combines technologies such as natural language understanding (NLP) and machine learning (ML)
+      to power virtual agents that can converse with human users in natural language. These technologies power chatbots ands virtual
+      agents such as Amazon Alexa, Google Assistant, and Apple Siri.
+  - url:
+  - n: 2
+- group:
+  - q: What is AI ?
+  - q: Artificial Intelligence
+  - a: |
+        Artificial intelligence (AI), sometimes called machine intelligence, is intelligence demonstrated by machines,
+        in contrast to the natural intelligence displayed by humans and other animals.
+        In computer science AI research is defined as the study of "intelligent agents":
+        any device that perceives its environment and takes actions that maximize its chance of successfully achieving its goals.
+        Colloquially, the term "artificial intelligence" is applied when a machine mimics "cognitive" functions
+        that humans associate with other human minds, such as "language understanding", "learning" and "problem solving
+  - url:
+  - n: 3
+- group:
+  - q: What are Chatbots
+  - q: what chatbots can do
+  - q: what are virtual agents
+  - q: what are autonomous agents
+  - a: |
+      Chatbots are autonomous software agents or virtual agents powered by latest advances in AI especially natural language processing (NLP),
+      machine learning (ML), speech understanding, and automated reasoning.
+  - n: 11
+- group:
+  - q: what chatbots can not do
+  - q: are there tasks chatbots can not do
+  - q: limits of chatbots
+  - q: limitations of current chatbots
+  - a: |
+      The state of the art in AI is advancing rapidly so its always hard to characterize 'what is not possible".
+      However as of 2019, it is safe to say that chatbots are successful only in narrow domains both from language understanding
+      and problem solving. They are not capable of human-level intelligence for open-ended tasks or domains.
+      It is not very hard to make a chatbot fail to understand some arbitrary utterance that a human would comprehend.
+      However, well designed bots can support narrow business tasks quite well.
+- group:
+  - q: Where will users access these chatbots
+  - q: can chatbots run on Facebook Messenger
+  - q: can chatbots run on Slack
+  - q: can chatbots run on Skype
+  - q: can chatbots run on Twitter
+  - q: can chatbots run on Websites
+  - q: can chatbots run on Mobile Apps
+  - a: |
+      Many of the most popular chat programs such as Facebook Messenger, Skype, Slack, WeChat, Telegram now support Chatbots.
+      Others will surely follow. Chatbots can also run on website or mobile apps using widgets that support chat-like capabilities.
+  - n: 12
+- group:
+  - q: can chatbots run on WhatsApp
+  - a: |
+      No. WhatsApp does not yet provide an API to support chatbots. But we exopect this to change in the near future.
+- group:
+  - q: What are the benefits of chatbots to businesses
+  - q: What are the benefits of chatbots to service providers
+  - q: how can chatbots help my business
+  - q: why should i deploy chatbots
+  - q: why do i need chatbots for my business
+  - a: |
+      24x7, year round:  Chatbots can be used to provide 24x7, year-round support to your customers
+      (including consumers, employees, business partners, and suppliers) without having to deploy large number of human agents in numerous call centers all over the world.
+      Two-way communication:  Consumers can  talk to businesses with their questions, ask for help, or engage in more complex transactions.
+      Conversely, business can reach out to consumers with updates, notifications, or loyalty building information and offers on a pro-active basis.
+      Personalization: Chatbots often run on signed communication channels (e.g., FB Messenger, Slack, Skype).
+      In such cases, businesses know who they are talking to and thus can personalize their responses to user questions or their own pro-active communications.
+      Moreover, chatbots can preserve history of prior communication with a user and can thus personalize it based on user preferences, results of previous interaction, location, time of day, etc.
+      Build once and deploy everywhere: Currently businesses have to create multiple competing technology-based solutions
+      such as web sites, mobile apps, call centers, email etc, each with their own technologies and competing content challenges.
+      With chatbots businesses can create one solution that can be deployed everywhere.
+      Reduce cost: Once chatbots are developed they can be deployed at a tiny fraction of the cost of hosting call centers
+      with human agents that can provide the same 24x7 coverage globally.
+      The chatbots are usually hosted on cloud infrastructure and the cost of scaling them horizontally to manage varying load has come down drastically and is still on a downward curve.
+  - n: 13
+
+- group:
+  - q: Why will  consumers use Chatbots
+  - q: how chatbots help my customers
+  - q: how chatbots help my users
+  - q: how will users use chatbots
+  - a: |
+      In addition to the benefits listed under the case for businesses, there are reasons why chatbots are attractive to consumers.
+      Call center limitations: Current call centers run by human agents suffer from long delays, poor customer service, and limited hours.
+      Chat programs preserve history:  Most chat communication program which support chatbots preserve the history of a user communication.
+      Talking bots:  Speech understanding technology has matured enough that chatbots can engage users via speech input and not just via typed text.
+      Reduced friction: Since users already spent more time inside messaging apps,
+      the cost of switching between these apps and merchant-specific apps for business tasks increasingly creates friction.
+      Single interface: No need to learn to juse apps or navigate on websites. Just express in natural language.
+  - n: 14
+
+- group:
+  - q: Why chatbots now
+  - q: What will enable chatbots adoption
+  - a: |
+      2016 was a watershed year in the use of messaging apps such as FB Messenger, WhatsApp, WeChat, SnapChat, Telegram, Skype, etc.
+      More time was spent by users inside these apps than all other categories of apps combined.
+      Many are calling this another paradigm shift in the use of computers: desktop, to internet, to mobile, and now messaging and direct communication.
+  - n: 15
+- group:
+  - q: How do bots compare with other digital technologies
+  - q: chatbots comnpared with websites
+  - q: chatbots compared with mobile apps
+  - q: chatbots vs emails
+  - q: chatbots vs marketing automation
+
+  - a: |
+      Other digital tools that connect businesses to users have increasingly serious limitations compared to chatbots.
+      Websites are either tied to desktops and need high bandwidth to download their rich media pages.
+      Mobile apps have not really succeeded beyond a small set of very popular apps – most of the business-specific and service provider apps have very low adoption.
+      In fact according to one survey 70% of mobile app usage is restricted to 5 apps!!
+      Email suffers from spam and lack of real-time communication.
+      Digital adtech and Marketing automation is only one-way, mainly for marketing messages and increasingly suffers from ‘fake’ clicks.
+      Telephones have been taken over by marketers and scam artists.
+  - n: 16
+- group:
+  - q: Are chatbots only good for Q&A
+  - q: Are chatbots only good for FAQ
+  - q: can chatbots be used for more serious business tasks
+  - a: |
+      The first generation of chatbots have been developed for automatically answering questions from corporate FAQs, corpus of call center logs,  or from access to some search engine.
+      Companies such as Predictika are developing technologies that will enable chatbots to support more complex business tasks
+      such as sales lead qualification; online sales; product configuration, i.e., buying product and services that require multiple inter-dependent choices;
+      business workflow such as automated sign-up and approval for services; business transactions
+      such as online trading, banking, travel booking, service appointments; automated troubleshooting and diagnostic support; etc.
+
+  - n: 17
+- group:
+  - q: How would you characterize different types of chatbots
+  - q: classification of chatbots
+  - a: |
+      One classification that we find useful divides chatbots into at least following categories,
+      though increasingly successful chatbots will combine ideas from more than one category.
+      Chat for chat sake: As a social companion
+      Bots for static text: Lookup FAQ or other text corpus to find closest match(es)
+      Triggered Task Agents: Such as Amazon Alexa, Google Assistant, Apple Siri
+      Search: Language and speech wrapper around a search engine
+      Complex task interactions: Enterprise chatbots that solve business tasks conversationally
+  - n: 18
+- group:
+  - q: Where is the AI in chatbots
+  - q: where is the artificial intellgence in chatbots
+  - q: does it  matter if chatbots have AI
+  - q: where is machine learning in chatbots
+  - q: where is NLP in chatbots
+  - q: do you use NLP
+  - q: do you use AI
+  - a: |
+      The AI in the chatbots is both in the front-end of interaction technologies and the back-end of reasoning, personalization, learning, and response generation.
+      In order to go beyond simple keyword-based Q&A systems of the past, today’s chatbots are relying on more robust NLP technologies
+      that use sophisticated parsing techniques based on learning from large corpus of sentences, classification of word usage and parts of speech, and automated relearning as new data comes in.
+      Similarly, deep-learning multi-layer neural networks are able to understand spoken continuous speech
+      that is speaker-independent and the proof is in the high quality shown by Alexa, Siri, Microsoft, and Google technologies that are becoming widely available.
+      In the back-end one needs automated reasoning techniques such as Predictika’s constraint-based reasoning engine
+      to manage complex tasks, machine learning for personalization and response generation, and again machine learning techniques
+      to learn new concepts over time and assimilate different kinds of knowledge.
+      So yes, AI is powering the chatbots today and will be needed even more over time as users demand
+      increasingly more natural human-like interaction with these chatbots and businesses try to automate more complex tasks.
+
+  - n: 19
+- group:
+  - q: What are the common business applications of chatbots
+  - q: what are chatbots applications
+  - a: |
+      It is safe to say that chatbots are being built for every imaginable business task or function.
+      This is so because chatbots help to automate a task and simplify communication between a business (or service providers)
+      and their users (customers, employees, partners, suppliers). Still the common areas include the following.
+      Sales, Marketing, Pre-Sales: Get product information, compare products, compare with competition
+      Unassisted sales. Cross-sell. Up-sell. Renewals.
+      Post sales Customer support.
+      Automate other business tasks.
+  - n: 20
+- group:
+  - q: Are there some examples of chatbots in different industries
+  - a: |
+      Chatbots are increasingly deployed by organizations all over the world.
+      Please type 'register for  demos' to see bots built by Predictika.
+  - n: 29
+- group:
+  - q: What is machine learning
+  - q: What is ML
+  - a: |
+      Machine Learning is a branch of AI that includes a large set of techniques for inferring predictive problem solving models from data.
+      Most ML techniques are 'supervised learning' where some human tags data which is then used to learn predictive models.
+      There are some unsupervised learning techniques too but this is an area where lots more research is needed,
+- group:
+  - q: What is deep learning
+  - q: what are multi layered neural networks
+  - a: |
+      Deep learning refers to a class of machine learning technologies that use multi-layer neural networks.
+      These technoques have excellent results for variety of problems in image recognition, speech understanding, language translation,
+      games of strategy, and many other problems where tagged data is available for training such neural network models.
+      Most deep ML techniques are supervised but a few allow unsupervised learning.
+- group:
+  - q: how adaptive are chatbots
+  - q: can chatbots learn
+  - a: |
+      Most chatbots use supervised machine learning techniques where a human developer has to create a corpus of tagged sentences to learn how to understanbd language.
+      Someone monitors the use of the chatbots and when it fails, the chatbots are retrained offline and a new version is made available.
+      Early research with unsupervised learning for chatbots has not been very successful as yet.
+      Predictika technology is semi-supervised. Once a task model is developed, the training is done automatically without requiring
+      a corpus of tagged sentences.
+- group:
+  - q: is AI a threat to mankind
+  - q: is artificial intelligence a threat to mankind
+  - q: is AI a threat to human race
+  - q: will computers replace humans
+  - q: can computers replace humans
+  - q: is AI a threat to our world
+  - a: |
+      At one level such questions have always been asked of any new and powerful technology (e.g., computers, television) and shown to be not so.
+      AI, however, because it touches on human intelligence and with popular fiction around robots run amok generates more concern in this regard.
+      As of 2019, while AI has made big strides, machines are not really close to mimicing human intelligence in any general sense.
+      Please do a google search to find a cottage industry of books and articles on this topic.
+
+- group:
+#  - q: will chatbots displace my job
+  - q: will chatbots replace my job
+  - q: will you replace my job
+#  - q: will chatbots eliminate my job
+#  - q: will chatbots affect my job
+#  - q: will chatbots impact my job
+  - q: will chatbots lead to job losses
+#  - q: will chatbots automate my job
+  - a: |
+      Computers and their wide spread adopton did lead ito some job losses but created millions more wordwide.
+      Similarly, as chatbots and AI begin to automate a large number of tasks eliminating some jobs, the expectation is
+      that they will create many more jobs but possibly requiring different and higher skill levels.
+# general Qs about Predictika
+- group:
+  - q: who are the founders of Predictika
+  - q: who founded Predictika
+  - q: who is your founder
+  - a: |
+      Sanjay Mittal PhD, Founder & C.E.O  , https://www.linkedin.com/in/sanjaymittal/
+      He was an accomplished researcher in AI at Xerox PARC, founded Selectica the leading company in online sales and configuration that he took public in 2000,
+      and has since started and sold a couple of other companies. Dr. Mittal has written multiple scholarly articles
+      and over 10 patents in machine learning, product configuration, and mobile technologies.
+  - url:
+  - n: 4
+- group:
+  - q: Who are the investors in Predictika
+  - q: Is Predictika funded by VCs
+  - q: Is Predictika venture funded
+  - q: has Predictika raised any angel funds
+  - q: Has Predictika raised money from outside investors
+  - a: |
+      Predictika is self-funded and has not raised any outside money so far.
+- group:
+  - q: are you raising any money now
+  - q: can I invest in Predictika
+  - q: are you taking investment
+  - q: are you taking outside money
+  - a: |
+      We are currently not raising any funds. However, we are always open to talk to interested and qualified investors.
+      Just type "contact founder"
+- group:
+    - q: how do i contact the founder
+    - q: can i contact the founder
+    - q: how do i get in touch with the founder
+    - q: i want to talk to the founder
+    - q: how can i reach your founder
+    - a: Just type 'contact founder'
+- group:
+    - q: can i contact the developers
+    - q: can i provide feedback
+    - q: how can i give feedback
+    - a: |
+        We always appreciate and value your feedback, even critical ones.
+        Just type 'provide feedback' or 'i want to give feedback'
+- group:
+  - q: where is the company located
+  - q: where is Predictika head office
+  - q: where is Predictika located
+  - q: where are you based out of
+  - q: where are you based
+  - q: where is Predictika based
+  - a: |
+      We are based in the san francisco bay area, California, USA. We also have a development team in India.
+  - url:
+  - n: 5
+- group:
+  - q: how big is the company
+  - q: how big is Predictika
+  - q: how many employees does Predictika have
+  - a: |
+      We are a small team of highly qualified and experienced tech professionals based in silicon valley and India.
+- group:
+  - q: are you a public company
+  - q: is Predictika a public company
+  - a: |
+      We are a private company based in the san francisco bay area.
+- group:
+  - q: what does the organization do
+  - q: what does the company do
+  - q: what does Predictika do
+  - q: what is Predictika
+  - q: what does Predictika mean
+  - q: what do you do
+  - a: |
+      Predictika is a US-based silicon valley startup founded by well-known technologist and entrepreneur Dr. Sanjay Mittal.
+      Predictika has developed the next generation AI platform for truly conversational chatbots.
+      Our technology allows enterprises to quickly model complex business tasks with rich conversational capabilities
+      and deploy them as chat or voice-based virtual agents across a variety of messaging platforms.
+      Brought to you by an experienced team of PhDs in Artificial Intelligence, Machine Learning and Computer Science.
+      The founder is an accomplished AI technologist and successful entrepreneur who has already taken a company public.
+  - url:
+  - n: 6
+- group:
+  - q: who is sanjay mittal
+  - a: |
+      Sanjay Mittal is an accomplished AI technologist, a successful serial entrepreneur, and a seasoned business executive
+      who has sold to and managed relationships with some of the largest companies in manufacturing, retail, and insurance.
+      His first venture was Selectica, a pioneer in internet sales and configuration solutions for large enterprises using AI
+      constraint-reasoning technologies, where he built the company from scratch to a very successful $5B IPO.
+  - url:
+  - n: 7
+- group:
+  - q: what is your email
+  - q: what is your email address
+  - q: how can i get in touch with Predictika
+  - q: how can i get in touch with you
+  - a: |
+      Email us at: info@Predictika.com
+      Or use our bot to 'register for demo', 'register as developer', 'contact sales', or 'contact founder'
+
+  - url:
+  - n: 8
+- group:
+  - q: what is your contact Phone number
+  - a: |
+      Please type "contact sales" to have someone in sales get in touch with you. Or you can email us at: info@Predictika.com
+      You can also type 'contact founder' to getv in touch with him.
+  - url:
+  - n: 9
+- group:
+  - q: when was the company founded
+  - q: when was Predictika founded
+  - q: when was Predictika formed
+  - q: what date did Predictika begin its operations
+  - q: when was the company started
+  - q: what date did Predictika start
+  - a: |
+      2016
+  - url:
+  - n: 10
+
+- group:
+  - q: What is the team behind Predictika
+  - a: |
+      Predictika has a core team of Ph. D.s in AI and machine learning and has invented patent-pending  technologies
+      for developing chatbots that can easily automate a wide range of complex business tasks.
+      The core team also includes a number of very experienced engineers and consultants with deep background in technology.
+      The in-house team is supported by a number of partnerships with companies that provide depth in technologies
+      needed to successfully deploy solutions for large to small enterprises.
+  - n: 22
+
+- group:
+  - q: are you hiring
+  - q: are their any job openings at Predictika
+  - q: what jobs are open at Predictika
+  - q: what jobs are available
+  - q: what jobs do you have
+  - q: do you have any jobs
+  - q: is Predictika hiring
+  - a: |
+      We are not actively hiring but are always looking for talented engineers especially with background in AI: ML & NLP.
+      Please type 'contact hiring' if you are interested.
+
+# Qs about Predictika product and its uses
+- group:
+  - q: How does a user interact with Predictika chatbots
+  - a: |
+      Predictika chatbots can be accessed from inside any messaging platform that supports an API for chatbot interaction.
+      Predictika also has a UI widget that can run inside a website or mobile apps.
+      A user can interact with the chatbot from this widget – thus supporting the ‘build once deploy everywhere’ philosophy.
+      Predictika chatbots also integrate with amazon Alexa, Google Assistant and other voice-to-text providers to enable voice-based virtual agents.
+  - n: 24
+- group:
+  - q: What infrastructure is needed to support Predictika’s chatbots
+  - q: do you run on public cloud
+  - q: do you run on aws
+  - q: do you run on amazon cloud
+  - q: do you run on google cloud
+  - q: do you run on microsoft azure
+  - q: do you run on ibm cloud
+  - q: can you run in my data center
+  - q: do we need separate IT infrastruicture for chatbots
+  - q: where are your chatbots hosted
+  - q: what is your technology stack
+  - a: |
+      Predictika’s chatbots run on cloud-based servers such as those hosted by Amazon’s AWS.
+      An enterprise customer can either use them via their AWS deployment or provide their own cloud-hosted environment.
+      Enterprises can also run our chatbots in their private data centers.
+      Predictika currently uses Docker-based containerization technology for rapid deployment and horizontal scaling.
+      We should be able to support other public clouds such as by google, microsoft, or IBM on a custom basis.
+  - n: 23
+- group:
+  - q: What technology does Predictika have for chatbots
+  - q: what is the technology behind your chatbots
+  - a: |
+      At Predictika we recognized that this task complexity is very similar to the one solved by constraints-based configurators,
+      first pioneered by Dr. Mittal at Xerox PARC and then successfully commercialized by him and his team at Selectica
+      where they had successfully deployed their technology at major Global 100 companies such as IBM, GE, Cisco, Dell, Hitachi, Reliance, Walt Disney, Aetna, Blue Cross & Blue Shield companies, Firemen’s Fund, etc.
+      Predictika has developed its own constraints-based, nested model configurator engine for automating complex tasks and directing the conversation in automating these tasks.
+      Additionally, Predictictika has developed innovative ways to use the configurator models to guide the NLP processes
+      that is much more effective than purely statistical NLP or generically trained grammars.
+
+  - n: 25
+- group:
+  - q: When is Predictika technology needed for chatbots
+  - q: what is special about Predictika technology
+  - q: what is your strength in chatbots
+  - q: why should i use your technology
+  - q: what is special about your technology
+  - a: |
+      Predictika technology is suitable for any business task that can be decomposed into multiple sub-tasks
+      or decision steps where the tasks have some inter-dependencies and such dependencies can be expressed via local relationships or constraints.
+      Examples include business workflow, food ordering, buying configurable goods and services
+      such as cars, equipment, insurance policies, investment products, health plans, service contracts, etc.
+      Predictika technology is also suitable for simpler tasks such as banking and other financial transactions,
+      insurance claims,  service appointments, sales and marketing, etc where the task may not be intrinsically complex
+      but the conversational setting brings new complexity.
+      Please register to ask for our forthcomning white paper by typing 'register for white paper'.
+
+  - n: 26
+- group:
+  - q: Does Predictika use other third-party tools?
+  - a: |
+      Our philosophy is to only build where we truly bring some unique value add. We license everything else.
+      We use wide array of open source tools for machine learning, speech, cloud deployment, chat widgets, etc.
+      However, in many cases we leverage our own technology to get more out of other tools than might be possible for other developers without access to our technologies.
+      For example, our configurator-based task models give us tremendous leverage in exploiting the NLP tools to give us much better accuracy in processing free flowing user requests in task areas that we support.
+  - n: 27
+- group:
+  - q: do you use any deep ML techniques
+  - q: do you use any deep machine learning techniques
+  - q: do you use any deep learning techniques
+  - q: do you use neural networks
+  - a: |
+      We are strarting to use deep ML models as we expand our scope to include more complex utterances especiallyt those that include
+      multiple intents in the same utterance.
+- group:
+    - q: do you spell check
+    - q: do your chatbots do spelling correction
+    - q: do you do spelling correction
+    - q: when do you spell check
+    - q: when do you do spelling correction
+    - a: |
+        Our bots can handle mis-spelled words in many cases especially where the context makes it
+        possible to do spelling correction reliably. However, we dont do it mindlessly as many
+        other mobile apps do where it can lead to bizarre results.
+- group:
+  - q: does Predictika have a developer platform
+  - q: how can we build our bots using Predictika tools
+  - q: does Predictika support outside developers
+  - q: does Predictika support 3rd party developers
+  - q: does Predictika support third party developers
+  - q: can we build a bot ourselves
+  - a: |
+      Predictika has an in-house team of developers for building solutions for enterprises that want us to.
+      Howeever, for those who have a team that wants to 'do it yourself' we have a full developer platform where you can
+      create your task models, train the NLP, test, and then deploy.
+      Currently, we are only allowing outside developers who are already customers. But we will be opening our platform
+      to 3rd party developers in the near future.
+      Type 'register as developer' to sign up to our waiting list of 3rd party developers.
+- group:
+  - q: how do you build a bot using Predictika technology
+  - q: what are the steps in building a bot using Predictika
+  - q: who builds the chatbots using your technology
+  - q: who builds the chatbots using Predictika technology
+  - q: who is responsible for the content
+  - a: |
+      The basic steps in building a chatbot using Predictika are as follows.
+      Step i: Model your task using our constraints-based dialog engine
+      Step ii: Train the NLP grammar using the models fropm step i.
+      Step iii: Test the chatbot and ervise as needed
+      Step iv: Deploy on the supported messaging and voice-based platforms automatically.
+      Other messaging platforms can be supported on a custom basis.
+      You can contract with Predictika to build a solution for you or use our developer platform to build it yourself.
+- group:
+  - q: can you build a bot for my company
+  - q: do you have a services team
+  - q: how do i contact sales
+  - q: how to contact sales team
+  - a: |
+      We have a experienced in-house team that can scope out the work and deploy a full solution.
+      Type 'contact sales' to get in touch with a product specialist.
+- group:
+  - q: who owns my chatbots
+  - a: |
+      You as the customer owns the chatbot. However, it requires a license to our technology.
+      As long as you have a valid license you can continue to deploy your chatbot.
+- group:
+  - q: how long does it take to build a bot using Predictika tools
+  - a: |
+      The answer naturally depends on the scope of the project. We have built some pretty rich and complex bots in under a day.
+      However, truly enterprise bots take time where the bulk of the time will go into reaching agreement on the scope,
+      collecting the data needed to power the bot, and any integration with other enterprise tools.
+      The actual time to model your task and train the grammar will be a very small fraction of the overall project.
+- group:
+  - q: what is the cost of deploying Predictika bots
+  - q: what is the cost of developing a Predictika chatbots
+  - q: what is Predictika pricing structure
+  - q: how does Predictika charge for its chatbots
+  - a: |
+      It will depend on what you want. However, in cases where we have compared against most other platforms, we can model the samne task
+      in a very small fraction of the time. Often what takes weeks and months with opther platforms can be doine in hours and days with
+      with Predictika tools.
+      And we can provide much richer functionality out-of-the-box.
+      Please type 'contact sales' to connect with a product specialist and discuss your specific needs
+- group:
+  - q: do Predictika chatbots allow voice input
+  - a: |
+      Yes. Chatbots developed using Predictika technology can with minimal changes work with voice input such as via Amazon Aleza
+      or Google Assistant. We are confident that we can support other voice input technologies such as from Microsoft, Apple, or Samsung.
+- group:
+  - q: do Predictika chatbots work with alexa
+  - q: do Predictika chatbots support alexa
+  - a: |
+      Yes, our chatbots support Amazon Alexa and can be automatically deployed from our developer platform.
+- group:
+  - q: do Predictika chatbots work with google home
+  - q: do Predictika chatbots support google home
+  - q: do Predictika chatbots support google assistant
+  - a: |
+      Yes. We have successfully integrated with Google Assistant. Support for it in our developer platform will be available later in 2019.
+      Type 'contact sales' if you need a specific time commitment.
+- group:
+  - q: do Predictika chatbots work with google voice
+  - q: do Predictika chatbots support google voice
+  - a: |
+      We have tested with google assistant and believe that we should be able to work with google voice API too.
+      Type 'contact sales' if you want to know more.
+
+- group:
+  - q: can Predictika chatbots be accessed inside facebook messenger
+  - q: can your bots run inside facebook
+  - q: can your bots support facebook
+  - q: can your bots support facebook messenger
+  - a: |
+      Predictika bots support FB Messenger and can be easily deployed using our developer platform.
+      Type 'register for demo' to see example of our bots running on FB
+- group:
+  - q: can Predictika chatbots be accessed inside skype
+  - q: do your bots support skype
+  - a: |
+      Yes, we have successfully tested with skype but currently do not support skype from our developer platform.
+      If skype deployment is a must have for you, please type 'contact sales'.
+- group:
+  - q: can Predictika chatbots be accessed inside messaging apps
+  - q: do your chatbots run inside messaging apps
+  - a: |
+      Predictika chatbots are available from inside any messaging app that provides a chatbot API.
+      We support FB Messenger difrectly from our developer platform. Others are available on custom basis.
+      If some other messaging app is a must have for you, please type 'contact sales'
+- group:
+  - q: can Predictika chatbots be accessed inside twitter
+  - a: |
+      Yes, we have successfully tested with Twitter but currently do not support Twitter from our developer platform.
+      If Twitter deployment is a must have for you, please type 'contact sales'.
+- group:
+  - q: can Predictika chatbots be accessed inside slack
+  - a: |
+      Yes, we have successfully tested with Slack but currently do not support Slack from our developer platform.
+      If Slack deployment is a must have for you, please type 'contact sales'.
+- group:
+  - q: can Predictika chatbots be accessed inside wechat
+  - a: |
+      We have not tested with WeChat yet but feel confident that we can support it on a custom basis.
+      If WeChat deployment is a must have for you, please type 'contact sales'.
+- group:
+  - q: can Predictika chatbots be accessed inside Telegram
+  - a: |
+      We have not tested with Telegram yet but feel confident that we can support it on a custom basis.
+      If Telegram deployment is a must have for you, please type 'contact sales'.
+- group:
+  - q: can Predictika chatbots run on websites
+  - a: |
+      Yes. We provide a chat widget that allows user coming to your website to converse with a bot developed using our technology.
+      You dont need to build separate chatbots for different platforms - the bot can talk over multiple messaging apps, voice platforms,
+      websites or mobile apps.
+- group:
+  - q: do we need separate bots for different platforms
+  - q: can the same chatbots be accessed from multiple modes
+  - q: can the same chatbots be accessed from FB, Alexa, Website
+  - a: |
+      One chatbot can be simultaneoulsly talking to users comiong from different platforms such as Facebook messenger,
+      Alexa, website, or a mobile app. So you dont need separate bots when you use Predictika platform.
+- group:
+  - q: what languages are supported by your chatbots
+  - q: do your chatbots support english
+  - q: do your chatbots support hindi
+  - q: do your chatbots support chinese
+  - q: do your chatbots support mandarin
+  - q: do your chatbots support french
+  - q: do your chatbots support spanish
+  - q: do your chatbots support indian languages
+  - q: do your chatbots support european languages
+  - a: |
+      Currently we support English as the primarty language of communcation with our chatbots.
+      Type 'contact sales' to find out about support for other languages.
+- group:
+  - q: can Predictika chatbots run on mobile devices
+  - q: can Predictika chatbots run on tablets
+  - q: can Predictika chatbots run on smartphones
+  - q: can Predictika chatbots run on iphone
+  - q: can Predictika chatbots run on android devices
+  - a: |
+      Yes. We provide a chat widget that allows user coming to your mobile device to converse with a bot developed using our technology.
+      You dont need to build separate chatbots for different platforms - the bot can talk over multiple messaging apps, voice platforms,
+      websites or mobile apps.
+- group:
+  - q: what support do you provide
+  - q: do you have 24x7 support
+  - q: do you have multi-tier support
+  - q: what if my chatbots crashes
+  - q: what if my chatbost stops working
+  - q: can i monitor my chatbots
+  - q: is there a hearbeat monitor for chatbots
+  - a: |
+      We support 24x7 deployments of our chatbots. Our dashboard gives you a real-time access to the traffic on your bot.
+      We have a bot on a our developer platform to answer questions about our technology.
+      We can also provide 24x7 human tech support on a contracted basis.
+
+- group:
+  - q: do you have failover support
+  - q: what is the redundancy support for your chatbots
+  - a: |
+      Our cloud-based servers have full redundancy support so if a servedr fails there is another one to take over.
+- group:
+  - q: do you have horizontal scalability
+  - q: do you have on demand scalability
+  - q: is there a limit on how many users can use your chatbots
+  - q: can your chatbots handle thousands of simultaneous users
+  - q: can you chatbots handle millions of simultaneous users
+  - q: can your chatbots support lots of users
+  - q: can your chatbots work for large user base
+  - a: |
+      Our cloud-based servers are designed to be horizontally scalable and support increasing numbers of users on demand.
+- group:
+  - q: what is your software upgrade process
+  - q: how do you upgrade software
+  - q: how do you release new software
+  - q: what is your software release process
+  - a: |
+      Our cloud-based servers are automatically updated on a periodic basis when we fix bugs or iontroduce new features.
+      This should be quite transparent to users.
+      Enterprise customers who host their own servers will get our new releases on a regular release policy as well as
+      on demand bug fix releases.
+- group:
+  - q: do you have a dashboard
+  - q: do you have an analytics dashboard
+  - q: can we get analytics on chatbots users
+  - q: can we see the user journey thru the chatbots dialog
+  - a: |
+      We have a dashboard that allows you to monitor the traffic on your bot as well as get analytics on your users' interactions with your bot.
+      Type 'register for demo' to see the dashboard in action.
+- group:
+  - q: what lessons have you learned from chatbots development
+  - q: what are the dos and donts of chatbots development
+  - a: |
+      As a company we have been working on conversational AI since 2016 and can summarize our key learnings.
+      Once you model your business task, the bot can be quite robust.
+      Our bots are normally augmented by static questions such as FAQs.
+      It is very important that users can step outside the confines of a conversation and ask questions, change their mind,
+      or even give extra information beyond what is expected.
+      Human language is very rich and diverse. Same things or intent can be often expressed in many different ways.
+      The bots will go thru a learning process as we gather data from interactions with real users.
+- group:
+    - q: tell me more about Predictika
+    - q: what more can you tell me about Predictika
+    - q: how can i learn more about Predictika
+    - q: how can i learn more about your company
+    - a: |
+        You can type 'When is Predictika technology needed for chatbots', 'what is unique about Predictika',
+        'how much custom programming is needed', 'how Predictika compare with google dialog flow',
+        etc to learn more about the company.
+        You can also 'register for whitepaper' to get a copy of our forthcoming white paper.
+- group:
+    - q: do you have a white paper I can read
+    - q: is there any white paper
+    - q: can you send me something to read
+    - a: |
+        We have a white paper that will summarize our technology and value proposition.
+        Type 'register for white paper' to sign up to get it.
+# Qs on comparing us with others
+- group:
+  - q: what is your elevator pitch
+  - q: what is unique about Predictika
+  - q: what is unique
+  - q: what is your USP
+  - a: |
+      Chatbots that support enterprise grade business tasks need to be very flexible in their interaction flow and conversational capabilities.
+      Predictika excels in both aspects. Our Constraints-based Dialog Engine allows you to easily model rich complex tasks.
+      Our model-based NLP trainer allows the same thing to be expressed in a large number of ways without needing to be trained on each instance.
+      Our Dialog Engine maintains full context, allowing the users to change their mind and revise their work with minimal re-entry.
+      Our multi-agent architecture allows the users to ask questions even in the middle of a conversation with the bot.
+- group:
+  - q: how much custom programming is needed
+  - q: do i need to program in python, node.js, or other programning languages
+  - q: do i need to program in python
+  - q: do i need to program in node.js
+  - q: do i need to program in other programning languages
+  - a: |
+      The only time you need to write ANY custom code is for connecting our chatbots with your back-end legacy systems.
+      The actual chatbot task model or the NLP training requires ZERO custom programming.
+      When you do need to interface our chatbots to your legacy systems, we use python programming language.
+- group:
+  - q: do you have a graphical dialog builder
+  - q: how easy is it to describe dialog using Predictika
+  - q: how do i describe dialog
+  - q: how do i model the dialog
+  - a: |
+      We dont have a graphical dialog builder largely because dialogs for business tasks cannot really be described graphically.
+      We use YAML as the language in which you can describe your task models. Thus even the most complex dialogs can be modeled
+      using our modeling language and expressed in a YAML file.
+- group:
+  - q: how Predictika compare with google dialog flow
+  - q: how Predictika compare with api.ai
+  - q: how compare with google dialog flow
+  - a: |
+      Google Dialog Flow (formerly api.ai) is a popular open source platform for conversational interfaces.
+      Their key strength is training the system from highly annotated sample sentences to recognize intent and extract intents.
+      Their key weaknesses, which we fix: Task dialog has to be hard coded in your favorite language, leading to long development time
+      and very rigid dialogs. Training from example sentences is very tedious and has convergence issues
+      There is also no support for voice inpout, graphical chat interface, or context management.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+
+- group:
+  - q: how Predictika compare with Amazon chatbots tools
+  - q: how Predictika compare with amazon lex
+  - a: |
+      Amazon has opened their Alexa platform for developiong conversational interfaces.
+      Their key strength is training the system from highly annotated sample sentences to recognize intent and extract intents
+      and voice-to-text support via Alexa.
+      Their key weaknesses, which we fix: Task dialog has to be hard coded in your favorite language, leading to long development time
+      and very rigid dialogs. Training from example sentences is very tedious and has convergence issues
+      There is also no support for graphical chat interface, or context management.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+- group:
+  - q: how Predictika compare with IBM watson
+  - a: |
+      IBM Watson is a enterprise platform for conversational interfaces.
+      Their key strength is training the system from highly annotated sample sentences to recognize intent and extract intents.
+      Their key weaknesses, which we fix: Task dialog has to be hard coded in your favorite language, leading to long development time
+      and very rigid dialogs. Training from example sentences is very tedious and has convergence issues
+      There is indifferent support for voice inpout, graphical chat interface, or context management.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+- group:
+  - q: how Predictika compare with other chatbots comnpanies
+  - q: how Predictika compare with other chatbots platforms
+  - q: how Predictika compare with other vendors
+  - q:
+  - a: |
+      Time to develop: Using our tools even complex dialogs can be modeled in a fraction of the time needed by other plarforms.
+      No programming: And it can all be done using ZERO custom programming. No python. No node.js. No Go. No Whatever!!
+      Langugage accuracy and flexibility: Once the task is modeled the, NLP is trained automatically, withoput requiring thousands of sample sentences.
+      Full context: Our dialog engine maintains complete context allowing users to ask questions in the middle of a dialog,
+      give partial input, incrementally give more information, or revise their choices.
+      Multi-agent architecture: Allows static and dynamic queries to be inter mixed withouit losing context
+      Multi-platcorm: Support for voice input, messaging apps, website and mobile deployment.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+
+- group:
+  - q: how Predictika compare  with drift
+  - a: |
+      Drift has made it easy to deploy very simple marketing bots quickly.
+      Their key weaknesses, which we fix: Task dialog has to be hard coded in your favorite language, leading to long development time
+      and very rigid dialogs. Training from example sentences is very tedious and has convergence issues
+      There is no support for voice inpout, or context management.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+
+- group:
+  - q: how Predictika compare with intercom
+  - a: |
+      Intercom has made it easy to deploy very simple marketing bots quickly.
+      Their key weaknesses, which we fix: Task dialog has to be hard coded in your favorite language, leading to long development time
+      and very rigid dialogs. Training from example sentences is very tedious and has convergence issues
+      There is no support for voice inpout, or context management.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+
+- group:
+  - q: who are your competitors
+  - q: who do you compete with
+  - a: |
+      Large companies such as Google, Microsoft, Amazon, IBM  have tools for building conversational interfaces.
+      Additionally, there are a  number of startups offering some chatbot development tools.
+      Predictika has developed unique technology that gives our customers substantial advantage over using most of our competitors' tools.
+      Type 'register for demo' to see some of our demo bots.
+      Or  type 'register for white paper' to sign up to get our forthcoming white paper on our technology and advantages.
+
+# Qs on verticals and applications of chatbpts inluding Predictika
+- group:
+  - q: what industries do you support
+  - q: what verticals are supported by you
+  - a: |
+      We have customers and partners developing or deploying chatbots in a broad range of industries and for a variety of applications
+      that touch on all aspects of customer life cycle with an enterprise. Type 'register for demo' to see some examples.
+      Or 'contact sales' for more detailed discussion.
+- group:
+  - q: who are your customers
+  - q: are your bots deployed anywhere
+  - q: where have you deployed
+  - q: what chatbots have you developed
+  - a: |
+      We have a number of bots deployed or ready for deployment world-wide.
+      You are talking to one RIGHT NOW!!
+      Type 'register for demo' to see some demo bots.
+      As we get permission from our customers, we will make their links available to you.
+      We are actively working with customers in a number of industries especially food ordering, banking,
+      automotive, insurance and health care.
+- group:
+  - q: can i see some demos
+  - q: how do I register to see demos
+  - q: can i see sample bots
+  - a: |
+      We have a number of bots deployed or ready for deployment world-wide.
+      You are talking to one RIGHT NOW!!
+      Type 'register for demo' to see some other demo bots.
+- group:
+  - q: What are chatbots applications specific to insurance industries
+  - q: What are chatbots applications for insurance
+  - a: |
+      Chatbots are being built to support the entire business cycle between financial industries and their consumers.
+      These include pre-sales (product information, FAQ, product comparison), sales (select insurance product, transaction, renewal)
+      to post-sales support (payments, cancellation, upgrade, claims, etc).
+      Please register to get additional information
+      Type 'register for demo' to see our sample bots.
+  - n: 28
+- group:
+  - q: what are chatbots applications in banking and finance
+  - a: |
+      Pre sales: Learn about financial products. Accounts. Loans. Mortgages. Investment Choices. Compare Alternatives
+      Sales: Unassisted loan, mortgage, and account sign up. Online qualification. Renewals.
+      Transactions: Account balances. Bill pay. Payment status. Online trading.
+      Customer support: Transfer funds. Stop payment. Fraud related. KYC.
+      Type 'register for demo' to see our sample bots.
+- group:
+  - q: what are chatbots applications in retail and ecommerce
+  - a: |
+      Pre sales: Learn about different products. Product features. Compare Alternatives. Configure bundled solutions.
+      Sales: Unassisted sales. Apply for credit.
+      Customer support: Shipment status. Returns. Bill payment. Store locator and hours.
+      Type 'register for demo' to see our sample bots.
+
+- group:
+  - q: what are chatbots applications in telecom
+  - a: |
+      Pre sales: Learn about different products. Product features. Compare Alternatives. Configure bundled solutions.
+      Sales: Unassisted sales. Apply for credit. Start service.
+      Customer support: Troubleshootiong. Schedule service. Cancel service. Bill payment. Store locator and hours.
+      Type 'register for demo' to see our sample bots.
+- group:
+  - q: what are chatbots applications in customer support
+  - a: |
+      Online trouble shooting. Schedule service.
+      Specific applications in customer support vary from domain.
+      Type 'register for demo' to see our sample bots.
+- group:
+  - q: what are chatbots applications in automotive
+  - a: |
+      Pre sales: Learn about different cars. Search inventory. Used-cars. Configure options. Schedule test drive. Find dealership.
+      Sales: Unassisted sales. Lease or purchase financing. Extended warranty,
+      Customer support: Schedule service. Recall service. Store locator and hours.
+      Type 'register for demo' to see our sample bots.
+
+- group:
+  - q: what are chatbots applications for auto dealerships
+  - a: |
+      Pre sales: Learn about different cars. Search inventory. Used-cars. Configure options. Schedule test drive.
+      Sales: Unassisted sales. Lease or purchase financing. Extended warranty,
+      Customer support: Schedule service. Recall service. Store locator and hours.
+      Type 'register for demo' to see our sample bots.
+- group:
+  - q: what are chatbots applications in health care
+  - a: |
+      Schedule doctor and lab appointments. See Results. Prescription renewal. Bill payment. Prescription Alerts.
+      Type 'register for demo' to see our sample bots.
+- group:
+  - q: what are chatbots applications in sales and marketing
+  - a: |
+      Pre sales: Learn about different products. Lead qualification. Compare products. Deliver marketing material.
+      Sales: Unassisted sales. Renewal. Customer assurance.
+      Type 'register for demo' to see our sample bots.
+  - n: 29
+- group:
+  - q: what are chatbots applications in food ordering
+  - a: |
+      Learn about menu choices. Create correct and complete order. Consider dietary restrictions.
+      Personalize the order. Repeat previous orders. Schedule delivery.
+      Type 'register for demo' to see our sample food ordering bot.
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
+#- group:
+#  - q:
+#  - a:
