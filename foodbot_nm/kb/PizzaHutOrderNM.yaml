@@ -1,0 +1,343 @@
+annot:
+  author: Priti Mittal
+  name: PizzaHutOrderNM.yaml
+  start date: April 24, 2017
+  welcomeMsg: |
+            Welcome to the predictika demo foodbot. It is based on the menu of a national fast food pizza chain.
+            You can type general greetings such as "hi" to get general information.
+            Or you can type "start" to be guided to place your order.
+            Or simply describe in your words what you want. You can say,
+            "i want large hand tossed pizza with onions mushrooms, drinks, pasta and desserts"
+  type: ConfigKB
+  desc: PizzaHut menu based KB. Uses Alternative way to model Order using nested models
+  topModel: PizzaHutOrder
+
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./allpizza.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+#- from: "./byopizza.yaml"
+#  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Desserts.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Dip.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Drinks.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Pasta.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Sides.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./Wings.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in a menu category"
+    activityStatus: required
+    cardinality: 1
+
+  constraints:
+  - constr: "push _index down to Item:_index"
+    type: rule
+    then: (assert(eq (para Item:_index) (para _index)))
+
+- model: Pizza
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in  pizza category"
+    activityStatus: required
+    domain: [(model CreateYourOwnPizza),(model CheesePizza),(model PepperoniPizza),
+            (model 'Meat Lovers Pizza'),(model 'Supreme Pizza'), (model "Half and Half Pizza") ]
+    nlp:
+      synonyms: 'Pizza'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select a pizza"
+
+- model: Drinks
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in drinks category"
+    activityStatus: required
+    domain: [(model 'Pepsi'),(model 'Diet Pepsi'),(model 'Mountain Dew'),(model 'Mist Mist'), (model 'Lipton Tea'),(model 'Crush Orange'),(model 'Dr Pepper') ]
+    nlp:
+      synonyms: 'Drinks'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select a drink"
+
+- model: Dip
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in dip category"
+    activityStatus: required
+    domain: [(model 'Dont Skip The Dip')]
+    nlp:
+      synonyms: 'Dip'
+    ui: {class: summary}
+    askUser:
+      msg: "Would you like to order a dip to go with your meal"
+
+- model: Pasta
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in pasta category"
+    activityStatus: required
+    domain: [(model 'Tuscany Chicken Alfredo Pasta'), ( model 'Tuscany Meaty Marinara Pasta'),
+      (model 'Family Size Chicken Alfredo'),(model 'Family Size Meaty Marinara') ]
+    nlp:
+      synonyms: 'Pasta'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select a pasta dish"
+
+- model: Desserts
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in desserts category"
+    activityStatus: required
+    domain: [(model 'The Ultimate Hersheys Chocolate Chip Cookie'), (model 'Hersheys Triple Chocolate Brownie'),
+        (model 'Cinnamon Sticks')]
+    nlp:
+      synonyms: 'Desserts'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select a dessert to go with your meal"
+
+- model: Sides
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in sides category"
+    activityStatus: required
+    domain: [(model 'Stuffed Garlic Knots'),(model 'Cheese Sticks'),(model 'Breadsticks'),(model 'Fries')]
+    nlp:
+      synonyms: 'Sides'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select a side item with your meal"
+
+- model: Wings
+  baseModel: MenuItem
+  parameters:
+  - para: Item
+    desc: "List of items in wings category"
+    activityStatus: required
+    domain: [(model 'Large Traditional Wings'), (model 'Breaded Bone-Out Wings') ]
+    nlp:
+      synonyms: 'Wings'
+    ui: {class: summary}
+    askUser:
+      msg: "Please select an order of our chicken wings"
+
+- model: PizzaHutOrder
+  parameters:
+  - para: DietaryRestriction
+    desc: 'Kinds of items that should NOT be in the order'
+    cardinality: -1
+    domain: ['Meat','Beef', 'Pork','Chicken', 'Veggie','Dairy', 'Sugar', 'Nuts']
+    activityStatus: optional
+    askUser:
+      msg: "Please select if you want to exclude any kinds of items from your order."
+      msgIfAssigned: "Please select any additional restrictions"
+    ui:
+      iterate: set
+      ignoreValue: Done
+      class: [summary]
+
+  - para: Order
+    desc: 'Holds the entire order'
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    domain: [(model Pizza), (model Pasta), (model Sides), (model Wings), (model Dip), (model Desserts), (model Drinks) ]
+    askUser:
+      msg: "Please tell us what you would like"
+      msgIfAssigned: "Would you like anything else?"
+    ui:
+      iterate: bag
+      ignoreValue: Done
+
+  - para: TotalPrice
+    dataType: float
+    cardinality: -1
+    askUser:
+      msgOnValue: ["Total for the order ${}",[TotalPrice]]
+    ui:
+      class: [summary]
+      valueformat: ['${}',[TotalPrice]]
+
+  - para: CompleteOrder
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [ShowOrder, ReviseOrder,  SaveOrder, Pay, Done]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "You have completed your order. What do you want to do next?"
+    ui:
+      iterate: resetPush
+      ignoreValue: Done
+    nlp:
+      gex: skip
+
+# following para are only used to eliminate menu choices from Order if all the choices in that menu category
+# is eliminated based on DietaryRestriction
+  - para: PizzaMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Pizza)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: DrinksMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Drinks)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: DipMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Dip)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: DessertsMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Desserts)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: PastaMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Pasta)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: DessertsMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Desserts)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: SidesMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Sides)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  - para: WingsMenuExc
+    cardinality: 1
+    activityStatus: optional
+    value: (model Wings)
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+  constraints:
+  - constr: "add up the TotalPrice from ea item"
+    type: rule
+    then: (assert(eq(para TotalPrice) (plus (para Order:*all*:Item:TotalPrice))))
+
+  - constr: "push dietary restriction to ea order item"
+    type: rule
+    if: (isignored (para DietaryRestriction))
+    then: (assert(contains (para Order:*all*:Items:DietaryRestriction) (para DietaryRestriction)))
+
+  - constr: "_start=NoInputs --> require DietaryRestriction"
+    type: rule
+    if: (eq (para _start) NoInputs)
+    then: (assert(isrequired (para DietaryRestriction)))
+
+# add constraints to filter out other menu items based on DietaryRestriction
+  - constr: "eliminate all Order items based on Diet"
+    type: rule
+    if: (isignored (para DietaryRestriction))
+    then: (assert(notmember(para Order:*all*:Item:DietType)(para DietaryRestriction)))
+
+# filter out menu items based on Diet. this is done for ea menu category separately using spl para
+# so that if their domain is made empty the entire category can be removed from Order
+  - constr: "eliminate all Desserts items based on Diet"
+    type: rule
+    if: (isignored (para DietaryRestriction))
+    then: (assert(notmember(para DessertsMenuExc:Item:DietType)(para DietaryRestriction)))
+  - constr: "No desserts choices left"
+    type: rule
+    if: (eq(len (domain (para DessertsMenuExc:Item))) 0)
+    then: (assert(notcontains (para Order) DessertsMenu ))
+
+  - constr: "CompleteOrder=Pay"
+    type: rule
+    if: (eq(para CompleteOrder) Pay)
+    then:
+      - and: (assert(tellUser "Payment processing not implemented yet. This is still a demo"))
+      - and: (assert(contains (para _sys) Quit))
+  - constr: "CompleteOrder=SaveOrder"
+    type: rule
+    if: (eq(para CompleteOrder) SaveOrder)
+    then:
+      - and: (assert(tellUser "Saving order not implemented yet. This is still a demo"))
+#      - and: (assert(contains (para _sys) Quit))
+  - constr: "CompleteOrder=ReviseOrder"
+    type: rule
+    if: (eq(para CompleteOrder) ReviseOrder)
+    then:
+      - and: (assert(tellUser "You can change any part of the order simply by saying change foo or change foo to bar, where foo is something you selected, e.g., change large to medium"))
+  - constr: "CompleteOrder=AddToOrder"
+    type: rule
+    if: (eq(para CompleteOrder) AddToOrder)
+    then:
+      - and: (assert(isunignore (para Order)))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(eq(para Order:*all*:Item:CompleteOrder) (para CompleteOrder)))
+      - and: (assert(tellUserFormat "Total Order Price ${:.2f}" (para TotalPrice) ))
+
+
+  - constr: "CompleteOrder=Done"
+    type: rule
+    if: (eq(para CompleteOrder) Done)
+    then:
+      - and: (assert(tellUser "Goodbye!! Thank you for your order. Please come back again."))
+      - and: (assert(tellUser "You can place a new order by just describing what you want."))
+      - and: (assert(tellUser "E.g., large pizza with onions and mushrooms, or I want a pizza with pepsi pasta and dessert."))
+      - and: (assert(tellUser "E.g., or simply type start to be guided step by step"))
+      - and: (assert(contains (para _sys) Quit))
+# eliminate menu categories from Order if no choices left due to DietaryRestriction
+# How to write rule(s) that eliminates a menu category from Order's domain if thay category has no choices left
+#  - constr: "No pasta choices left"
+#    type: rule
+#    if: (eq(len (domain (para Pasta))) 0)
+#    then: (assert(notcontains (para Order)Pasta ))

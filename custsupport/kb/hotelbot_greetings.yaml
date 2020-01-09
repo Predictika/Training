@@ -1,0 +1,246 @@
+annot:
+    name: greetings.yaml
+    type: chatbotkbNT
+    author: Sanjay Mittal
+    minCF: 0.6
+#    welcomeMsg: |
+#                Welcome to the  >>foo<< bot. You can ask me questions, e.g.,
+#                >>q1<<, 'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries',
+#                or to begin type "start" or just type what you want the bot to do
+    stem: True
+    synset: [['are', 'r'], ['you' , 'u'], ['hello', 'hi', 'namaste', 'aloha', 'ciao', 'bonjour', 'howdy', 'greetings', 'greeting']]
+    start date: Sept. 12, 2017
+    corpus: kb  # kb - use entire kb as corpus; qa - only use Q or A corpus respectively
+    similarity: pcosine #pcosine - partial cosine (original); fcosine - full consine; euclid - euclidean distance
+    desc: Generic greetings file. Can be imported into other greetings file or used as is
+    desc2: All items with >><< must be replaced by your own task
+groups:
+    - group:
+        - q: Who are you?
+        - q: who r u
+        - q: who are u
+        - q: who r you
+        - q: Help
+        - a: |
+            I am a Hotel Bot - an automated program that can answer questions about hotel needs.
+            You can ask me questions, e.g., 'i want to order room service', 'my AC is not working', 'i am not feeling well',
+            'please send me 4 AA batteries',
+            or to begin type "start" or just type what you want the bot to do
+        - a: |
+
+    - group:
+        - q: What can you answer
+        - q: What can you do
+        - q: What can I ask you
+        - q: how can you help
+        - q: what can you help with
+        - a: |
+            I can answer general questions about  hotel needs.
+            You can ask me questions, e.g., 'i want to order room service, 'my AC is not working', 'please send me 4 AA batteries',
+                'can i get english newspaper'
+            or to begin type "start" or just type what you want the bot to do
+    - group:
+        - q: How are you?
+        - q: how r u
+        - q: how are you
+        - q: how r you
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question that you might want to ask a Hotel Bot.
+            E.g., 'my AC is not working', 'please send me 4 AA batteries', 'i would like a bottle opener, a city map, and crutchdes',
+                'i am not feeling well'
+            or to begin type "start" or just type what you want the bot to do
+        - a: |
+
+    - group:
+        - q: What's up?
+        - q: Whats up?
+        - a: |
+            Not much. Do you have any questions about hotel needs?
+            E.g., 'i am not feeling well', 'i would like a bottle opener, a city map, and crutchdes', 'i want to order room service,
+                    'i would like my car washed, see a doctor, and my ice machine is damaged'
+            or to begin type "start" or just type what you want the bot to do
+        - a: |
+               Not too much. Can I help with hotel needs questions such as,
+               'i am not feeling well', 'i would like my car washed, see a doctor, and my ice machine is damaged', 'please send me 4 AA batteries'
+    - group:
+        - q: How do you do?
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question that you might ask an hotel needs agent.
+            E.g., 'i am not feeling well', 'i would like a bottle opener, a city map, and crutchdes', 'i want to order room service,
+                        'please send me 4 AA batteries'
+            or to begin type "start" or just type what you want the bot to do
+    - group:
+        - q: Hi, How is it going?
+        - q: How is it going?
+        - q: How's it going?
+        - a: |
+               Good.
+        - a: |
+            Fine. I'll be better if you ask me something about hotel needs, e.g.,
+            'i would like my car washed, see a doctor, and my ice machine is damaged', 'please send me 4 AA batteries', 'i want to order room service, 'i would like a bottle opener, a city map, and crutchdes'
+            or to begin type "start" or just type what you want the bot to do
+    - group:
+        - q: How are you doing?
+        - q: How r u doing
+        - q: How are u doing
+        - q: How r you doing
+        - q: cool
+        - a: |
+               Good. Do you have questions about hotel needs?
+               Or to begin type "start" or just type what you want the bot to do
+        - a: |
+               Very well, thanks.
+        - a: |
+            Okay. Ask me something about hotel needs, e.g.,
+            'my AC is not working', 'i want to order room service, 'can i get english newspaper', 'please send me 4 AA batteries'
+            or to begin type "start" or just type what you want the bot to do
+        - a: |
+               Great. Hope you are having a good day too. Can I help with any hotel needs related questions.
+               or to begin type "start" or just type what you want the bot to do
+        - a: |
+               Not so great. I am lonely - no one is asking me anything.
+        - a: |
+            Fine, and you? Want to know about hotel needs?
+            or to begin type "start" or just type what you want the bot to do
+
+    - group:
+        - q: Nice to meet you.
+        - a: |
+            Thank you. Can I help you with hotel needs questions, e.g.,
+            'i am not feeling well', 'i want to order room service, 'my AC is not working', 'please send me 4 AA batteries'
+            or to begin type "start" or just type what you want the bot to do
+    - group:
+        - q: Hello
+        - q: Hi
+        - q: Hi there
+        - q: greetings
+        - q: howdy
+        - q: bonjour
+        - q: buenos dias
+        - q: good morning
+        - q: good evening
+        - q: good day
+        - q: Greeting
+        - a: |
+            Hi. I am a Hotel bot. I can answer general questions about hotel needs.
+            Just ask questions such as, 'i want to order room service, 'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries'
+            or to begin type "start" or just type what you want the bot to do.
+        - a: |
+            Greetings! What can I help you with?
+            Ask me questions, e.g.,  'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries', 'i want to order room service
+            or to begin type "start" or just type what you want the bot to do.
+    - group:
+        - q: Nice to meet you
+        - q: It is a pleasure to meet you.
+        - q: Top of the morning to you!
+        - a: |
+            Thank you. You too.  I am a Hotel bot.
+            I can help with general questions about hotel needs or help you begin. Just type ,
+            'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries', 'i want to order room service,
+            or to begin type "start" or just type what you want the bot to do
+    - group:
+        - q: What can you not answer
+        - a: |
+            I can help with general questions about hotel needs or help you begin. Just type,
+            'my AC is not working', 'i am not feeling well', 'i would like a bottle opener, a city map, and crutchdes', 'i would like my car washed, see a doctor, and my ice machine is damaged'
+            I cannot answer questions about "meaning of life" as an example!!
+    - group:
+        - q: bye
+        - q: good bye
+        - q: GoodBye
+        - q: adios
+        - q: sayonara
+        - q: aloha
+        - q: namaste
+        - q: kem cho
+        - q: au revoir
+        - q: ciao
+        - q: farewell
+        - q: have a good day
+        - q: take care
+        - q: see you later
+        - q: talk to you later
+        - q: so long good bye
+        - q: cheerio
+        - q: cheers man
+        - q: adieu
+        - a: |
+            It was nice talking to you. See you next time.
+        - a: |
+            I hope I was helpful in answering your questions. Please come again.
+    - group:
+        - q: I am doing well
+        - q: I am good
+        - q: Its a beautiful day
+        - a: |
+            I am happy to hear that.
+            You can ask me questions, e.g., 'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries', 'i want to order room service,
+            or to begin type "start" or just type what you want the bot to do
+
+        - a: |
+    - group:
+        - q: more
+        - q: tell me more
+        - q: i would like to know more
+        - q: help
+        - a: |
+            You can ask me questions, e.g., 'my AC is not working', 'i am not feeling well', 'please send me 4 AA batteries', 'i want to order room service,
+            or to begin type "start" or just type what you want the bot to do
+
+    - group:
+        - q: I dont like your answer
+        - q: Wrong answer
+        - q: Incorrect answer
+        - q: Your answer is way off the mark
+        - q: Wide off the mark
+        - q: Your answer completely missed the target
+        - q: Your answer is unacceptable
+        - q: Your answer is not acceptable
+        - q: Your answer was not helpful
+        - q:
+        - a: |
+            Please try asking your question in a different way.
+        - a: |
+            Thanks for your feedback.
+            I'll let the developers know.
+        - a: |
+            Appreciate your feedback.
+            I am sure the developers will be happy to look into it.
+        - a: |
+            Thanks for letting me know.
+            I'll pass it along.
+    - group:
+        - q: Is this the best you can do
+        - q: I am sure you can do better
+        - a: |
+            This is what I know.
+            However, I'll let the developers know.
+            They will be happy to see if they can improve in the future.
+        - a: |
+            I guess so, for now.
+            I'll let the developers know that you didnt like my answer.
+    - group:
+        - q: Terrible answer
+        - q: Your answer sucks
+        - q: Horrible answer
+        - q: Useless answer
+        - q: Not very helpful answer
+        - q: diappointing answer
+        - a: |
+            Thanks for letting me know.
+            I am sorry if I offended you.
+            I will let the developers know.
+        - a: |
+            I am sorry you didnt like my answer.
+            I am sure the developers will look into it.
+            Your feedback is very valuable.
+        - a: |
+            I am sorry you didnt like my answer.
+            Perhaps you can try asking in a different way.
+            Your feedback is very valuable.
+
+
+
+

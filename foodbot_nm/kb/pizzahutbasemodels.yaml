@@ -1,0 +1,714 @@
+annot:
+  author: Priti Mittal
+  name: pizzahutbasemodels.yaml
+  start date: Mar 28, 2017
+  type: ConfigKB
+  desc: Simple KB for creating your own pizza and base models for all other pizza ingredients
+  topModel: PizzaBase
+models:
+- model: PricedItem
+  desc: 'Base model for every priced item on the menu'
+  parameters:
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+#    value: [NoFood]
+    domain: [ 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', 'Sugar', 'Nuts', NoFood ]
+    nlp:
+      gex: skip
+
+  - para: DietaryRestriction
+    desc: 'Kinds of toppings that should NOT be in the order'
+    cardinality: -1
+    domain: ['Meat','Beef', 'Pork','Chicken', 'Veggie','Dairy', Sugar, Nuts]
+    activityStatus: optional
+    askUser:
+      msg: "Plesse select if you want to exclude any kinds of items from your order"
+      msgIfAssigned: "Please select any additional restrictions"
+#    ui:
+#      iterate: set
+#      ignoreValue: Done
+#      class: summary
+    nlp:
+      gex: skip
+
+  - para: Currency
+    value: '$'
+
+  - para: TotalPrice
+    dataType: float
+    activityStatus: required
+    domain: (0,1000)
+    cardinality: -1
+    askUser:
+      dontAsk: True
+    ui:
+      valueFormat: ["{}{:.2f}",[Currency, TotalPrice]]
+
+  - para: CompleteOrder
+    desc: "Only set by PizzaHutOrder and not by asking user"
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [ShowOrder, MakeChanges, SaveOrder, Pay]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+
+- model: PizzaBase
+  baseModel: PricedItem
+  parameters:
+  - para: PizzaKey
+    desc: "Normally not used. However can be set when pizza is half-half"
+    activityStatus: optional
+    dataType: arbit
+
+  - para: Size
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: 'Large' # if given, used during model completion
+    domain: [Personal, Small, Medium, Large, Xlarge]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the size of the {}",[PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: Crust
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: 'Original Pan' # if given, used during model completion
+    domain: ['Original Pan','Hand Tossed','Thin n crispy','Original Stuffed', 'Skinny It Up']
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the crust of the {}", [PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: CrustFlavor
+    desc: "This para describes flavoring added to the crust"
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    preset:  'No Flavor'
+    domain: ['No Flavor','Hut favorite','Toasted Parmesan','Salted Pretzel','Toasted Cheddar', 'Garlic Buttery Blend']
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Do you want extra flavoring for the crust of the  {}",[PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: Sauce
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: (model "Sauce") # not required. if given will be assigned when model becomes active
+    activityStatus: required # defaults to: optional; others: required; excluded
+
+  - para: Cheese
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: (model "Cheese") # not required. if given will be assigned when model becomes active
+    activityStatus: required # defaults to: optional; others: required; excluded
+
+  - para: Toppings
+    dataType: symbolic
+    desc: "Pizza classes that have limited toppings should change their cardinality"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+
+  constraints:
+  - constr: "sets PizzaKey for self"
+    type: rule
+    then: (assert(eq(para PizzaKey) (firstval (para PizzaKey)(para _key))))
+
+  - constr: "sets PizzaKey for sauce"
+    type: rule
+    then: (assert(eq(para Sauce:PizzaKey) (firstval (para PizzaKey)(para _key))))
+
+  - constr: "sets PizzaKey for cheese"
+    type: rule
+    then: (assert(eq(para Cheese:PizzaKey) (firstval (para PizzaKey)(para _key))))
+  - constr: "push dietary restriction to Cheese"
+    type: rule
+    then: (assert(contains (para Cheese:DietaryRestriction) (para DietaryRestriction)))
+
+- model: PizzaBaseMultiToppings
+  baseModel: PizzaBase
+  desc: "Base class for multi-toppings pizza. Its constraints are different"
+  parameters:
+  - para: Toppings
+    dataType: symbolic
+    desc: "Pizza classes that have limited toppings should change their cardinality"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+
+  constraints:
+  - constr: "impose dietary restriction"
+    type: rule
+    #then: (assert(notoverlap (para Toppings:*all*:Type)(para DietaryRestriction)))
+    #then: (assert(notmember (para DietaryRestriction)(para Toppings:*all*:Type)))
+#    if: (neq (para DietaryRestriction) 'Nothing')
+    then:
+      - and: (assert(notmember (para Toppings:*all*:DietType)(para DietaryRestriction)))
+
+  - constr: "sets PizzaKey for all toppings"
+    type: rule
+    then: (assert(mpeqarbit(para Toppings:*all*:PizzaKey) (firstval (para PizzaKey)(para _key))))
+
+  - constr: "CompleteOrder=ShowOrder, Toppings=1"
+    type: rule
+    if:
+      - and: (eqCS(para CompleteOrder) ShowOrder)
+      - and: (eq(para Toppings_mvsize) 1)
+    then:
+      - and: (assert(tellUser "{} {} {} with {}, {} and {}{}" (para Size) (para Crust) (para _key)
+          (para Cheese:OrderDesc)(para Sauce:OrderDesc) (para Toppings:*all*:OrderDesc)(blankStr (para _index))))
+
+  - constr: "CompleteOrder=ShowOrder, Toppings>1"
+    type: rule
+    if:
+      - and: (eqCS(para CompleteOrder) ShowOrder)
+      - and: (gt(para Toppings_mvsize) 1)
+    then:
+      - and: (assert(tellUser "{} {} {} with {}, {}, {}{}" (para Size) (para Crust) (para _key)
+          (para Cheese:OrderDesc)(para Sauce:OrderDesc) (para Toppings:*all*:OrderDesc)(blankStr (para _index))))
+
+- model: PizzaBaseSingleTopping
+  baseModel: PizzaBase
+  desc: "Base class for single topping pizzas"
+  parameters:
+  - para: Toppings
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+
+  constraints:
+  - constr: "sets PizzaKey for single topping"
+    type: rule
+    then: (assert(eq(para Toppings:PizzaKey) (firstval (para PizzaKey)(para _key))))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {} {} with {}, {} and {}{}" (para Size) (para Crust) (para _key)
+          (para Cheese:OrderDesc)(para Sauce:OrderDesc) (para Toppings:OrderDesc)(blankStr (para _index))))
+
+- model: BaseWings
+  baseModel: PricedItem
+  parameters:
+  - para: Flavor
+    activityStatus: required
+    askUser: {msg: "Select the sauce and flavoring for the wings"}
+    ui:
+      class: [summary]
+
+  - para: HowMany
+    activityStatus: required
+    askUser: {msg: "How many wings do you want"}
+    ui:
+      class: [summary]
+
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+    value: [Chicken, Meat]
+#    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+#    domain: [ 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', Sugar, Nuts, NoFood ]
+
+  constraints:
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {}  {}{}" (para HowMany) (para Flavor) (para _key)(blankStr (para _index))))
+
+- model: BasePasta
+  baseModel: PricedItem
+  parameters:
+  - para: Bread
+    activityStatus: required
+    askUser: {msg: ["Select the bread to go with your {}",[_key]]}
+    ui:
+      class: [summary]
+
+  - para: BasePrice
+    dataType: float
+    activityStatus: required
+    ui:
+      class: [summary]
+      valueFormat: ['{}{:.2f}', [Currency, BasePrice]]
+
+  - para: OptPrice
+    cardinality: -1
+    value: 0
+    dataType: float
+    ui:
+      class: [summary]
+      valueFormat: ['{}{:.2f}', [Cufrrency, OptPrice]]
+
+  constraints:
+  - constr: 'TotalPrice=BasePrice + OptPrice'
+    type: rule
+    then: (assert(eq (para TotalPrice) (plus (anyvals(para BasePrice) (para OptPrice)))))
+
+#  - constr: "CompleteOrder=ShowOrder"
+#    type: rule
+#    if: (eq(para CompleteOrder) ShowOrder)
+#    then:
+#      - and: (assert(tellUser "(para _key) with {} and  {}" (para Bread) (para SecondPan) ))
+
+- model: BaseDrink
+  baseModel: PricedItem
+  parameters:
+  - para: Size
+    activityStatus: required
+    askUser: {msg: ["Select the size of your {} order",[_key]]}
+    ui:
+      class: [summary]
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  [Bottle, 1.25]
+    -  ['Two Liter', 1.99]
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {}{}" (para Size) (para _key)(blankStr (para _index))))
+
+- model: BaseSides
+  baseModel: PricedItem
+  parameters:
+  - para: Size
+    activityStatus: required
+    askUser: {msg: ["Select the size of your {} order",[_key]]}
+    ui:
+      class: [summary]
+
+  constraints:
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {}{}" (para Size) (para _key)(blankStr (para _index))))
+
+
+- model: Sauce
+  parameters:
+  - para: PizzaKey
+    dataType: arbit
+    desc: "Refers to the pizza where this sauce is to be added"
+    nlp:
+      gex: skip
+
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: [NoFood]
+    domain: [NoFood, 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', 'Sugar', 'Nuts' ]
+    nlp:
+      gex: skip
+
+  - para: Sauce
+    defValue: 'Barbeque' # if given, used during model completion
+    domain: ['Barbeque','Classic Marinara','Premium Crushed Tomato','Creamy Garlic Parmesan','Buffalo','NoSauce']
+#    preset: 'Classic Marinara'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the sauce for your {}",[PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: Quantity
+    defValue: 'Regular' # if given, used during model completion
+    domain: [Light, Regular,Extra, 'NoSauce']
+#    preset: Regular
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["How much sauce do you want on your {}?", [PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: OrderDesc
+    desc: "Computed description used for building order description"
+    dataType: arbit
+
+  constraints:
+  - constr: "NoSauce -> Qty=None"
+    type: rule
+    if: (eq (para Sauce) 'NoSauce')
+    then:
+      - and: (assert(eq (para Quantity) 'NoSauce'))
+      - and: (assert(eq (para OrderDesc) 'No Sauce'))
+
+
+  - constr: "Sauce <> NoSauce -> Qty<>None"
+    type: rule
+    if:
+      - and: (neq (para Sauce) 'NoSauce')
+    then:
+      - and: (assert(neq (para Quantity) 'NoSauce'))
+      - and: (assert(preset (para Quantity) Regular))
+      - and: (assert(eq (para OrderDesc)(strplus (para Quantity) ' ' (para Sauce) ' sauce')))
+
+  - constr: "Drop Regular from OrderDesc"
+    type: rule
+    if: (eq (para Quantity) Regular)
+    then: (assert(eq(para OrderDesc) (strplus (para Sauce) ' sauce')))
+
+- model: Cheese
+  parameters:
+  - para: DietaryRestriction
+    desc: 'Kinds of toppings that should NOT be in the order'
+    cardinality: -1
+    domain: ['Meat','Beef', 'Pork','Chicken', 'Veggie','Dairy', Sugar, Nuts]
+    activityStatus: optional
+    askUser:
+      msg: "Plesse select if you want to exclude any kinds of items from your order"
+      msgIfAssigned: "Please select any additional restrictions"
+#    ui:
+#      iterate: set
+#      ignoreValue: Done
+#      class: summary
+  - para: PizzaKey
+    dataType: arbit
+    desc: "Refers to the pizza where this cheese is added"
+    nlp:
+      gex: skip
+
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [NoFood, 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', 'Sugar', 'Nuts' ]
+    nlp:
+      gex: skip
+
+  - para: Cheese
+    defValue: 'Cheese' # if given, used during model completion
+    domain: ['Cheese','Cheddar Cheese', 'Goat Cheese', 'NoCheese']
+#    preset: 'Cheese'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the cheese for your {}",[PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: Quantity
+    defValue: 'Regular' # if given, used during model completion
+    domain: ['Light', 'Regular','Extra', 'NoCheese']
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["How much cheese do you want on your {}?", [PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: OrderDesc
+    desc: "Computed description used for building order description"
+    dataType: arbit
+
+  constraints:
+  - constr: "NoCheese -> Qty=None"
+    type: rule
+    if: (eq (para Cheese) 'NoCheese')
+    then:
+      - and: (assert(eq (para Quantity) 'NoCheese'))
+      - and: (assert(eq (para OrderDesc) 'No Cheese'))
+
+  - constr: "Cheese <> NoCheese -> Qty<>None"
+    desc: "With cheese, cannnot have No qty"
+    type: rule
+    if: (neq (para Cheese) 'NoCheese')
+    then:
+      - and: (assert(neq (para Quantity) 'NoCheese'))
+      - and: (assert(eq (para DietType) 'Dairy'))
+      - and: (assert(preset (para Quantity) 'Regular'))
+      - and: (assert(eq (para OrderDesc)(strplus (para Quantity) ' ' (para Cheese))))
+#  - constr: "Preset Cheese=Cheese unless DietaryRerstriction=Dairy"
+#    type: rule
+#    if: (notmember Dairy (para DietaryRestriction))
+#    then: (assert(preset (para Cheese) Cheese))
+  - constr: "Drop Regular from OrderDesc"
+    type: rule
+    if: (eq (para Quantity) Regular)
+    then: (assert(eq(para OrderDesc) (para Cheese)))
+  - constr: 'Eiminate all cheese if DietaryRestriction=Dairy'
+    type: rule
+    if: (member Dairy (para DietaryRestriction))
+    then: (assert(eq (para Cheese) 'NoCheese'))
+
+- model: Dessert
+  baseModel: PricedItem
+  parameters:
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+#    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: [Sugar]
+#    domain: [NoFood, 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', 'Sugar', 'Nuts' ]
+
+  constraints:
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{}{}" (para _key)(blankStr (para _index))))
+
+
+- model: Ingredient_model
+  parameters:
+  - para: PizzaKey
+    dataType: arbit
+    desc: "Refers to the pizza where this topping is added"
+    nlp:
+      gex: skip
+
+  - para: Ingredient
+    activityStatus: required # defaults to: optional; others: required; excluded
+
+  - para: DietType
+    desc: "Diet descriptors about the food item"
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [NoFood, 'Meat','Beef', 'Pork','Chicken', 'Veggie','Vegan', 'Dairy', 'Sugar', 'Nuts' ]
+
+  - para: Ingredient_quantity
+    defValue: 'Regular' # if given, used during model completion
+    domain: [Light, 'Regular','Extra', 'Nothing']
+    preset: Regular
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the quantity of {} for your {}", [Ingredient, PizzaKey]]}
+    ui:
+      class: [summary]
+
+  - para: Ingredient_count
+    desc: "Keeps track of how many toppings should be counted. Regular=1, Extra=2, Nothing=0"
+    cardinality: 1
+    dataType: int
+    domain: (0,5)
+    activityStatus: required
+    askUser:
+      dontAsk: True
+
+  - para: OrderDesc
+    desc: "Computed description used for building order description"
+    dataType: arbit
+
+  constraints:
+  - constr: "Nothing -> Qty=Nothing"
+    type: rule
+    if: (eq (para Ingredient) 'Nothing')
+    then:
+      - and: (assert(eq (para Ingredient_quantity) 'Nothing'))
+      - and: (assert(eq(para OrderDesc) 'No Toppings'))
+
+  - constr: "Ingredient <>Nothing -> Qty<>Nothing"
+    type: rule
+    if: (neq (para Ingredient) 'Nothing')
+    then:
+      - and: (assert(neq (para Ingredient_quantity) 'Nothing'))
+      - and: (assert(eq(para OrderDesc) (strplus (para Ingredient_quantity) ' ' (para Ingredient))))
+
+  - constr: "Drop Regular from OrderDesc"
+    type: rule
+    if: (eq (para Ingredient_quantity) Regular)
+    then: (assert(eq(para OrderDesc) (para Ingredient)))
+
+  - constr: "Assign count based on quantity"
+    type: table
+    parameters: [(para Ingredient_quantity), (para Ingredient_count)]
+    rows:
+    - [Nothing, 0]
+    - [Regular, 1]
+    - [Extra, 2]
+
+- model: Meat
+  desc: "Meat toppings"
+  baseModel: Ingredient_model
+  parameters:
+  - para: Ingredient 
+    domain: ['Pepperoni','Italian Sausage','Premium Salami','Classical Meatball','Slow Roasted Ham','Applewood Smoked Bacon','Grilled Chicken','Beef', 'Seasoned Pork']
+  - para: DietType
+    value: [Meat]
+
+- model: 'Pepperoni'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: Pepperoni
+  - para: DietType
+    value: [Meat, Pork]
+
+- model: 'Italian Sausage'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Italian Sausage'
+  - para: DietType
+    value: [Meat, Beef]
+
+- model: 'Premium Salami'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Premium Salami'
+  - para: DietType
+    value: [Meat, Beef, Pork]
+
+- model: 'Classical Meatball'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Classical Meatball'
+  - para: DietType
+    value: [Meat, Beef]
+
+- model: 'Slow Roasted Ham'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Slow Roasted Ham'
+  - para: DietType
+    value: [Meat, Pork]
+
+- model: 'Applewood Smoked Bacon'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Applewood Smoked Bacon'
+  - para: DietType
+    value: [Meat, Pork]
+
+- model: 'Grilled Chicken'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Grilled Chicken'
+  - para: DietType
+    value: [Meat, Chicken]
+
+- model: 'Beef'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Beef'
+  - para: DietType
+    value: [Meat, Beef]
+
+- model: 'Seasoned Pork'
+  baseModel: Meat
+  parameters:
+  - para: Ingredient
+    value: 'Seasoned Pork'
+  - para: DietType
+    value: [Meat, Pork]
+
+- model: Veggie
+  desc: "Vegetable toppings"
+  baseModel: Ingredient_model
+  parameters:
+  - para: Ingredient 
+    domain: ['Fresh Mushrooms','Roasted Spinach','Peruvian Cherry Peppers','Fresh Red Onions','Black Olives',
+          'Green Bell Peppers','Banana Peppers','Sweet Pineapple','Jalapeno Peppers','Roma Tomatoes']
+  - para: DietType
+    value: [Veggie]
+
+- model: Vegan
+  baseModel: Ingredient_model
+  parameters:
+  - para: Ingredient 
+    domain: ['Fresh Mushrooms','Roasted Spinach','Peruvian Cherry Peppers','Fresh Red Onions','Black Olives',
+          'Green Bell Peppers','Banana Peppers','Sweet Pineapple','Jalapeno Peppers','Roma Tomatoes']
+  - para: DietType
+    value: [Vegan]
+
+- model: Veggie_Vegan
+  baseModel: Ingredient_model
+  parameters:
+  - para: Ingredient 
+    domain: ['Fresh Mushrooms','Roasted Spinach','Peruvian Cherry Peppers','Fresh Red Onions','Black Olives',
+    'Green Bell Peppers','Banana Peppers','Sweet Pineapple','Jalapeno Peppers','Roma Tomatoes']
+  - para: DietType
+    value: [Veggie, Vegan]
+
+- model: 'Fresh Mushrooms'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Fresh Mushrooms'
+
+- model: 'Roasted Spinach'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Roasted Spinach'
+
+- model: 'Peruvian Cherry Peppers'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Peruvian Cherry Peppers'
+
+- model: 'Fresh Red Onions'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Fresh Red Onions'
+
+- model: 'Black Olives'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Black Olives'
+
+- model: 'Green Bell Peppers'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Green Bell Peppers'
+
+- model: 'Banana Peppers'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Banana Peppers'
+
+- model: 'Sweet Pineapple'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Sweet Pineapple'
+
+- model: 'Jalapeno Peppers'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Jalapeno Peppers'
+
+- model: 'Roma Tomatoes'
+  baseModel: Veggie_Vegan
+  parameters:
+  - para: Ingredient
+    value: 'Roma Tomatoes'
+
+- model: NoTopping
+  baseModel: Ingredient_model
+  parameters:
+  - para: Ingredient
+    value: "Nothing"
+  - para: DietType
+    value: [NoFood]
+  - para: Ingredient_quantity
+    value: "Nothing"
+  - para: OrderDesc
+    value: 'No Toppings'
+
+- model: NoMenuItem
+  baseModel: PricedItem
+  desc: "Used when nothing can be ordered from a menu category"
+  parameters:
+  - para: TotalPrice
+    value: 0

@@ -1,0 +1,50 @@
+annot:
+  author: Priti Mittal
+  name: Desserts.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for orderting desserts
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: "The Ultimate Hersheys Chocolate Chip Cookie"
+  baseModel: Dessert
+  parameters:
+  - para: TotalPrice
+    value: 1.99
+
+- model: "Hersheys Triple Chocolate Brownie"
+  baseModel: Dessert
+  parameters:
+  - para: TotalPrice
+    value: 1.50
+
+- model: "Cinnamon Sticks"
+  baseModel: Dessert
+  parameters:
+  - para: Size
+    activityStatus: required
+    domain: ['Single Order','Double Order']
+    defValue: 'Order'
+    ui:
+      class: [summary]
+    askUser: {msg: "Select the size of Cinnamon Sticks"}
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  ['Single Order', 1.25]
+    -  ['Double Order', 1.99]
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} of {}{}" (para Size) (para _key)(blankStr (para _index))))
+
+
+

@@ -1,0 +1,264 @@
+annot:
+  author: Priti Mittal
+  name: allpizza.yaml
+  start date: Mar 28, 2017
+  type: ConfigKB
+  desc: 'Pizza models with Half Half modeled with CreateYourOwnPizza only'
+# topModel: CreateYourOwnPizza
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+- from: "./byopizza.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: 'Regular Classic Marinara'
+  baseModel: Sauce
+  parameters:
+  - para: Sauce
+    value: 'Classic Marinara'
+  - para: Quantity
+    value: 'Regular'
+
+- model: 'Regular Cheese'
+  baseModel: Cheese
+  parameters:
+  - para: Cheese
+    value: Cheese
+  - para: Quantity
+    value: Regular
+
+# Cheese Pizza
+- model: CheesePizza
+  desc: "Pizza with only cheese and sauce and nothing else can be added"
+  baseModel: PizzaBaseSingleTopping
+  parameters:
+  - para: DietType
+    value: [Dairy]
+
+  - para: Sauce
+    value:  (model 'Regular Classic Marinara')
+    #domain: ['Barbeque','Classic Marinara','Premium Crushed Tomato','Creamy Garlic Parmesan','Buffalo','No Sauce']
+
+  - para: Cheese
+    value: (model 'Regular Cheese')
+    # not required. if given will be assigned when model becomes active
+    #domain: ['Cheese','No Cheese']
+
+  - para: CrustFlavor
+    value: 'No Flavor'
+    # not required. if given will be assigned when model becomes active
+    #domain: ['No Crust Flavor','Hut favorite','Toasted Parmesan','Salted Pretzel','Toasted Cheddar', 'Garlic Buttery Blend','No crust flavor']
+
+  - para: Toppings
+    cardinality: 1
+    value: (model NoTopping) # not required. if given will be assigned when model becomes active
+    # domain: [(model Meat),(model Veggie), (model NoTopping)]
+
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  [Personal, 10]
+    -  [Small, 12]
+    -  [Medium, 15]
+    -  [Large, 20]
+    -  [Xlarge, 30]
+
+#Pepperoni Pizza
+- model: PepperoniPizza
+  desc: "Pizza with pepperoni as the only topping"
+  baseModel: PizzaBaseSingleTopping
+  parameters:
+  - para: DietType
+    value: [Meat, Pork]
+
+  - para: CrustFlavor
+    value: 'No Flavor'
+    # not required. if given will be assigned when model becomes active
+    #domain: ['No Crust Flavor','Hut favorite','Toasted Parmesan','Salted Pretzel','Toasted Cheddar', 'Garlic Buttery Blend','No crust flavor']
+
+  - para: Toppings
+    value:  (model Pepperoni)
+    # domain: [(model Meat),(model Veggie), (model NoTopping)]
+
+
+# TBD ??? need to model opt prices for crust flavor and extra pepperoni
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  [Personal, 12]
+    -  [Small, 14]
+    -  [Medium, 18]
+    -  [Large, 22]
+    -  [Xlarge, 36]
+
+# Meat Lovers Pizzza
+- model: "Meat Lovers Pizza"
+  desc: "Pizza with 6 meat toppings"
+  baseModel: PizzaBaseMultiToppings
+  parameters:
+  - para: DietType
+    value: [Meat, Beef, Pork]
+
+  - para: CrustFlavor
+    value: 'No Flavor'
+    # not required. if given will be assigned when model becomes active
+    #domain: ['No Crust Flavor','Hut favorite','Toasted Parmesan','Salted Pretzel','Toasted Cheddar', 'Garlic Buttery Blend','No crust flavor']
+
+  - para: Toppings
+    cardinality: 6
+    value:  [(model Pepperoni),(model "Italian Sausage"), (model "Slow Roasted Ham"), (model "Applewood Smoked Bacon"),(model Beef), (model "Seasoned Pork")]
+    # domain: [(model Meat),(model Veggie), (model NoTopping)]
+
+
+# TBD ??? need to model opt prices for crust flavor and extra pepperoni
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  [Personal, 13]
+    -  [Small, 15]
+    -  [Medium, 20]
+    -  [Large, 25]
+    -  [Xlarge, 40]
+
+# Supreme Pizza
+- model: "Supreme Pizza"
+  desc: "Pizza with 5 popular toppings"
+  baseModel: PizzaBaseMultiToppings
+  parameters:
+  - para: DietType
+    value: [Meat, Pork, Beef, Veggie]
+
+  - para: CrustFlavor
+    value: 'No Flavor'
+    # not required. if given will be assigned when model becomes active
+    #domain: ['No Crust Flavor','Hut favorite','Toasted Parmesan','Salted Pretzel','Toasted Cheddar', 'Garlic Buttery Blend','No crust flavor']
+
+  - para: Toppings
+    cardinality: 5
+    value:  [(model Pepperoni),(model "Fresh Red Onions"), (model "Green Bell Peppers"),(model Beef),(model "Seasoned Pork")]
+    # domain: [(model Meat),(model Veggie), (model NoTopping)]
+
+
+# TBD ??? need to model opt prices for crust flavor and extra pepperoni
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    -  [Personal, 13]
+    -  [Small, 15]
+    -  [Medium, 20]
+    -  [Large, 25]
+    -  [Xlarge, 40]
+
+- model: "Half and Half Pizza"
+  nlp:
+    synonyms:
+      - "Half half"
+      - "Half half pizza"
+      - "Half and Half"
+  baseModel: PricedItem
+  desc: "Pizza where each half can be separately customized"
+  parameters:
+  - para: Size
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: 'Large' # if given, used during model completion
+    domain: [Personal, Small, Medium, Large, Xlarge]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the size of the {}",[_key]]}
+    ui:
+      class: [summary]
+
+  - para: Crust
+    dataType: symbolic
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: 'Original Pan' # if given, used during model completion
+    domain: ['Original Pan','Hand Tossed','Thin n crispy','Original Stuffed', 'Skinny It Up']
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser: {msg: ["Select the crust of the {}", [_key]]}
+    ui:
+      class: [summary]
+
+  - para: FirstHalf
+    activityStatus: required
+    domain: [(model CreateYourOwnPizza)]
+    value: (model CreateYourOwnPizza)
+    askUser:
+        msg: "Select one half of the pizza"
+    nlp:
+      synonyms:
+        - "one half"
+
+  - para: SecondHalf
+    activityStatus: required
+    domain: [(model CreateYourOwnPizza)]
+    value: (model CreateYourOwnPizza)
+    askUser:
+        msg: "Select the other half of the pizza"
+    nlp:
+      synonyms:
+        - "other half"
+
+  - para: PriceMultiplier
+    dataType: float
+    value: 1.1
+
+  constraints:
+  - constr: "Price is 10% more than price of more expensive half"
+    type: rule
+    then: (assert(eq (para TotalPrice)(times(max (para FirstHalf:TotalPrice)(para SecondHalf:TotalPrice))(para PriceMultiplier))))
+
+  - constr: "Pass PizzaKey to both halves"
+    type: rule
+    then:
+      - and: (assert(eq(para FirstHalf:PizzaKey) "First Half"))
+      - and: (assert(eq(para SecondHalf:PizzaKey) "Second Half"))
+
+  - constr: "pass dietary restriction to first half"
+    type: rule
+    #then: (assert(notoverlap (para FirstHalf:Toppings:*all*:Type)(para DietaryRestriction)))
+    then: (assert(contains (para FirstHalf:DietaryRestriction)(para DietaryRestriction)))
+
+# TBD ??? still need to apply dietary restr to cheese, sauce, etc when applicable say for meat, dairy
+
+  - constr: "pass dietary restriction to second half"
+    type: rule
+    #then: (assert(notoverlap (para SecondHalf:Toppings:*all*:Type)(para DietaryRestriction)))
+    then: (assert(contains (para SecondHalf:DietaryRestriction)(para DietaryRestriction)))
+
+  - constr: "Both half have same size"
+    type: rule
+    then:
+      - and: (assert(eq (para FirstHalf:Size)(para Size)))
+      - and: (assert(eq (para SecondHalf:Size)(para Size)))
+
+  - constr: "Both half have same crust"
+    type: rule
+    then:
+      - and: (assert(eq (para FirstHalf:Crust)(para Crust)))
+      - and: (assert(eq (para SecondHalf:Crust)(para Crust)))
+
+  - constr: "Both half have same CrustFlavor"
+    type: rule
+    then: (assert(eq (para FirstHalf:CrustFlavor)(para SecondHalf:CrustFlavor)))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {} Half&Half Pizza with {} on one half. And {} on the other half.{}"
+          (para FirstHalf:Size) (para FirstHalf:Crust) (para FirstHalf:HalfDesc)(para SecondHalf:HalfDesc)(blankStr (para _index))))
+

@@ -1,0 +1,244 @@
+annot:
+  author: Sanjay Mittal
+  name: byopizza
+  desc: "CreateYourOwn pizza model derived from the tutorial versin"
+  start date: Feb3, 2017
+  type: ConfigKB
+  topModel: CreateYourOwnPizza
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+models:
+- model: "CreateYourOwnPizza"
+  baseModel: PizzaBaseMultiToppings
+  nlp:
+    synonyms:
+      - pizza
+
+  parameters:
+  - para: Crust
+# inherits details from base class
+
+  - para: CrustFlavor
+# inherits details from base class
+
+  - para: Sauce
+# inherits details from base class
+
+  - para: Cheese
+# inherits details from base class
+
+  - para: Size
+# inherits details from base class
+
+  - para: Toppings
+    dataType: symbolic
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [(model Pepperoni),(model 'Italian Sausage'),(model 'Grilled Chicken'),(model 'Slow Roasted Ham'),
+      (model 'Fresh Mushrooms'),(model 'Fresh Red Onions'),
+      (model 'Black Olives'),(model 'Green Bell Peppers'),
+      (model 'Jalapeno Peppers'),(model NoTopping),(model 'Applewood Smoked Bacon'),(model Beef),(model 'Seasoned Pork'),
+             (model 'Roasted Spinach'),(model 'Peruvian Cherry Peppers'),(model 'Banana Peppers'),
+             (model 'Classical Meatball'),(model 'Premium Salami'),(model 'Roma Tomatoes'),(model 'Sweet Pineapple')]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: ["Please select the toppings for the {} {}",[PizzaKey, MaxToppPrompt]]
+      msgIfAssigned: ["Would you like any other toppings on your {} {}", [PizzaKey, MaxToppPrompt]]
+    ui:
+      iterate: set
+      ignoreValue: Done
+      class: [summary]
+      showChoices: 7
+  - para: BasePrice
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['{}{:.2f}',[Currency,BasePrice]]
+
+  - para: OptPrice
+    desc: Cost for the extra toppings if any
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['{}{:.2f}',[Currency,OptPrice]]
+
+  - para: OptChPrice
+    desc: Cost for extra cheese if any
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['{}{:.2f}',[Currency, OptChPrice]]
+
+  - para: TotalPrice
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain: (0,100)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['{}{:.2f}',[Currency, TotalPrice]]
+#    askUser:
+#      msgOnValue: ['Base price: ${}. Charge for extra options: ${}. Extra cheese: ${}. Total: ${}', [BasePrice, OptPrice, OptChPrice, TotalPrice]]
+
+  - para: BaseToppingsCt
+    desc: "Number of Toppings included in the base price"
+    dataType: int  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+#    ui:
+#      class: [summary]
+
+  - para: ExtToppings
+    desc: "Extra toppings, beyond allowed in base price"
+    dataType: int  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,10)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+#    ui:
+#      class: [summary]
+
+  - para: OptBasePr
+    desc: "Base price for ea extra toppings. This is multiplied by OptFactor"
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0.5 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,5)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+
+  - para: OptFactor
+    desc: "Factor by which optional toppings are priced based on size"
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+
+  - para: MaxToppPrompt
+    dataType: arbit
+    desc: "Computed string used to indicate max toppings if there is any limit"
+    value: ""
+
+  - para: HalfDesc
+    desc: "Description created when this is half of a pizza"
+    dataType: arbit
+
+  constraints:
+  - constr: "if Crust=Stuffed --> Cheese neq GoatCheese"
+    type: rule
+    exp: (if (cond(eq (para Crust) 'Original Stuffed Crust')) then (assert(neq (para Cheese:Cheese) 'Goat Cheese')))
+  - constr: "if Cheese == GoatCheese --> Crust neq Stuffed --> "
+    type: rule
+    exp: (if (cond(eq (para Cheese:Cheese) 'Goat Cheese')) then (assert(neq (para Crust) 'Original Stuffed Crust')))
+  - constr: "if Size=Xlarge --> Crust neq [Stuffed, PaperThin, ]"
+    type: rule
+    exp: (if (cond(eq (para Size) Xlarge)) then (assert(notmember (para Crust) ['Original Stuffed Crust', 'Skinny It Up'])))
+  - constr: "if Crust=[Stuffed, PaperThin] --> Size  neq Xlarge"
+    type: rule
+    exp: (if (cond(member (para Crust) ['Original Stuffed Crust', 'Skinny It Up'])) then (assert(neq (para Size) Xlarge)))
+  - constr: "if Size=Xlarge --> Only 5 toppings allowed"
+    type: rule
+    exp: (if (cond(eq (para Size) Xlarge)) then (assert(le (para Toppings_mvsize) 5)))
+  - constr: "if Crust=PaperThin --> Sauce cannot be extra size"
+    type: rule
+    exp: (if (cond(eq (para Crust) 'Skinny It Up')) then (assert(neq (para Sauce:Quantity) Extra)))
+  - constr: "if Sauce contains extra sauce --> Crust NEQ PaperThin"
+    type: rule
+    exp: (if (cond(eq (para Sauce:Quantity) Extra)) then (assert(neq (para Crust) 'Skinny It Up' )))
+#  - constr: "TotPrice= BasePrice + OptPrice"
+#    type: rule #table, rule. More may be added later
+#    exp: (if then (assert(eq (para TotalPrice) (+ (para BasePrice)(para OptPrice)))))
+  - constr: "TotPrice= BasePrice + OptPrice + OptChPrice"
+    type: rule #table, rule. More may be added later
+    exp: (if then (assert(eq (para TotalPrice) (+ (para BasePrice)(para OptPrice)(para OptChPrice)))))
+  - constr: "if toppings > base --> ExtToppings=toppings - base toppings"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(gt (para Toppings_mvsize) (para BaseToppingsCt))) then (assert(eq (para ExtToppings) (- (para Toppings_mvsize)(para BaseToppingsCt)))))
+  - constr: "if ExtToppings >0 --> OptPrice= ExtToppings opt * OptFactor * OptBasePr"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(gt (para ExtToppings) 0)) then (assert(eq (para OptPrice) (* (para ExtToppings)(para OptFactor)(para OptBasePr)))))
+  - constr: "if ExtraCheese --> OptChPrice= OptFactor * OptBasePr"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(eq  (para Cheese:Quantity) Extra )) then (assert(eq (para OptChPrice) (* (para OptFactor)(para OptBasePr)))))
+  - constr: "table Size, BasePrice"
+    type: table
+    parameters: [(para Size), (para BasePrice)]
+    rows:
+    -  [Personal, 10]
+    -  [Small, 12]
+    -  [Medium, 15]
+    -  [Large, 20]
+    -  [Xlarge, 30]
+  - constr: "table Size, BaseToppingsCt"
+    type: table
+    parameters: [(para Size), (para BaseToppingsCt)]
+    rows:
+    -  [Personal, 2]
+    -  [Small, 3]
+    -  [Medium, 3]
+    -  [Large, 3]
+    -  [Xlarge, 4]
+  - constr: "table Size, OptFactor"
+    type: table
+    parameters: [(para Size), (para OptFactor)]
+    rows:
+    -  [Personal, 1]
+    -  [Small, 2]
+    -  [Medium, 3]
+    -  [Large, 4]
+    -  [Xlarge, 6]
+
+  - constr: "Any topping -> eliminates NoTopping"
+    type: rule
+    if: (notmember NoTopping (para Toppings))
+    then: (assert (notcontains (para Toppings) NoTopping))
+
+  - constr: "NoTopping -> eliminates all other toppings"
+    type: rule
+    if: (member NoTopping (para Toppings))
+    then: (assert(eq (para Toppings) [NoTopping]))
+
+  - constr: "Create MaxToppPrompt str for toppings limit"
+    type: rule
+    if:
+    then: (assert(eq(para MaxToppPrompt)(strformat "(upto {} more)" (- (paraMaxVal(para Toppings_mvsize))(para Toppings_mvsize)))))
+
+  - constr: "Ignore Toppings if reach limit"
+    type: rule
+    if: (eq (para Toppings_mvsize) (paraMaxVal(para Toppings_mvsize)))
+    then: (assert(isignored (para Toppings)))
+
+  - constr: "Compute half pizza description with >1 toppings"
+    type: rule
+    if: (gt(para Toppings_mvsize) 1)
+    then: (assert(eq (para HalfDesc) (strformat "{}, {}, {} " (para Cheese:OrderDesc)(para Sauce:OrderDesc) (para Toppings:*all*:OrderDesc))))
+
+  - constr: "Compute half pizza description with exactly 1 topping"
+    type: rule
+    if: (eq(para Toppings_mvsize) 1)
+    then: (assert(eq (para HalfDesc) (strformat "{}, {} and {} " (para Cheese:OrderDesc)(para Sauce:OrderDesc) (para Toppings:*all*:OrderDesc))))

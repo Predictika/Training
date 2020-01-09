@@ -1,0 +1,78 @@
+annot:
+  author: Priti Mittal
+  name: Drinks.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for orderting drinks
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: Pepsi
+  baseModel: BaseDrink
+  parameters:
+  - para: DietType
+    value: [Sugar]
+
+  - para: Size
+    domain: ['Bottle','Two Liter']
+    defValue: 'Bottle'
+
+- model: "Diet Pepsi"
+  baseModel: BaseDrink
+  parameters:
+  - para: Size
+    domain: ['Bottle','Two Liter']
+    defValue: 'Bottle'
+
+- model: "Mountain Dew"
+  baseModel: BaseDrink
+  parameters:
+  - para: DietType
+    value: [Sugar]
+
+  - para: Size
+    domain: ['Bottle','Two Liter']
+    defValue: 'Bottle'
+
+- model: "Lipton Tea"
+  baseModel: BaseDrink
+  parameters:
+  - para: Size
+    domain: ['Bottle']
+    defValue: 'Bottle'
+
+- model: "Mist Mist"
+  baseModel: BaseDrink
+  parameters:
+  - para: DietType
+    value: [Sugar]
+
+  - para: Size
+    domain: ['Bottle','Two Liter']
+    defValue: 'Bottle'
+
+- model: "Crush Orange"
+  baseModel: BaseDrink
+  parameters:
+  - para: DietType
+    value: [Sugar]
+
+  - para: Size
+    domain: ['Two Liter']
+    defValue: 'Two Liter'
+
+
+- model: "Dr Pepper"
+  baseModel: BaseDrink
+  parameters:
+  - para: DietType
+    value: [Sugar]
+
+  - para: Size
+    domain: ['Bottle','Two Liter']
+    defValue: 'Bottle'
+

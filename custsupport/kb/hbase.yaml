@@ -1,0 +1,283 @@
+annot:
+  author: Sanjay Mittal
+  name: hmodels.yaml
+  start date: Nov 11, 2019
+  type: ConfigKB
+  desc: basae models for hotelbot prototype for PrologicsFirst
+
+
+models:
+
+- model: ServiceActionBase
+  parameters:
+    - para: EntityWithAction
+      nlp:
+        gex: skip
+    - para: Entity
+    - para: Action
+    - para: PrefixPhrase
+      nlp:
+        gex: skip
+    - para: ActionCategory
+#      domain: [NeedService, NeedSuuply, NeedSupplyQty]
+      nlp:
+        gex: skip
+    - para: QtyRequired
+#      domain: []Yes,No]
+      nlp:
+        gex: skip
+    - para: SubCategory
+      nlp:
+        gex: skip
+    - para: Cost
+#      value: "Free"
+      nlp:
+        gex: skip
+    - para: NeedBooking
+      nlp:
+        gex: skip
+    - para: ResponseMsgOrig
+      desc: "Msg read from data file"
+      nlp:
+        gex: skip
+    - para: ResponseMsg
+      desc: "computed by constraints"
+      dataType: arbit
+      nlp:
+        gex: skip
+    - para: Intent
+      nlp:
+        gex: skip
+
+# TimeZone is set at the top-level and propagated to all the events. if not set
+# then treated as the defauly timezone of the server
+    - para: TimeZone
+      dataType: symbolic
+      activityStatus: required
+      desc: "timezone for events. None by default"
+      askUser:
+        dontAsk: True
+      nlp:
+        gex: skip
+
+# CheckoutDT is typically set by one of the events ad then constrained here
+# and then shared with all other events. It is a datetime obj.
+    - para: CheckoutDT
+      dataType: symbolic
+      activityStatus: required
+      desc: "datetime for checkout"
+      askUser:
+        dontAsk: True
+      nlp:
+        gex: skip
+
+# EventDT is the time (as datetime obj) when the event should be carried out. Not set for every
+# event, only when specified
+    - para: EventDT
+      dataType: arbit
+      desc: "datetime for this event"
+      nlp:
+        gex: skip
+
+  constraints:
+    - constr: "ResponseMsg <- ResponseMsgOrig"
+      type: rule
+      then: (assert(init (para ResponseMsg) (para ResponseMsgOrig)))
+
+    - constr: "show ReponseMsg when EventDT not known"
+      type: rule
+      if:
+        - and: (isAssigned(para _active))
+        - and: (not(isAssigned(para EventDT)))
+      then: (assert(tellUserFormat "{}" (para ResponseMsg)))
+
+    - constr: "show ReponseMsg when EventDT is known"
+      type: rule
+      if:
+#        - and: (isAssigned(para _active))
+        - and: (isAssignedCS(para EventDT))
+      then: (assert(tellUserFormat "{} on {} at {}"
+                  (para ResponseMsg)(date(para EventDT)) (time(para EventDT))))
+
+
+- model: "Need Service Base"
+#  nlp:
+#    synonyms:
+#      - ""
+  baseModel: ServiceActionBase
+
+  constraints:
+    - constr: "Charge msg"
+      type: rule
+      if: (eq(para Cost) Charge)
+      then: (assert(tellUserFormat "There may be a small charge for {}. We will let you know." (para Entity)))
+
+# print booking msg only if there was NO ResponseMsgOrig in the model
+    - constr: "Booking msg for NeedBooking"
+      type: rule
+      if:
+        - and: (eq (para NeedBooking) Booking)
+        - and: (not(isAssigned(para ResponseMsgOrig)))
+      then: (assert(tellUserFormat "{} requires making a booking with {}. We will call you shortly to make a booking" (para Entity)(para SubCategory)))
+
+# to  avoid dbl printing od booking msg, we test for NeedBooking
+    - constr: "Booking msg for Action=Book"
+      type: rule
+      if:
+        - and: (member (para Action) [Book])
+        - and: (neq(firstval(para NeedBooking) Foo) Booking)
+        - and: (not(isAssigned(para ResponseMsgOrig)))
+      then: (assert(tellUserFormat "We will call you shortly to make a booking for {}" (para Entity)))
+
+# to  avoid dbl printing od booking msg, we test for NeedBooking
+    - constr: "Booking msg for Action=Confirm"
+      type: rule
+      if:
+        - and: (member (para Action) [Confirm])
+# used firstval so if NeedBooking is unassigned, treated as if predicate succeeds
+        - and: (neq(firstval(para NeedBooking) Foo) Booking)
+        - and: (not(isAssigned(para ResponseMsgOrig)))
+      then: (assert(tellUserFormat "We will call you shortly to confirm {}" (para Entity)))
+
+# to  avoid dbl printing od Order msg, we test for NeedBooking, since NeedBooking=Booking
+# might apply for Action=Order
+    - constr: "Msg for Action=Order"
+      type: rule
+      if:
+        - and: (member (para Action) [Order])
+        - and: (neq(firstval(para NeedBooking) Foo) Booking)
+        - and: (not(isAssigned(para ResponseMsgOrig)))
+      then: (assert(tellUserFormat "Someone will call you shortly to take your {} for {}" (para Action)(para Entity)))
+
+    - constr: "Create ResponseMsg services in room"
+      type: rule
+      if:
+        - and: (not(isAssigned(para ResponseMsg)))
+        - and: (member (para Action) [Service, Remove, Replenish, Deliver])
+      then: (assert(eq (para ResponseMsg) (strFormat "Someone will be over shortly to {} your {} " (para Action) (para Entity))))
+
+# base class for service actions that have a time and event date time associated with them
+- model: "Need Timed Service Base"
+  baseModel: "Need Service Base"
+  parameters:
+# EventTime is the time (as str) of this event when set
+    - para: EventTime
+      dataType: arbit
+      activityStatus: required
+      desc: "time of this event as a str"
+      askUser:
+        msg: ["Select time for {}",[_key]]
+      nlp:
+        extractor:
+          name: timex
+
+  constraints:
+# override to make it no-op
+    - constr: "show ReponseMsg when EventDT not known"
+      type: rule
+      then: (cond(eq(para _active)(para _active)))
+
+    - constr: "Compute EventDT if CheckoutDT is known"
+      type: rule
+      if: (isAssigned(para CheckoutDT))
+      then: (assert(eq(para EventDT)(dtsamedayorafter (para CheckoutDT) (para EventTime))))
+
+    - constr: "Compute EventDT if CheckoutDT, TimeZone is NOT known"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (not(isAssigned(para TimeZone)))
+      then: (assert(eq(para EventDT)(dtafter (timenow) (para EventTime))))
+
+    - constr: "Compute EventDT if CheckoutDT is NOT known. TimeZone is"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (isAssigned(para TimeZone))
+      then: (assert(eq(para EventDT)(dtafter (timenow (para TimeZone)) (para EventTime))))
+
+
+- model: "Need Supply Base"
+#  nlp:
+#    synonyms:
+#      - ""
+  baseModel: ServiceActionBase
+
+  constraints:
+    - constr: "Charge msg"
+      type: rule
+      if: (eq(para Cost) Charge)
+      then: (assert(tellUserFormat "There will be a small charge for {}. We will add it to your bill." (para _key)))
+
+    - constr: "Create ResponseMsg if not there"
+      type: rule
+      if:
+        - and: (not(isAssigned(para ResponseMsg)))
+      then: (assert(eq (para ResponseMsg) (strFormat "We will send {} to your room" (para _key))))
+
+
+- model: "Need Supply Qty Base"
+#  nlp:
+#    synonyms:
+#      - ""
+  baseModel: ServiceActionBase
+  parameters:
+    - para: Qty
+      dataType: symbolic
+      domain: [1,2,3,4,5,6,7,8,9]
+      ui:
+        showChoices: 0
+      askUser:
+        msg: ["How many 1 to 9 {}?",[_key]]
+
+  constraints:
+#    - constr: "Create ResponseMsg if not there"
+#      type: rule
+#      if: (not(isAssigned(para ResponseMsg)))
+#      then: (assert(init (para ResponseMsg) (strFormat "We will send {} to your room" (para _key))))
+
+# this over rides inherited constr of same name
+    - constr: "activate Qty if QtyRequired=Yes"
+      type: rule
+      if: (eq(para QtyRequired) Yes)
+      then: (assert(isRequired(para Qty)))
+
+    - constr: "Charge msg"
+      type: rule
+      if:
+        - and: (eq(para Cost) Charge)
+        - and: (isRequired(para Qty))
+      then: (assert(tellUserFormat "There will be a small charge for {} {}. We will add it to your bill." (para Qty)(para _key)))
+
+    - constr: "Charge msg for optional Qty"
+      type: rule
+      if:
+        - and: (eq(para Cost) Charge)
+        - and: (not(isRequired(para Qty)))
+      then: (assert(tellUserFormat "There will be a small charge for {} {}. We will add it to your bill."
+                (firstval(para Qty) "some")(para _key)))
+
+
+    - constr: "Create ResponseMsg if not there"
+      type: rule
+      if:
+        - and: (not(isAssigned(para ResponseMsg)))
+        - and: (not(isRequired(para Qty)))
+      then: (assert(eq (para ResponseMsg) (strFormat "We will send {} {} to your room" (firstval (para Qty) some) (para _key))))
+
+    - constr: "Create ResponseMsg if not there and Qty known"
+      type: rule
+#      if: (not(isAssigned(para ResponseMsg)))
+      then: (assert(eq (para ResponseMsg) (strFormat "We will send {} {} to your room" (para Qty)(para _key))))
+
+#- model: "Need Service"
+#  parameters:
+#    - para: Item
+##      domainFromVar:
+#
+#- model: "Need Supply"
+#  parameters:
+#    - para: Item
+##      domainFromVar:
+
+

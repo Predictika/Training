@@ -1,0 +1,494 @@
+annot:
+  author: Sanjay Mittal
+  name: hmodels.yaml
+  start date: Nov 11, 2019
+  type: ConfigKB
+  desc: models for hotelbot prototype for PrologicsFirst
+  welcomeMsg: |
+            Welcome to your hotel virtual agent.
+  topModel: CustomerSupport
+
+import:
+- from: "./hbase.yaml"
+  models: all
+
+- buildFromCsv: "./NeedService.csv"
+  models: all
+  saveVar: serviceVar
+  baseModel: "Need Service Base"
+
+# as of 11/21/19, Need Supply Qty used for both
+- buildFromCsv: "./NeedSupply.csv"
+  models: all
+  saveVar: serviceVar
+  baseModel: "Need Supply Qty Base"
+
+- buildFromCsv: "./NeedSupplyQty.csv"
+  models: all
+  saveVar: serviceVar
+  baseModel: "Need Supply Qty Base"
+
+
+
+models:
+- model: 'Second Wakeup Alarm'
+#  nlp:
+#    synonyms:
+#      - "Wakeup call"
+#      - "Wake up alarm"
+#      - "Wake up call"
+  baseModel: "Need Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "We will give you a second wake up call"
+    - para: EventTime
+      activityStatus: optional
+    - para: Delay
+      desc: "timedelay from first wakeup"
+    - para: FirstWakeupDT
+      dataType: symbolic
+  constraints:
+# override to make it no-op
+    - constr: "show ReponseMsg when EventDT not known"
+      type: rule
+      then: (cond(eq(para _active)(para _active)))
+
+    - constr: "EventDT>CheckoutDT --> Print warning"
+      type: rule
+      if: (gt (para EventDT) (para CheckoutDT))
+      then: (assert (tellUserFormat "Caution:- Second Wakeup time {} is after your checkout time {}" (para EventDT) (para CheckoutDT)))
+
+    - constr: "EventDT<FirstWakeupDT --> Print warning"
+      type: rule
+      if: (lt (para EventDT) (para FirstWakeupDT))
+      then: (assert (tellUserFormat "Caution:- Second Wakeup time {} is before your first wkeup call {}" (para EventDT) (para CheckoutDT)))
+
+    - constr: "EventDT=FirstWakeupDT + Delay"
+      type: rule
+      then: (assert(eq(para EventDT)(dtplus (para FirstWakeupDT) (para Delay))))
+
+- model: 'Wakeup Alarm'
+  nlp:
+    synonyms:
+      - "Wakeup call"
+      - "Wake up alarm"
+      - "Wake up call"
+  baseModel: "Need Timed Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "We will give you a wake up call"
+    - para: NeedSecWakeup
+      domain: ['Yes','No']
+      activityStatus: required
+      askUser:
+        msg: "Would you like a second wakeup call 30 minutes after the first"
+    - para: SecWakeup
+      domain:
+        - (model 'Second Wakeup Alarm')
+  constraints:
+    - constr: "EventDT>CheckoutDT --> Print warning"
+      type: rule
+      if: (gt (para EventDT) (para CheckoutDT))
+      then: (assert (tellUserFormat "Caution:- Wakeup time {} is after your checkout time {}" (para EventDT) (para CheckoutDT)))
+
+    - constr: "SecWakeup assigned --> NeedSecWakeup=Yes"
+      type: rule
+      if: (isAssigned(para SecWakeup))
+      then: (assert(eq(para NeedSecWakeup) Yes))
+
+# For 2nd alarm dont need checkout time
+#    - constr: "CheckoutDT known --> make NeedSecWakeup req"
+#      type: rule
+#      if: (isAssigned(para CheckoutDT))
+#      then: (assert(isRequired(para NeedSecWakeup)))
+
+    - constr: "NeedSecWakeup=Yes -> Wakeup= model(Wakeup Alarm)"
+      type: rule
+      if: (eq(para NeedSecWakeup) Yes)
+      then:
+        - and: (assert(eq (para SecWakeup) (model 'Second Wakeup Alarm')))
+        - and: (assert(eq(para SecWakeup:Delay) '0:30'))
+        - and: (assert(eq(para SecWakeup:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "pass EventDT to SecWakeup"
+      type: rule
+      then: (assert(eq(para SecWakeup:FirstWakeupDT)(para EventDT)))
+
+- model: 'Morning Coffee'
+  baseModel: "Need Timed Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "Your morning coffee will be delivered to your room"
+  constraints:
+    - constr: "EventDT>CheckoutDT --> Print warning"
+      type: rule
+      if: (gt (para EventDT) (para CheckoutDT))
+      then: (assert (tellUserFormat "Caution:- Morning Coffee time {} is after your checkout time {}" (para EventDT) (para CheckoutDT)))
+
+- model: 'Packed Breakfast'
+  nlp:
+    synonyms:
+      - "Breakfast to go"
+  baseModel: "Need Timed Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "We will have a packed breakfast ready for you"
+
+- model: 'Order Taxi'
+  baseModel: "Need Timed Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "A taxi will be ready for you"
+  constraints:
+#    - constr: "EventDT=CheckoutDT"
+#      type: rule
+#      if: (not(isAssigned(para EventTime)))
+#      then: (assert(eq (para EventDT) (para CheckoutDT)))
+    - constr: "EventDT<CheckoutDT --> Print warning"
+      type: rule
+      if: (lt (para EventDT) (para CheckoutDT))
+      then: (assert (tellUserFormat "Caution:- Taxi time {} is before your checkout time {}" (para EventDT) (para CheckoutDT)))
+
+- model: 'Checkout'
+  baseModel: "Need Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "Your bill will be ready at the front desk"
+    - para: EventTime
+      dataType: arbit
+      activityStatus: required
+      askUser:
+        msg: ["Select time for {}",[_key]]
+      nlp:
+        extractor:
+          name: timex
+  constraints:
+    - constr: "Compute EventDT if CheckoutDT, TimeZone is NOT known"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (not(isAssigned(para TimeZone)))
+      then: (assert(eq(para EventDT)(dtafter (timenow) (para EventTime))))
+
+    - constr: "Compute EventDT if CheckoutDT is NOT known. TimeZone is"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (isAssigned(para TimeZone))
+      then: (assert(eq(para EventDT)(dtafter (timenow (para TimeZone)) (para EventTime))))
+
+    - constr: "CheckoutDT=EventDT"
+      type: rule
+      then: (assert(eq(para CheckoutDT)(para EventDT)))
+
+# override to make it no-op
+    - constr: "show ReponseMsg when EventDT not known"
+      type: rule
+      then: (cond(eq(para _active)(para _active)))
+
+# this model has multiple sub-events
+- model: 'Full Checkout'
+  baseModel: "Need Service Base"
+  parameters:
+    - para: ResponseMsgOrig
+      value: "Your bill will be ready at the front desk"
+    - para: EventTime
+      dataType: arbit
+      activityStatus: required
+      askUser:
+        msg: ["Select time for {}",[_key]]
+      nlp:
+        extractor:
+          name: timex
+    - para: NeedWakeup
+      domain: ['Yes', 'No']
+      askUser:
+        msg: "Would you like a wakeup call"
+    - para: WakeupModel
+      domain:
+        - (model "Wakeup Alarm")
+# assign this only if NeedWakeup=True. (model "Wakeup Alarm")
+
+    - para: NeedCoffee
+      domain: ['Yes', 'No']
+      askUser:
+        msg: "Would you like morning coffee delivered to your room"
+    - para: CoffeeModel
+      domain:
+        - (model "Morning Coffee")
+# assign this only if NeedCoffee=True. (model "Morning Coffee")
+
+    - para: NeedBreakfast
+      domain: ['Yes', 'No']
+      askUser:
+        msg: "Would you like packed breakfast to go"
+    - para: BreakfastModel
+      domain:
+        - (model "Packed Breakfast")
+# assign this only if NeedBreakfast=True. (model "Packed Breakfast")
+
+    - para: NeedTaxi
+      domain: ['Yes', 'No']
+      askUser:
+        msg: "Would you like to order a taxi after you checkout"
+    - para: TaxiModel
+      domain:
+        - (model "Order Taxi")
+# assign this only if NeedTaxi=True. (model "Order Taxi")
+
+  constraints:
+# override to make it no-op
+    - constr: "show ReponseMsg when EventDT not known"
+      type: rule
+      then: (cond(eq(para _active)(para _active)))
+
+    - constr: "Compute EventDT if CheckoutDT, TimeZone is NOT known"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (not(isAssigned(para TimeZone)))
+      then: (assert(eq(para EventDT)(dtafter (timenow) (para EventTime))))
+
+    - constr: "Compute EventDT if CheckoutDT is NOT known. TimeZone is"
+      type: rule
+      if:
+        - and: (not(isAssigned(para CheckoutDT)))
+        - and: (isAssigned(para TimeZone))
+      then: (assert(eq(para EventDT)(dtafter (timenow (para TimeZone)) (para EventTime))))
+
+    - constr: "CheckoutDT=EventDT"
+      type: rule
+      then: (assert(eq(para CheckoutDT)(para EventDT)))
+
+# make NeedXXX ignored if corresp XXX para are already assigned
+    - constr: "Ignore NeedWakeup if Wakeup assigned"
+      type: rule
+      if: (isAssigned(para WakeupModel))
+      then:
+# after demo replace isIgnlore by (assert(eq(para NeedWakeUp) Yes)))
+        - and: (assert(isIgnored(para NeedWakeup)))
+        - and: (assert(eq(para WakeupModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "Ignore NeedCoffee if Coffee assigned"
+      type: rule
+      if: (isAssigned(para CoffeeModel))
+      then:
+        - and: (assert(isIgnored(para NeedCoffee)))
+        - and: (assert(eq(para CoffeeModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "Ignore NeedBreakfast if Breakfast assigned"
+      type: rule
+      if: (isAssigned(para BreakfastModel))
+      then:
+        - and: (assert(isIgnored(para NeedBreakfast)))
+        - and: (assert(eq(para BreakfastModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "Ignore NeedTaxi if Taxi assigned"
+      type: rule
+      if: (isAssigned(para TaxiModel))
+      then:
+        - and: (assert(isIgnored(para NeedTaxi)))
+        - and: (assert(eq(para TaxiModel:CheckoutDT) (para CheckoutDT)))
+
+#activate sub-event para
+    - constr: "CheckoutDT known --> make NeedWakeup req"
+      type: rule
+      if: (isAssigned(para CheckoutDT))
+      then: (assert(isRequired(para NeedWakeup)))
+
+    - constr: "NeedCheckout=Yes -> Wakeup= model(Wakeup Alarm)"
+      type: rule
+      if: (eq(para NeedWakeup) Yes)
+      then:
+        - and: (assert(eq (para WakeupModel) (model 'Wakeup Alarm')))
+        - and: (assert(eq(para WakeupModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "CheckoutDT known --> make NeedCoffee req"
+      type: rule
+      if: (isAssigned(para CheckoutDT))
+      then: (assert(isRequired(para NeedCoffee)))
+
+    - constr: "NeedCoffee=Yes -> Coffee= model Morning Coffee"
+      type: rule
+      if: (eq(para NeedCoffee) Yes)
+      then:
+        - and: (assert(eq (para CoffeeModel) (model 'Morning Coffee')))
+        - and: (assert(eq(para CoffeeModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "CheckoutDT known --> make NeedBreakfast req"
+      type: rule
+      if: (isAssigned(para CheckoutDT))
+      then: (assert(isRequired(para NeedBreakfast)))
+
+    - constr: "NeedBreakfast=Yes -> Breakfast= model Packed Breakfast"
+      type: rule
+      if: (eq(para NeedBreakfast) Yes)
+      then:
+        - and: (assert(eq (para BreakfastModel) (model 'Packed Breakfast')))
+        - and: (assert(eq(para BreakfastModel:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "CheckoutDT known --> make NeedTaxi req"
+      type: rule
+      if: (isAssigned(para CheckoutDT))
+      then: (assert(isRequired(para NeedTaxi)))
+
+    - constr: "NeedTaxi=Yes -> Taxi= model Order Taxi"
+      type: rule
+      if: (eq(para NeedTaxi) Yes)
+      then:
+        - and: (assert(eq (para TaxiModel) (model 'Order Taxi')))
+        - and: (assert(eq(para TaxiModel:CheckoutDT) (para CheckoutDT)))
+
+## push ChckoutDT to sub-events
+#    - constr: "Push CheckoutDT to Wakeup"
+#      type: rule
+#      then: (assert(eq(para WakeupModelModel:CheckoutDT) (para CheckoutDT)))
+#    - constr: "Push CheckoutDT to Coffee"
+#      type: rule
+#      then: (assert(eq(para CoffeeModel:CheckoutDT) (para CheckoutDT)))
+#
+#    - constr: "Push CheckoutDT to Breakfast"
+#      type: rule
+#      then: (assert(eq(para BreakfastModel:CheckoutDT) (para CheckoutDT)))
+#
+#    - constr: "Push CheckoutDT to Taxi"
+#      type: rule
+#      then: (assert(eq(para TaxiModel:CheckoutDT) (para CheckoutDT)))
+
+
+- model: CustomerSupport
+  parameters:
+# TimeZone is set at the top-level and propagated to all the events. if not set
+# then treated as the defauly timezone of the server
+  - para: TimeZone
+    dataType: symbolic
+    activityStatus: required
+    domain:
+      - 'America/Los_Angeles'
+      - 'Asia/Dubai'
+      - 'Asia/Kolkata'
+      - 'Asia/Seoul'
+      - 'Asia/Singapore'
+      - 'Asia/Hong_Kong'
+      - 'Asia/Tokyo'
+      - 'Asia/Shanghai'
+      - 'Europe/Amsterdam'
+      - 'Europe/London'
+      - 'Europe/Madrid'
+      - 'US/Eastern'
+      - 'US/Central'
+      - 'US/Mountain'
+      - 'US/Pacific'
+      - 'Australia/Sydney'
+      - 'Etc/GMT'
+    desc: "timezone for events. America/Los_Angeles by default"
+    defValue: 'America/Los_Angeles'
+    askUser:
+      msg: ["Select time zone (skip will default to {})", [DefTimeZone]]
+
+  - para: UserAction
+    desc: 'Holds the sequence of user requests'
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+# the domain will be filled by the translator and will be the list of all MenuCategory models
+#    domain: [(model MenuCategory1), (model MenuCategory1), (model MenuCategory1), (model MenuCategory1), (model MenuCategory1), (model MenuCategory1), (model MenuCategory1) ]
+#    domain:
+#      - (model "Need Service")
+#      - (model "Need Supply")
+    domain:
+      - (model 'Checkout')
+      - (model 'Full Checkout')
+      - (model 'Wakeup Alarm')
+      - (model 'Packed Breakfast')
+      - (model 'Morning Coffee')
+      - (model 'Order Taxi')
+    domainFromVar: serviceVar
+    askUser:
+      msg: "How may I help you?"
+      msgIfAssigned: "Tell me how else I can help you?"
+      #msgIfAssigned: "Anything else to order? (say done to end)?"
+#      displayPara: ServiceName
+    ui:
+      iterate: bag
+      ignoreValue: Done
+      showChoices: 0
+      showChoicesIfAssigned: 0
+
+# time zone as set via user profile from the chat widget or another chat UI
+  - para: UserTimeZone
+    dataType: symbolic
+    defValue: 'America/Los_Angeles'
+    desc: "timezone for events set via chat UI. None by default"
+    ui:
+      init: timezone
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+# default time zone as set via user profile from the chat widget or another chat UI or its default
+  - para: DefTimeZone
+    dataType: arbit
+    defValue: 'America/Los_Angeles'
+    desc: "timezone for events set via chat UI. None by default"
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+# CheckoutDT is typically set by one of the events and then constrained here
+# and then shared with all other events
+  - para: CheckoutDT
+    dataType: symbolic
+    desc: "datetime for checkout"
+    askUser:
+      dontAsk: True
+    nlp:
+      gex: skip
+
+#  - para: CurrentDateStr
+#    dataType: arbit
+#    desc: "current time str"
+
+  constraints:
+    - constr: "print CurrentTimeStr"
+      type: rule
+      if: (isAssignedCS(para TimeZone))
+      then: (assert(tellUserFormat "Current time is {}"
+             (timenow  (para TimeZone) )))
+
+    - constr: "DefTimeZone <- UserTimeZone or its defValue"
+      type: rule
+      if: (isAssigned(para _active))
+      then: (assert(eq(para DefTimeZone)
+              (firstval(para UserTimeZone)(defval(para UserTimeZone)))))
+
+    - constr: "TimeZone ignored --> copy from UserTimeZone"
+      type: rule
+      if: (isIgnoredCS(para TimeZone))
+      then: (assert(eq(para TimeZone) (para DefTimeZone)))
+
+#    - constr: "compute current date if timezon set or ignored"
+#      type: rule
+#      if:
+#        - and: (isAsked(para TimeZone))
+##        - or: (isAssignedCS(para TimeZone))
+##        - or: (isIgnoredCS(para TimeZone))
+#      then:
+#        - and: (assert(eq (para CurrentDateStr) (strformat "{}"
+#              (date(timenow (firstval (para TimeZone) (defval (para TimeZone))))))))
+
+    - constr: "tie TimeZone with ea event"
+      type: rule
+      then: (assert(eqp(para UserAction:*all*:TimeZone) (para TimeZone)))
+
+    - constr: "tie CheckoutDT with ea event"
+      type: rule
+      then: (assert(eqp(para UserAction:*all*:CheckoutDT) (para CheckoutDT)))
+
+    - constr: "restart UserAction to create indef loop"
+      type: rule
+      if: (isIgnored(para UserAction))
+      then:
+        - and: (assert(tellUser "I hope I was able to help. Pl ask me for help again in future."))
+        - and: (assert(isUnignored(para UserAction)))

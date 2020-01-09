@@ -1,0 +1,40 @@
+annot:
+  author: Priti Mittal
+  name: Dip.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for ordering Dip
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: "Dont Skip The Dip"
+  baseModel: PricedItem
+  parameters:
+  - para: Dip
+    activityStatus: required
+    domain: ['Garlic','Blue Cheese','Honey BBQ','Marinara', 'Ranch' ]
+    defValue: 'Garlic'
+    askUser:
+      msg: "Select the tasty dip to go with your order"
+  - para: TotalPrice
+    value: 0.99
+
+  constraints:
+  - constr: "Blue Cheese, Ranch have dairy"
+    type: rule
+    if: (member (para Dip) ['Blue Cheese', 'Ranch'])
+    then: (assert (eq (para DietType) 'Dairy'))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} Dip{}" (para Dip)(blankStr (para _index))))
+  - constr: "Filter Dip based on DietaryRestriction=Dairy"
+    type: rule
+    if: (member Dairy (para DietaryRestriction))
+    then: (assert(notmember ['Blue Cheese', 'Ranch'] (para Dip)))

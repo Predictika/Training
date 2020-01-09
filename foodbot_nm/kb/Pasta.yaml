@@ -1,0 +1,163 @@
+annot:
+  author: Priti Mittal
+  name: Pasta.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for orderting drinks
+
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+models:
+- model: "Tuscany Chicken Alfredo Pasta"
+  baseModel: BasePasta
+  parameters:
+  - para: DietType
+    value: [Meat, Chicken]
+
+  - para: Bread
+    domain: ['Bread Sticks','CheeseSticks']
+    activityStatus: required
+    defValue: 'Bread Sticks'
+
+  - para: SecondPan
+    domain: ['NoSecond', 'Meaty Marinara','Creamy Chicken Alfredo']
+    activityStatus: required
+    askUser:
+      msg: ["Would you like a second pan of pasta with your {}?", [_key]]
+
+  constraints:
+  - constr: "BasePrice based on Bread"
+    type: table
+    parameters: [(para Bread), (para BasePrice)]
+    rows:
+    - ['Bread Sticks', 1.99]
+    - ['CheeseSticks', 2.49]
+
+  - constr: "OptPrice for SecondPan"
+    type: rule
+    if: (neq (para SecondPan) 'NoSecond')
+    then: (assert(eq (para OptPrice) (times 0.5 (para BasePrice))))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} with {} and  {}{}" (para _key) (para Bread) (para SecondPan)(blankStr (para _index)) ))
+
+  - constr: "Remove SecondPan choices based on dietary restriction=meat"
+    type: rule
+    if: (member Meat (para DietaryRestriction))
+    then: (assert(notmember ['Meaty Marinara','Creamy Chicken Alfredo'] (para SecondPan)))
+  - constr: "Remove SecondPan choices based on dietary restriction=chicken"
+    type: rule
+    if: (member Chicken (para DietaryRestriction))
+    then: (assert(notmember 'Creamy Chicken Alfredo' (para SecondPan)))
+  - constr: "Remove SecondPan choices based on dietary restriction=beef"
+    type: rule
+    if: (member Beef (para DietaryRestriction))
+    then: (assert(notmember 'Meaty Marinara' (para SecondPan)))
+
+- model: "Tuscany Meaty Marinara Pasta"
+  baseModel: BasePasta
+  parameters:
+  - para: DietType
+    value: [Meat, Beef]
+
+  - para: Bread
+    domain: ['Bread Sticks','CheeseSticks']
+    activityStatus: required
+    defValue: 'Bread Sticks'
+
+  - para: SecondPan
+    domain: ['NoSecond','Meaty Marinara','Creamy Chicken Alfredo']
+    activityStatus: required
+    askUser:
+      msg: ["Would you like a second pan of pasta with your {}?",[_key]]
+
+  constraints:
+  - constr: "BasePrice based on Bread"
+    type: table
+    parameters: [(para Bread), (para BasePrice)]
+    rows:
+    - ['Bread Sticks', 1.99]
+    - ['CheeseSticks', 2.49]
+
+  - constr: "OptPrice for SecondPan"
+    type: rule
+    if: (neq (para SecondPan) 'NoSecond')
+    then: (assert(eq (para OptPrice) (times 0.6 (para BasePrice))))
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} with {} and  {}{}" (para _key)(para Bread) (para SecondPan)(blankStr (para _index)) ))
+  - constr: "Remove SecondPan choices based on dietary restriction=meat"
+    type: rule
+    if: (member Meat (para DietaryRestriction))
+    then: (assert(notmember ['Meaty Marinara','Creamy Chicken Alfredo'] (para SecondPan)))
+  - constr: "Remove SecondPan choices based on dietary restriction=chicken"
+    type: rule
+    if: (member Chicken (para DietaryRestriction))
+    then: (assert(notmember 'Creamy Chicken Alfredo' (para SecondPan)))
+  - constr: "Remove SecondPan choices based on dietary restriction=beef"
+    type: rule
+    if: (member Beef (para DietaryRestriction))
+    then: (assert(notmember 'Meaty Marinara' (para SecondPan)))
+
+
+#family sizes
+
+- model: "Family Size Chicken Alfredo"
+  baseModel: BasePasta
+  parameters:
+  - para: DietType
+    value: [Chicken, Meat]
+
+  - para: Bread
+    domain: ['Bread Sticks','CheeseSticks']
+    activityStatus: required
+    defValue: 'Bread Sticks'
+  constraints:
+  - constr: "BasePrice based on Bread"
+    type: table
+    parameters: [(para Bread), (para BasePrice)]
+    rows:
+    - ['Bread Sticks', 6.99]
+    - ['CheeseSticks', 7.99]
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} with {}{}" (para _key)(para Bread)(blankStr (para _index))))
+
+- model: "Family Size Meaty Marinara"
+  baseModel: BasePasta
+  parameters:
+  - para: DietType
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: [Meat, Beef]
+
+  - para: Bread
+    domain: ['Bread Sticks','CheeseSticks']
+    activityStatus: required
+    defValue: 'Bread Sticks'
+
+  constraints:
+  - constr: "BasePrice based on Bread"
+    type: table
+    parameters: [(para Bread), (para BasePrice)]
+    rows:
+    - ['Bread Sticks', 6.99]
+    - ['CheeseSticks', 7.99]
+
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eqCS(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} with {}{}" (para _key)(para Bread)(blankStr (para _index))))
+

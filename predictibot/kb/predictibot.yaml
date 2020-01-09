@@ -1,0 +1,955 @@
+annot:
+  author: Indran Sahadevan
+  name: PredictiBot
+  start date: Aug 15, 2018
+  type: ConfigKB
+  welcomeMsg: |
+            Hi, Welcome to Predictika.
+            We are a Conversational AI company so we have a bot only web site.
+            Anything you want to know about us, our technology, our customers ask our bot.
+            Our bots will get better with every interaction.
+  noMatchAns: |
+            Sorry, I dont have a good answer for your question.
+            Please try rephrasing or try with different words.
+            You can also type "hi", or "what can I ask" to get some sample questions.
+  synset:
+  stem: True
+  desc: "This is Predictika's Corporate Bot"
+  topModel: Predictibot
+
+# actions: register as developer; register for white paper (WP); contact sales; register for demo; contact founder; contact hiring
+
+models:
+
+- model: Predictibot
+  parameters:
+  - para: 'EmailAddress'
+    desc: 'Email address'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      extractor:
+        name: emailx
+    askUser:
+      msg: "Business email address"
+    ui:
+        class: [summary]
+
+  - para: 'UserName'
+    desc: 'User Name'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      synonyms: ["Name"]
+      extractor:
+        name: namex
+    askUser:
+      msg: "Please enter your name"
+    ui:
+        class: [summary]
+
+  - para: 'PhoneNumber'
+    desc: 'Phone Number'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      extractor:
+        name: phone_number_x
+    askUser:
+      msg: "Your business contact phone number"
+    ui:
+        class: [summary]
+
+  - para: 'OrganizationName'
+    desc: 'Name of Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Name of your organization"
+    ui:
+        class: [summary]
+
+  - para: 'RoleOrganization'
+    desc: 'Role in Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'C-level'
+      - 'Chatbot Developer'
+      - 'Technology Evaluator'
+      - 'Casual Interest'
+      - 'Investment, M&A'
+      - 'Student'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "What is your role regarding chatbots in your organization?"
+    ui:
+        class: [summary]
+
+  - para: 'DecisionTimeFrame'
+    desc: 'Time frame for deciding'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Very Soon'
+      - '3-6 Months'
+      - '6-12 Months'
+      - 'Indefinite'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "How soon chatbots will be introduced in your organization?"
+    ui:
+        class: [summary]
+
+  - para: 'IndustryVertical'
+    desc: 'Type of Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Retail or Ecommerce'
+      - 'Automotive'
+      - 'Banking or Finance'
+      - 'Insurance'
+      - 'Restaurant or Food Delivery'
+      - 'Advertising or Marketing Company'
+      - 'Healthcare or Medical Practice'
+      - 'Telecom Services Provider'
+      - 'SMB Service Providedr'
+      - 'Technology Company'
+      - 'Non-Profit'
+      - 'Government Agency'
+      - 'Industry Analyst'
+      - 'Educational Organization'
+      - 'Other'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Industry vertical your organization belongs to"
+    ui:
+        class: [summary]
+
+  - para: 'OtherOrganization'
+    desc: 'Type of other Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Type of other organization you represent"
+    ui:
+        class: [summary]
+
+  - para: Action
+    desc: 'Top-level action'
+    cardinality: -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    domain:
+      - (model 'Register Demo')
+      - (model 'Contact Sales')
+      - (model 'Register Developer')
+      - (model 'Register White Paper')
+      - (model "Contact Hiring")
+      - (model "Contact Founder")
+      - (model "Provide Feedback")
+    askUser:
+      msg: "How I can help you. You can ask general questions any time."
+      msgIfAssigned: "Would you like to do anything else? Select Done to quit."
+    ui:
+      iterate: bag # reset  once, set
+      ignoreValue: Done
+
+  - para: 'FirstName'
+    desc: 'First Name, extracted from UserName'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please enter your first name"
+
+  - para: EmailActions
+    desc: "Maintains count of how many actions need email or other data"
+    cardinality: -1
+    dataType: int
+    value: 0
+    activityStatus: optional
+    askUser:
+      dontAsk: True
+
+
+  constraints:
+  - constr: "Computes EmailActions count"
+    type: rule
+    then: (assert(eq (para EmailActions) (plus(para Action:*all*:AskEmailFlag))))
+
+  - constr: "Print prompt message first time Action is set and its NOT provide feedback"
+    type: rule
+    if:
+      - and: (cond(eq(para EmailActions) 1))
+#      - and: (cond(not(isIgnored(para Action))))
+    then:
+      - and: (assert(tellUser "Please answer a few questions so I can best help you."))
+      - and: (assert(tellUser "Type skip or ignore if you dont want to answer some question. But I will need the email minimally."))
+# EmailAddress will be activated by indiv actions only
+#      - and: (assert(isRequired (para 'EmailAddress')))
+#
+#  - constr: "Activate User email once some email Action is set"
+#    type: rule
+#    if:
+#      - and: (cond(isAssigned (para Action)))
+##      - and: (cond(not(isIgnored (para Action))))
+#      - and: (cond(not(lastEq(para Action) "Provide Feedback")))
+#    then:
+#      - and: (assert(isRequired (para 'EmailAddress')))
+##      - and: (assert(isRequired (para 'UserName') (para 'PhoneNumber')(para 'EmailAddress')
+##              (para 'OrganizationName')(para 'IndustryVertical') (para 'RoleOrganization') (para 'DecisionTimeFrame')))
+#  - constr: "email --> require user name"
+#    type: rule
+#    if: (cond(isAssigned(para 'EmailAddress')))
+#    then: (assert(isRequired (para 'UserName')))
+#
+#  - constr: "user name --> require user phone number"
+#    type: rule
+#    if: (cond(isAssigned(para 'UserName')))
+#    then: (assert(isRequired (para 'PhoneNumber')(para 'OrganizationName')))
+
+
+# role, DecisionTimeFrame, Industry vertical, OtherOrg  should be left to respective action to ask
+#  - constr: "user name --> require org name"
+#    type: rule
+#    if: (cond(isAssigned(para 'UserName')))
+#    then: (assert(isRequired (para 'OrganizationName')))
+
+#  - constr: "org name --> require role in orog"
+#    type: rule
+#    if: (cond(isAssigned(para 'OrganizationName')))
+#    then: (assert(isRequired (para 'RoleOrganization')))
+
+#
+#  - constr: "org role --> require decision time frame"
+#    type: rule
+#    if: (cond(isAssigned (para 'RoleOrganization')))
+#    then: (assert(isRequired (para 'DecisionTimeFrame')))
+
+#  - constr: "OrganizationName --> require industry vertical"
+#    type: rule
+#    if: (cond(isAssigned (para 'OrganizationName')))
+#    then: (assert(isRequired (para 'IndustryVertical' )))
+#
+#  - constr: "Activate Other Org para if Vertical=Other"
+#    type: rule
+#    if: (cond(eq  (para 'IndustryVertical') Other))
+#    then:
+#      - and: (assert(isRequired (para 'OtherOrganization')))
+
+# following ignore some para based on others, or unignore if they get assigned
+#  - constr: "ignore UserName -> ignore phone number"
+#    type: rule
+#    if: (cond(isIgnored(para UserName)))
+#    then: (assert(isIgnored(para PhoneNumber)))
+#
+#  - constr: "assigned UserName -> unIgnore phone number"
+#    type: rule
+#    if: (cond(isAssigned(para UserName)))
+#    then: (assert(isUnIgnored(para PhoneNumber)))
+#
+#  - constr: "ignore OrganizationName -> ignore IndustryVertical, RoleOrganization, DecisionTimeFrame"
+#    type: rule
+#    if: (cond(isIgnored(para OrganizationName)))
+#    then: (assert(isIgnored (para IndustryVertical) (para RoleOrganization)))
+#
+#  - constr: "assign OrganizationName -> unIgnore IndustryVertical, RoleOrganization, DecisionTimeFrame"
+#    type: rule
+#    if: (cond(isAssigned(para OrganizationName)))
+#    then: (assert(isUnIgnored (para IndustryVertical) (para RoleOrganization)))
+#
+# end of ignore block of constraints
+
+  - constr: "Push email to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:EmailAddress) (para EmailAddress)))
+  - constr: "Push user name to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:UserName) (para UserName)))
+  - constr: "Push phone number to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:PhoneNumber) (para PhoneNumber)))
+  - constr: "Push role to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:RoleOrganization) (para RoleOrganization)))
+  - constr: "Push OrganizationName to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:OrganizationName) (para OrganizationName)))
+  - constr: "Push vertical to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:IndustryVertical) (para IndustryVertical)))
+  - constr: "Push other org to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:OtherOrganization) (para OtherOrganization)))
+#  - constr: "Push DecisionTimeFrame to all Action models"
+#    desc: 'Only pushes down, not back up'
+#    type: rule
+#    then:
+#      - and: (assert(init (para Action:*all*:DecisionTimeFrame) (para DecisionTimeFrame)))
+  - constr: "Push FirstName to all Action models"
+    type: rule
+    then:
+      - and: (assert(eqp (para Action:*all*:FirstName) (para FirstName)))
+
+# both these constraints reactivate Action
+  - constr: "Closing msg when Done"
+    type: rule
+    if: (cond(isIgnored (para Action)))
+    then:
+      - and: (assert(tellUser "Thanks for visiting Predictika's Corporate Chatbot. I hope I was able to help. Please come again."))
+      - and: (assert(tellUser "You can ask questions about predictika, its technology, or applications any time."))
+      - and: (assert(isunignored (para Action)))
+
+  - constr: "Closing msg when Done and user has NOT already Provided feedback"
+    type: rule
+    if:
+      - and: (cond(isIgnored (para Action)))
+      - and: (cond(not(member "Provide Feedback" (para Action))))
+    then:
+      - and: (assert(tellUser "Please type 'give feedback' if you want to give us any feedback."))
+      - and: (assert(isunignored (para Action)))
+
+
+#  - constr: 'Extract First Name from UserName'
+#    type: rule
+#    then: (assert(init (para FirstName) (firstName (para UserName))))
+
+- model: "Action Base Model"
+  desc: "Defines all the para but does not actrivate them"
+  parameters:
+#  - para: 'UserName'
+#    desc: 'User Name'
+#    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+#    dataType: symbolic
+#    activityStatus: required # defaults to: optional; others: required; excluded
+#    askUser:
+#      msg: "Please enter your name"
+#    ui:
+#        class: [summary]
+
+  - para: 'EmailAddress'
+    desc: 'Email address'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      extractor:
+        name: emailx
+    askUser:
+      msg: "Business email address"
+    ui:
+        class: [summary]
+
+  - para: 'UserName'
+    desc: 'User Name'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      synonyms: ["Name"]
+      extractor:
+        name: namex
+    askUser:
+      msg: "Please enter your name"
+    ui:
+        class: [summary]
+
+  - para: 'PhoneNumber'
+    desc: 'Phone Number'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    nlp:
+      extractor:
+        name: phone_number_x
+    askUser:
+      msg: "Your business contact phone number"
+    ui:
+        class: [summary]
+
+  - para: 'OrganizationName'
+    desc: 'Name of Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Name of your organization"
+    ui:
+        class: [summary]
+
+  - para: 'RoleOrganization'
+    desc: 'Role in Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'C-level'
+      - 'Chatbot Developer'
+      - 'Technology Evaluator'
+      - 'Casual Interest'
+      - 'Investment, M&A'
+      - 'Student'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "What is your role regarding chatbots in your organization?"
+    ui:
+        class: [summary]
+
+  - para: 'DecisionTimeFrame'
+    desc: 'Time frame for deciding'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Very Soon'
+      - '3-6 Months'
+      - '6-12 Months'
+      - 'Indefinite'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "How soon chatbots will be introduced in your organization?"
+    ui:
+        class: [summary]
+
+  - para: 'IndustryVertical'
+    desc: 'Type of Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Retail or Ecommerce'
+      - 'Automotive'
+      - 'Banking or Finance'
+      - 'Insurance'
+      - 'Restaurant or Food Delivery'
+      - 'Advertising or Marketing Company'
+      - 'Healthcare or Medical Practice'
+      - 'Telecom Services Provider'
+      - 'SMB Service Providedr'
+      - 'Technology Company'
+      - 'Non-Profit'
+      - 'Government Agency'
+      - 'Industry Analyst'
+      - 'Educational Organization'
+      - 'Other'
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Industry vertical your organization belongs to"
+    ui:
+        class: [summary]
+
+  - para: 'OtherOrganization'
+    desc: 'Type of other Organization'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Type of other organization you represent"
+    ui:
+        class: [summary]
+
+  - para: 'FirstName'
+    desc: 'First Name, extracted from UserName'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please enter your first name"
+
+  - para: AskEmailFlag
+    desc: "1 or 0 based on whether email should be asked or not"
+    cardinality: 1
+    dataType: int
+    value: 1
+    activityStatus: required
+    askUser:
+      dontAsk: True
+
+# following may not be needed
+  - para: 'AskEmailAgain'
+    desc: 'Flag to re-ask one more time. 0 - asked once, 1 - asked twice'
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: int
+    domain: (0,2)
+    value: 0
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      dontAsk: True
+
+  constraints:
+  - constr: "AskEmailFlag=1 --> Email required"
+    type: rule
+    if: (cond(eq(para AskEmailFlag) 1))
+    then: (assert(isRequired(para EmailAddress)))
+
+  - constr: "AskEmailFlag=1, Email skipped --> Ask email again"
+    type: rule
+    if:
+      - and: (eq(para AskEmailFlag) 1)
+      - and: (isIgnored(para EmailAddress))
+      - and: (eq(para AskEmailAgain) 0)
+    then:
+      - and: (assert(tellUserFormat "I need your email address to complete the {} task." (para _key)))
+      - and: (assert(isunignored(para EmailAddress)))
+      - and: (assert(incr (para AskEmailAgain) 1))
+
+  - constr: "No email even after asking for it twice "
+    type: rule
+    if:
+      - and: (isIgnored (para EmailAddress))
+      - and: (not(isAssigned(para EmailAddress)))
+      - and: (eq (para AskEmailAgain) 1)
+    then:
+      - and: (assert(tellUserFormat "I cannot complete your {} action without email." (para _key)))
+      - and: (assert(isIgnored (para 'DecisionTimeFrame') (para IndustryVertical)))
+# AskEmailAgain=2 if asked twice and still no email
+      - and: (assert(incr (para AskEmailAgain) 1))
+
+# following is activated if earlier asked twice but later email known from another action
+  - constr: "Asked twice but later got email"
+    type: rule
+    if:
+      - and: (eq(para AskEmailAgain)2)
+      - and: (isAssigned(para EmailAddress))
+    then:
+      - and: (assert(tellUserFormat "Thanks for sharing your email. First I will complete your earlier action {}." (para _key)))
+
+- model: "FullData Action Base"
+  desc: "This model asks lots of user data"
+  baseModel: "Action Base Model"
+  constraints:
+  - constr: "email --> require user name"
+    type: rule
+    if: (cond(isAssigned(para EmailAddress)))
+    then:
+      - and: (assert(isRequired (para UserName)))
+# unignore it too in case EmailAddress was set via propag
+      - and: (assert(isunignored(para UserName)(para DecisionTimeFrame)(para PhoneNumber)(para OrganizationName)
+              (para 'RoleOrganization')(para 'IndustryVertical' )))
+
+  - constr: "user name --> require user phone number"
+    type: rule
+    if: (cond(isAssigned(para UserName)))
+    then:
+      - and: (assert(isRequired (para PhoneNumber)))
+#      - and: (assert(isunignored(para PhoneNumber)))
+
+  - constr: "user name --> require org name"
+    type: rule
+    if: (cond(isAssigned(para 'UserName')))
+    then:
+      - and: (assert(isRequired (para 'OrganizationName')))
+#      - and: (assert(isunignored(para OrganizationName)))
+
+  - constr: "org name --> require role in orog"
+    type: rule
+    if: (cond(isAssigned(para 'OrganizationName')))
+    then: (assert(isRequired (para 'RoleOrganization')))
+
+  - constr: "org role --> require decision time frame"
+    type: rule
+    if: (cond(isAssigned (para 'RoleOrganization')))
+    then:
+      - and: (assert(isRequired (para 'DecisionTimeFrame')))
+#      - and: (assert(isunignored(para DecisionTimeFrame)))
+
+  - constr: "OrganizationName --> require industry vertical"
+    type: rule
+    if: (cond(isAssigned (para 'OrganizationName')))
+    then: (assert(isRequired (para 'IndustryVertical' )))
+
+  - constr: "Activate Other Org para if Vertical=Other"
+    type: rule
+    if: (cond(eq  (para 'IndustryVertical') Other))
+    then:
+      - and: (assert(isRequired (para 'OtherOrganization')))
+
+- model: 'Register Demo'
+  baseModel: "FullData Action Base"
+  parameters:
+  - para: 'DemoBots'
+    desc: 'Bots to demo'
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Food Ordering Bot'
+      - 'BMW Car Selection Bot'
+      - 'Auto Dealership Bot'
+      - 'Customer Support Bot'
+#      - 'Financial Products Bot'
+#      - 'Acronym Bot'
+#      - 'Bill Payment FAQ Bot'
+      - 'All Bots'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Which bot are you interested in seeing?"
+      msgIfAssigned: "Do you want to see other demo bots?"
+      msgOnSkip: ['You cannot skip this question but you can cancel {} action. Just type cancel',[_key]]
+      canSkip: False
+    ui:
+      class: [summary]
+      iterate: set # reset , once, set
+      ignoreValue: Done
+
+  - para: 'DemoPlatform'
+    desc: 'Where to run demo'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Website Widget'
+      - 'Facebook Messenger'
+      - 'Alexa'
+      - 'Google Assistant'
+# add these to domain of DemoPlatform as they become supported
+#      - 'Slack'
+#      - 'Twitter'
+#      - 'WhatsApp'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Where do you want to run the demo bot?"
+      msgOnSkip: ['You cannot skip this question but you can cancel {} action. Just type cancel',[_key]]
+      canSkip: False
+    nlp:
+      gex: skip
+    ui:
+        class: [summary]
+
+
+  constraints:
+#  - constr: "Msg when made active"
+#    type: rule
+#    if: (cond(isAssignedCS (para _active)))
+#    then: (assert(tellUser "Thanks for your interest in seeing some of our demo bots. Please answer a few questions"))
+
+  - constr: "make Decision time frame required"
+    type: rule
+    if: (cond(isAssigned(para _active)))
+    then: (assert(isRequired(para DecisionTimeFrame)))
+
+  - constr: "All Bots --> dont ask more"
+    type: rule
+    if: (cond(member 'All Bots' (para 'DemoBots')))
+    then: (assert(isIgnored (para 'DemoBots')))
+
+  - constr: "if User Enters all the values "
+    type: rule
+    if: (cond (isassigned(para DemoBots) (para EmailAddress) (para DemoPlatform)))
+    then:
+      - and: (assert(tellUser "Hi, Thank you for registering to see {} on {}" (para DemoBots)(para DemoPlatform) ))
+      - and: (assert(tellUser "Please look for an email from webmaster@predictika.com to {} with a link to the selected demo bot (s)" (para EmailAddress)  ))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+# TBD. Constraint to send email to predictika with user request for demo approval
+
+# TBD Msg that not enough known to schedule demo
+
+- model: 'Contact Sales'
+  baseModel: "FullData Action Base"
+  parameters:
+
+  constraints:
+  - constr: "require Decision Time Frame"
+    type: rule
+    if: (cond(isAssigned (para _active)))
+    then: (assert(isRequired (para DecisionTimeFrame)))
+
+  - constr: "DecisionTimeFrame is known and under a year"
+    type: rule
+    if:
+      - and: (cond(neq (para DecisionTimeFrame) 'Indefinite'))
+      - and: (cond(isAssigned (para EmailAddress)))
+    then:
+      - and: (assert(tellUser "Thank you for your interest. Someone from sales will be in touch shortly."))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization)
+              (para IndustryVertical) (para OtherOrganization)))
+
+# TBD. Constraint to send email to predictika with user request for sales contact request
+
+  - constr: "Time frame not known"
+    type: rule
+    if: (cond(eq (para DecisionTimeFrame) 'Indefinite'))
+    then:
+      - and: (assert(tellUser "It seems you are still early in your evaluation process."))
+      - and: (assert(tellUser "Type 'register for demo' or 'register for white paper' to learn more about our capabilities"))
+      - and: (assert(tellUser "You can also ask me questions about predictika, technology, appications, or how we compare with others"))
+      - and: (assert (tellUser "Please 'contact sales' when you are ready"))
+# Log user interest for future
+
+  - constr: "Time frame not set"
+    type: rule
+    if:
+      - and: (cond(isAssigned (para EmailAddress)))
+      - and: (isIgnored (para DecisionTimeFrame))
+      - and: (cond(not(isAssigned (para DecisionTimeFrame))))
+    then:
+      - and: (assert(tellUser "Please share your decision time frame so we can best route your request."))
+      - and: (assert(tellUser "Type 'register for demo' or 'register for white paper' to learn more about our capabilities"))
+      - and: (assert(tellUser "You can also ask me questions about predictika, technology, appications, or how we compare with others"))
+      - and: (assert (tellUser "Please 'contact sales' when you are ready"))
+# Log user interest for future
+
+
+- model: 'Register Developer'
+  baseModel: "FullData Action Base"
+  parameters:
+
+  constraints:
+  - constr: "make Decision time frame required"
+    type: rule
+    if: (cond(isAssigned(para _active)))
+    then: (assert(isRequired(para DecisionTimeFrame)))
+
+  - constr: "add to waiting list"
+    type: rule
+    if: (cond(isAssigned (para EmailAddress)))
+    then:
+      - and: (assert (tellUser "Thank your for your interest in joining our developer program."))
+      - and: (assert (tellUser "We will review your interest in becoming a developer and be in touch soon."))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+#      - and: (assert(tellUser "We will add your email to our list and be in touch when we open up our program."))
+# TBD. Constraint to send email to predictika with user request for developer waiting list signup request
+
+# by the time this constraint runs, user has been asked about email twice. no need to ask again
+#  - constr: "no email address even after asking twice"
+#    type: rule
+#    if:
+#      - and: (cond(isIgnored (para EmailAddress)))
+#      - and: (cond(not(isAssigned (para EmailAddress))))
+#      - and: (eq(para AskEmailAgain) 2)
+#    then:
+##      - and: (assert(eq (para AskEmailAgain) DontAsk)))
+##      - and: (assert(isUnIgnored (para EmailAddress)))
+#      - and: (assert (tellUser "Thank your for your interest in joining our developer program."))
+##      - and: (assert (tellUser "Our program is currently only available to signed customers."))
+#      - and: (assert(tellUser "But without your email we can not review your application."))
+
+- model: "Register White Paper"
+  baseModel: "FullData Action Base"
+  nlp:
+    synonyms: ['Register WP', 'Register WhitePaper']
+  parameters:
+
+  constraints:
+  - constr: "add to waiting list"
+    type: rule
+    if: (cond(isAssigned (para EmailAddress)))
+    then:
+      - and: (assert (tellUser "Thank your for your interest in getting a copy of our forthcoming white paper."))
+      - and: (assert(tellUser "We have added your email to our list and will send you a link to our WP once it is ready."))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+# TBD. Constraint to send email to predictika with user request for WP waiting list signup request
+
+# by the time this constraint runs, user hzas been asked about email twice. no need to ask again
+#  - constr: "no email address"
+#    type: rule
+#    if:
+#      - and: (cond(isIgnored (para EmailAddress)))
+#      - and: (not(isAssigned (para EmailAddress)))
+##      - and: (cond(eq (para AskEmailAgain) AskAgain))
+#    then:
+##      - and: (assert(eq (para AskEmailAgain) DontAsk)))
+##      - and: (assert(isUnIgnored (para EmailAddress)))
+#      - and: (assert (tellUser "Thank your for your interest in getting a copy of our white paper."))
+#      - and: (assert (tellUser "But without your email we can not add you to our waiting list."))
+
+- model: 'Contact Hiring'
+  baseModel: "Action Base Model"
+  parameters:
+  - para: 'EmailAddress'
+    desc: 'Email address'
+    askUser:
+      msg: "Email address"
+  - para: 'DecisionTimeFrame'
+    desc: 'Time frame for deciding'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: required
+    askUser:
+      msg: "What is your time frame for job change?"
+
+  - para: 'JobInterest'
+    desc: 'Job Interest'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'AI/NLP Developer'
+      - 'Full Stack Developer'
+      - 'Python Expert'
+      - 'Bot Developer'
+      - 'Sales'
+      - 'Product Management'
+      - 'Other Jobs'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "What kind of job are you looking for"
+    ui:
+        class: [summary]
+
+  - para: 'LinkedInProfile'
+    desc: 'LinkedIn Profile link'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: required # defaults to: optional; others: required; excluded
+    nlp:
+      extractor:
+        name: urlx
+    askUser:
+      msg: "Please enter your LinkedIn profile URL"
+    ui:
+        class: [summary]
+
+  constraints:
+  - constr: "require Decision Time Frame"
+    type: rule
+    if: (cond(isAssigned(para _active)))
+    then: (assert(isRequired (para DecisionTimeFrame)))
+  - constr: "Hiring Msg"
+    type: rule
+    if: (cond(isAssigned (para LinkedInProfile)))
+    then:
+      - and: (assert(tellUser "Thanks for sharing your LinkedIn profile. Someone will review your background and will be in touch as appropriate"))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+
+# TBD. Constraint to send email to predictika with user request for hiring interest
+
+  - constr: "Missing LinkedIn Profile"
+    type: rule
+    if:
+      - and: (cond(isIgnored (para LinkedInProfile)))
+      - and: (not(isAssigned (para LinkedInProfile)))
+    then:
+      - and: (assert(tellUser "Thanks for your interest, but we cannot proceed without your LinkedIn profile."))
+      - and: (assert(tellUser "If you enter your LinkedIn profile, then we can proceed."))
+
+
+- model: 'Contact Founder'
+  baseModel: "Action Base Model"
+  parameters:
+  - para: 'EmailAddress'
+    desc: 'Email address'
+    askUser:
+      msg: "Email address"
+  - para: 'DecisionTimeFrame'
+    desc: 'Time frame for deciding'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    askUser:
+      msg: ["What is your time frame for {}?", [DiscussionTopic]]
+
+  - para: 'DiscussionTopic'
+    desc: 'Topic of discussion'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    domain:
+      - 'Invest in Company'
+      - 'Buy Company'
+      - 'Sell Company'
+      - 'Marketing Partnership'
+      - 'Distribution Partnership'
+      - 'Other Partnership'
+      - 'Explore Senior Position'
+      - 'Confidential Discussion'
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please tell me why you want to contact the founder"
+    ui:
+        class: [summary]
+
+  constraints:
+  - constr: "require Decision Time Frame"
+    type: rule
+    if:
+      - and: (cond(isAssigned(para DiscussionTopic)))
+      - and: (cond(isAssigned (para EmailAddress)))
+    then: (assert(isRequired (para DecisionTimeFrame)))
+  - constr: "Topic, email assigned, and  time frame set asked (assigned OR ignored)"
+    type: rule
+    if:
+      - and: (cond(isAssigned(para DiscussionTopic)))
+      - and: (cond(isAssigned (para EmailAddress)))
+      - and: (cond(isAsked (para DecisionTimeFrame)))
+    then:
+      - and: (assert(tellUser "I will inform the founder of your interest. I am sure someone will be in touch soon."))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+#  - constr: "Topic, email set, time frame ignored"
+#    type: rule
+#    if:
+#      - and: (cond(isAssigned(para DiscussionTopic)))
+#      - and: (cond(isAssigned (para EmailAddress)))
+#      - and: (cond(isIgnored (para DecisionTimeFrame)))
+#    then: (assert(tellUser "I will inform the founder of your interest. I am sure someone will be in touch soon."))
+# TBD. Constraint to send email to predictika with user request for founder contact
+
+  - constr: "Topic not set but email set"
+    type: rule
+    if:
+      - and: (cond(isIgnored(para DiscussionTopic)))
+      - and: (not(isAssigned (para DiscussionTopic)))
+      - and: (cond(isAssigned (para EmailAddress)))
+    then:
+      - and: (assert(tellUser "I will inform the founder of your interest. However, since you have chosen to hide your topic of interest,"))
+      - and: (assert(tellUser "it is not clear if you will hear from him."))
+      # ignore remaining para if not already asked
+      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+              (para IndustryVertical) (para OtherOrganization)))
+# TBD. Constraint to send email to predictika with user request for founder contact
+
+  - constr: "No Topic, No Email"
+    type: rule
+    if:
+      - and: (cond(isIgnored(para DiscussionTopic)))
+      - and: (cond(isIgnored (para EmailAddress)))
+      - and: (not(isAssigned (para EmailAddress)))
+    then:
+      - and: (assert(tellUser "I am sorry I can not help you until you tell me your email and topic of interest."))
+
+- model: "Provide Feedback"
+  baseModel: "Action Base Model"
+  nlp:
+    synonyms: ["Give Feedback", "Provide Reaction", "Give Reaction"]
+  parameters:
+  - para: AskEmailFlag
+    desc: "1 or 0 based on whether email should be asked or not"
+    cardinality: 1
+    dataType: int
+    value: 0
+    activityStatus: required
+    askUser:
+      dontAsk: True
+  - para: 'FeedbackMsg'
+    desc: 'Topic of feedback'
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    dataType: symbolic
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please give us some feedback on your interaction with me"
+    ui:
+        class: [summary]
+
+  constraints:
+  - constr: "Thank you msg"
+    type: rule
+    if: (cond(isAssigned (para FeedbackMsg)))
+    then:
+      - and: (assert(tellUser "Thanks for your feedback. I will pass it to our developers"))
+# TBD. Constraint to send email to predictika with user feedback

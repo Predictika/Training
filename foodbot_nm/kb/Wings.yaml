@@ -1,0 +1,53 @@
+annot:
+  author: Priti Mittal
+  name: Wings.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for orderting Wings
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: 'Large Traditional Wings'
+  baseModel: BaseWings
+  parameters:
+  - para: Flavor
+    domain: ['Honey BBQ', 'Buffalo Mild','Buffalo Medium','Buffalo Burnin Hot','Garlic Parmesan','Hawaiian Teriyaki',
+              'Spicy Garlic','Lemon Pepper Dry Rub','Cajun Style Dry Rub','Naked']
+
+  - para: HowMany
+    domain: ['6 Piece','12 Piece', '18 Piece', '36 Piece']
+
+
+  constraints:
+  - constr: "table HowMany, TotalPrice"
+    type: table
+    parameters: [(para HowMany), (para TotalPrice)]
+    rows:
+    - ['6 Piece', 2.99]
+    - ['12 Piece', 5.29]
+    - ['18 Piece', 7.49]
+    - ['36 Piece', 13.99]
+
+- model: 'Breaded Bone-Out Wings'
+  baseModel: BaseWings
+  parameters:
+  - para: Flavor
+    domain: ['Honey BBQ', 'Buffalo Mild','Buffalo Medium','Buffalo Burnin Hot','Garlic Parmesan','Hawaiian Teriyaki',
+              'Spicy Garlic','Lemon Pepper Dry Rub','Cajun Style Dry Rub','Naked']
+
+  - para: HowMany
+    domain: ['8 Piece','16 Piece', '24 Piece', '48 Piece']
+
+  constraints:
+  - constr: "table HowMany, TotalPrice"
+    type: table
+    parameters: [(para HowMany), (para TotalPrice)]
+    rows:
+    - ['8 Piece', 6.99]
+    - ['16 Piece', 12.99]
+    - ['24 Piece', 18.99]
+    - ['48 Piece', 35.99]

@@ -1,0 +1,100 @@
+annot:
+  author: Priti Mittal
+  name: Sides.yaml
+  start date: April 24, 2017
+  type: ConfigKB
+  desc: Simple KB for orderting side dishes
+
+import:
+- from: "./pizzahutbasemodels.yaml"
+  models: all # either list of models in [a, b, c] or all to import ALL models
+
+
+models:
+- model: "Stuffed Garlic Knots"
+  baseModel: BaseSides
+  desc: 10 large Garlic Knots stuffed with melted cheese and finished with a garlic buttery blend, grated parmesan and Italian herbs. Served with a dipping cup of marinara.
+  parameters:
+  - para: Size
+    domain: ['10','20']
+    activityStatus: required
+    defValue: '10'
+    askUser:
+      msg: ['Select the size of the {} order',[_key]]
+
+  - para: DietType
+    value: [Dairy]
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    - ['10', 3.99]
+    - ['20', 5.99]
+
+- model: "Cheese Sticks"
+  baseModel: BaseSides
+  parameters:
+  - para: DietType
+    value: [Dairy]
+
+  - para: Size
+    domain: ['Single Order','Double Order']
+    activityStatus: required
+    defValue: 'Single Order'
+    askUser:
+      msg: ['Select the size of the {} order',[_key]]
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    - ['Single Order', 1.99]
+    - ['Double Order', 3.19]
+
+- model: Breadsticks
+  baseModel: BaseSides
+  parameters:
+  - para: Size
+    domain: ['Single Order','Double Order']
+    activityStatus: required
+    defValue: 'Single Order'
+    askUser:
+      msg: ['Select the size of the {} order',[_key]]
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    - ['Single Order', 1.99]
+    - ['Double Order', 3.19]
+
+- model: Fries
+  baseModel: BaseSides
+  parameters:
+  - para: Size
+    domain: ['Single Order','Double Order']
+    activityStatus: required
+    defValue: 'Order'
+    askUser:
+      msg: ['Select the size of the {} order',[_key]]
+
+  constraints:
+  - constr: "table Size, TotalPrice"
+    type: table
+    parameters: [(para Size), (para TotalPrice)]
+    rows:
+    - ['Single Order', 1.99]
+    - ['Double Order', 3.19]
+
+
+
+
+
+
+
+
+
