@@ -1,0 +1,411 @@
+annot:
+  author: Priti Mittal
+  name: foodbot_FAQ.yaml
+  start date: August 4, 2018
+  type: KB
+  stem: True
+  desc: Foodbot FAQ based partly on Pizza Hut
+groups:
+- group:
+  - q: can I order pizza?
+  - q: how many types of pizza do you have
+  - q: how do i order pizza
+  - q: how do i start ordering
+  - q: I want to order food
+  - q: can i add coke with thin crust pizza
+  - q: can i order small cheese pizza
+
+  - a: |
+      Yes you can! Use this food ordering chat bot and type order pizza. select your choices to order Pizza, pasta, sides
+      drinks and deserts. Follow the guided instructions and order what ever you want.
+      We have Cheese pizza, Pepperoni pizza, Meat lovers pizza, Supreme pizza and create your own pizza.
+  - url:
+  - n: 1
+
+- group:
+  - q: can I order cheese pizza?
+  - q: can i order small cheese pizza
+  - q: can i order large cheese pizza
+  - q: order small thin crust pizza
+  - q: how can I order pizza
+
+  - a: |
+       Yes you can order by typing  order pizza and select cheese pizza. You can order by selecting size of pizza
+        like small , medium or large. I am not sure about any promotions on cheese pizza. Go to web site and check
+  - url:
+  - n: 2
+
+- group:
+  - q: where can I find nutritional value?
+  - q: what is nutritional value of small cheese pizza
+  - q: what is the nutritional value of pizza
+  - q: can you tell me nutritional value of pizza
+  - q: can i see nutritional value chart
+  - q: do you have nutritional value chart
+  - q: want to find nutrition value
+  - q: how do i find nutritional value chart
+  - q: nutritional value of pizza
+
+  - a: |
+      Yes we do have nutrition value information on web site. Please check on www.pizzahut.com in nutrition.
+       Check out Nutrition page for Nutrition Calculator, Full menu nutrition and  Food allergy information.
+       For example: 1 serving = 1 slice = 1/8 of pizza Veggie Lover's® - Small Thin 'N Crispy® Slice    calories 100 ,
+  - url:
+  - n: 3
+
+- group:
+
+  - q:  What is meat lovers pizza
+  - q:  What does The Meat lovers Pizza mean
+  - q:  meat lovers pizza
+  - q:  what do you have in meat lovers pizza
+  - q:  what do you have in meat lover pizza
+
+  - a: |
+      Meat lovers pizza has 6 meat  toppings on pizza. Pepperoni, Italian Sausage, Slow roasted Ham, Beef,
+      Applewood smoked Bacon, Seasoned Pork
+      You can order it by simply typing: i want meat lovers pizza
+
+  - url:
+  - n: 4
+- group:
+
+  - q:  can i order meat lovers pizz
+  - q:  how do i order meat lovers pizza
+
+  - a: |
+      Please type: i want meat lovers pizza or something similar
+      Meat lovers pizza has 6 meat  toppings on pizza. Pepperoni, Italian Sausage, Slow roasted Ham, Beef,
+      Applewood smoked Bacon, Seasoned Pork
+
+  - url:
+  - n: 4
+- group:
+  - q: what are gluten free choices
+  - q: what gluten free options you have
+  - q: do you have Gluten free pizza
+  - q: do you have any gluten free options
+  - q: do you have gluten free crust
+  - q: do you have gluten free choices
+
+  - a: |
+      Yes! Delicious gluten-free pizza made with Udi's® Certified Gluten-Free crust.
+      Select Pizza Hut® Gluten-Free toppings. For those simply looking to reduce gluten in their diets,
+      we offer a create-your-own option but it is NOT prepared using the procedures certified by the Gluten Intolerance Group (GIG).
+      The create-your-own option is made with Udi's® certified gluten-free crust and the cheese, pepperoni
+      (if selected) and marinara from the gluten-free kit, but any other toppings selected in addition to these come
+      from the make table where all toppings are stored. These create-your-own pizzas (along with the GIG certified pizzas)
+      are freshly baked- to-order on parchment paper in our oven.
+      In addition to these techniques, team members who make either your create-your-own option or
+      a Cheese-only or Pepperoni Gluten-Free Pizza wear gloves and even use a designated gluten-free pizza roller
+      cutter to cut the pizzas. Most standard Pizza Hut® toppings are naturally gluten free, however
+      meatballs, Sauce Drizzles and Crust Flavors are excluded due to gluten content and possible cross-contamination.
+
+
+  - url:
+  - n: 5
+- group:
+  - q: what is the menu
+  - q: what can I order
+  - q: can I see the menu
+  - q: what on the menu
+
+  - a: |
+      Our menu is based on a major restaurant chain's menu.
+      You can order Pizza, Wings, Pasta, Sides, Drinks, Desserts etc.
+      Just type "start" to begin order process with the bot guiding you.
+      Or just type what you want such as, "I want pizza pasta drinks"
+      Or type, "large hand tossed pizza with onions and mushrooms diet pepsi and pasta"
+      You can type full description of an item, partial description, or just the menu category
+- group:
+  - q:  Which crust is vegan
+  - q:  any vegan choices
+  - q: is cheese vegan
+  - q: do you have vegan crust
+  - q: any vegan pizza
+  - q: What are my vegan options
+  - q: any vegan crust
+  - q: do you have vegan choices
+
+  - a: |
+      These are the choices we have.
+      sweet pizza sauce and either the Thin 'N Crispy or Hand-Tossed crust
+      (the others aren't vegan). Knock yourself out with veggietoppings!
+      The dessert pizza crust is also vegan.
+
+  - url:
+  - n: 6
+
+- group:
+  - q: do you have salads
+  - q:  can i order salad
+  - q: Do you have salads
+
+  - a: |
+      Yes we do have salad menu. Most restaurants have salad bar in house but
+      we don't take order online and we don't deliver salads.
+
+  - url:
+  - n: 7
+
+- group:
+  - q: can i order wings
+  - q: do you have wings
+  - a: |
+      yes you can have two type of wings.
+      We have large traditional wings and Breaded Bone - out wings.
+
+  - url:
+  - n: 8
+- group:
+  - q: do you have any french fries
+  - q: can I order french fries
+  - q: how much are french fries
+  - q: How much are french fries
+  - q: do you have french fries
+
+  - a: |
+      Just type I want fries.
+      We have 3 kinds of french fries.  Straight cut fries, Lemon pepper seasoned, Cajun style seasoned.
+      All of them are $2.99
+  - url:
+  - n: 9
+- group:
+  - q: is pizza suace vegetarian
+  - a: |
+      Regular pizza sauce at Pizza Hut is indeed vegetarian, but the sauce on the stuffed
+      crust pizza contains chicken fat, and the pasta and bread stick sauce is beef-based
+  - url:
+  - n: 10
+- group:
+  - q: What kind of cheese is used in Pizza Hut
+  - q: which cheese you use
+  - q: what type of cheese
+  - q: Is cheese vegetarian
+  - a: |
+      We use skim milk mozzarella on our pizza, Skim milk mozzarella is extremely stretchy, but loses a little
+      on the flavor end. More expensive pizzerias normally spring for the full fat mozzarella cheese.
+  - url:
+  - n: 11
+- group:
+  - q: dessert options
+  - q: do you have desserts
+  - q: dessert choices
+  - q: what kind of deserts you have
+  - q: can i order desserts
+  - q: what is dessert choices
+  - q: what kind of desserts
+  - q: what options you have for dessert
+  - q: want to order deserts
+  - q: any desserts
+  - q: any dessert choices
+
+  - a: |
+      There are a few options for desserts.
+      Hershey's Toasted S'Mores cookie ( 1 slice ) 237 cal/serving
+      The Ultimate Hersshey' chocolate chip cookie, 8 pieces, 195 cal/piece
+      Cinamon Sticks , 10 sticks  81 cal/ stick
+      Hershey's Triple Chocolate Brownie, 9 pieces, 256 cal/piece
+  - url:
+  - n: 12
+- group:
+  - q: how many slices are there in large pizza
+  - a: |
+      Usually it is 8 slices
+  - url:
+  - n: 13
+- group:
+  - q:  can I use my coupon online
+  - a: |
+      In most cases you can redeem any valid Pizza Hut coupon online.
+  - url:
+  - n: 15
+- group:
+  - q: pizza dough?
+  - q: What is  Dough made of
+  - q: what is dough made of
+
+  - a: |
+      Pizza Hut got its start in 1958 in Wichita, Kansas, the nation's top wheat-producing state.
+      We have harvested wheat for our original dough recipes from some of the same family-run wheat
+      fields and have worked with some of the same flour-making mills for decades.
+      Just like artisan bakeries, we believe in taking the extra bread-making step to allow our dough to sit
+      undisturbed in heated proofers to allow our famous and original Pan dough to rise perfectly for
+      optimal flavor and texture. It's an investment in time and money, but one we believe is well worth it.
+  - url:
+  - n: 15
+- group:
+  - q: are you hiring
+  - a: |
+      We are always hiring in restaurant jobs, and corporate jobs. please check on pizzahut.com
+
+  - url:
+  - n: 16
+- group:
+  - q: is pizza dough made with eggs
+  - a: |
+      Real pizza dough does not contain eggs, but some of the cheaper places and also some of the frozen ones
+      do (for texture purposes, because they skimped on time, a very important factor).
+      Always ask, making clear you have an allergy.
+
+  - url:
+  - n: 17
+
+- group:
+  - q:  how much does it cost to deliver
+  - q:  do you deliver
+  - q:  cost for delivery
+  - q:  how much you charge for delivery
+  - q:  is delivering available
+  - a: |
+      Yes we Deliver! Pizza Hut has announced it will no longer charge a delivery fee for online orders, which can save customers
+      up to $8. The company is boasting that it's the first of the "Big Three" pizza chains to offer no-cost delivery.
+      However, there's a slightly sneaky disclaimer that customers need to be aware of.
+
+  - url:
+  - n: 17
+
+
+- group:
+  - q:  What is the minimum order
+  - a: |
+      Pizza Hut Raises Minimum Delivery Order To $10.50 To Match $10 Pizza Promotion.
+      Matt writes that local Pizza Hut used to have a $10 minimum for online delivery orders.
+      That's fair enough, and a common practice. But when the chain raised the minimum to $10.50 at the same
+      time that they debuted a $10 pizza promotion.
+  - url:
+  - n: 19
+
+- group:
+  - q: how much do you make in pizza delivering
+  - a: |
+      Average Pizza Delivery Drivers in the United States make around $7.92 per hour.
+      This group's pay is mainly influenced by geographic location, followed by the specific employer and
+      experience level.
+  - url:
+  - n: 20
+
+- group:
+  - q: how much do you tip the pizza delivery man
+  - q: what is the tip for delivery man
+  - a: |
+      The Web site  www.tipthepizzaguy.com suggests the following: 15% for normal service, with a $2 minimum;
+      20% for excellent service; 10% or less for poor service; at least 10% for orders of $50 or more.
+      Don't assume a delivery charge, if there is one, goes to the pizza deliverer.
+      Ask the person who takes your order.
+
+  - url:
+  - n: 21
+
+- group:
+  - q:  how much is large cheese pizza?
+  - q:  how much is large pizza
+
+  - a: |
+      Hand tossed pizza $14.99. 290 cal/slice , 8 slices.
+  - url:
+  - n: 22
+- group:
+  - q:   What is the cheapest deal you have?
+  - a: |
+      $5.99 Each: 2 Medium 2 -Topping Pizzas
+      Get 2 Or More Medium 2-Topping Pizzas For Just $5.99 Each. Make It A Specialty Or
+      Pan Pizza For An Additional Charge.
+
+  - url:
+  - n: 23
+- group:
+  - q:  How Will I Know When The Restaurant Received My Internet Order?
+  - a: |
+      Once you submit your order, the Order Confirmation page will show the time your order was
+      received along with an estimated time that your order will be ready for carryout or delivery.
+      You will also receive a confirmation email at the email address you provided at registration.
+      And if you're still unsure about your order, you can always call the restaurant directly.
+
+- group:
+  - q: what payment options are available through internet ordering
+  - a: |
+      Most restaurants accept cash, Pizza Hut Gift Cards and eGift Cards, as well as all major credit cards.
+  - url:
+  - n: 24
+
+- group:
+  - q: do you have promotions or coupons
+  - q: do you have any coupons
+  - q: do you have any promotions
+  - q: do you have any deals
+  - q: do you have any special deals
+  - q: Is there any promotions or coupons
+  - q: Do you have any coupons
+  - q: is there any promotions or coupons
+
+
+  - a: |
+      We always have promotions going on and coupons are available to redeem. I can list few which do
+      change time to time but it is a good idea to check online  at 'www.pizzahut.com ' in deals tab.
+      for e.g  Large 3-Topping Pizza And A HERSHEY'S® Toasted S'mores Cookie,  Breadsticks And A 2-Liter
+      $7.00,  $5.99 Each: 2 Medium 2-Topping Pizzas,  2 Large 3-Topping Pizzas, Breadsticks And 2 Liter
+      $33.99
+  - n: 25
+
+- group:
+  - q:  What is meat lovers pizza
+  - q:  What does The Meat lovers Pizza mean
+  - q:  What do you have in meat lovers pizza
+  - q:  can i order meat lovers pizza
+  - q:  what do you have in meat lover pizza
+  - q:  show options of meat lover pizza
+
+
+  - a: |
+      Yes you can. Please type order meat lovers pizza.
+      Meat lovers pizza has 6 meat  toppings on pizza. Pepperoni, Italian Sausage, Slow roasted Ham, Beef,
+      Applewood smoked Bacon, Seasoned Pork
+
+  - url:
+  - n: 4
+
+- group:
+  - q: what sides are there
+  - q: do you any sides
+  - q: do you have any side dishes
+
+  - a: |
+      We have a number of side dishes ro complement your main course, such as:
+      French fries, cheese sticks, garlic knots, or bread sticks
+
+- group:
+  - q:  how much is order of Cheese sticks
+  - q:  what is the price of Cheese Sticks
+
+
+  - a: |
+      Cheese sticks are $6.49
+      5 sticks 150 cal/stick
+      Marinara Dipping Sauce, 1 Dip 28 cal/dip
+
+- group:
+  - q:  how much is stuffed garlic knots
+  - q:  what is the price of Garlic Knots
+  - a: |
+      Stuffed garlic knots are $6.49
+      10 knots 79 cal/knot
+      Marinara Dipping Sauce, 1 Dip28 cal/dip
+      Prices can be changed time to time.
+
+#- group:
+#  - q:
+#  - q:
+#  - q:
+#  - q:
+#  - q:
+#  - q:
+#  - q:
+#
+#
+#
+#  - a:
+#
+#
+#  - url:
+#  - n:

@@ -1,0 +1,284 @@
+annot:
+  author: Sanjay Mittal
+  name: PizzaTutorialKB1
+  desc: "Tutorial KB. Basic pizza model with a many more  constraints. also ready for use by UI"
+  start date: Feb3, 2017
+  type: ConfigKB
+  welcomeMsg: |
+          Welcome to Build-your-pizza bot
+          I am a simple bot for training purposes.
+          Just answer the questions to create your custom pizza.
+  topModel: CreateYourPizza
+models:
+- model: "CreateYourPizza"
+  parameters:
+  - para: Size
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: Medium # if given, used during model completion
+    domain:  [Personal, Small, Medium, Large, Xlarge] # values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+    askUser: {msg: "Select the size of the pizza"}
+
+  - para: Crust
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:   # not required. if given will be assigned when model becomes active
+    defValue: 'Thin' # if given, used during model completion
+    domain:  ['PaperThin', 'Thin', 'Thick', 'Pan', 'Stuffed'] # values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+    askUser:
+      msg: "What kind of crust would you like for your pizza"
+
+  - para: Cheese
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+#    preset: RegularCheese # if given, used during model completion
+    domain:  [NoCheese, RegularCheese, ExtraCheese, GoatCheese] # values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+    askUser: {msg: "Select the cheese"}
+
+  - para: Sauce
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+#    preset: Marinara # if given, used during model completion
+    domain:   [NoSauce, Marinara, WhiteSauce, ExtraMarinara, ExtraWhite] # values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+    askUser: {msg: "What sauce would you like"}
+
+  - para: Toppings
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  [Onions, Mushrooms, BellPepper, HotPepper, Artichokes, Pineapple, Ham, Pepperoni, Sausage, Anchovies, Chicken, BBQChicken, Meatballs ]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      iterate: set
+      ignoreValue: Done
+    askUser:
+      msg: "Select toppings for the pizza"
+      msgIfAssigned: "Select more toppings. Done to end"
+
+  - para: TotalPrice
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['${}',[TotalPrice]]
+    askUser:
+      msgOnValue: ['Base price: ${}. Charge for extra options: ${}. Extra cheese: ${}. Total: ${}', [BasePrice, OptPrice, OptChPrice, TotalPrice]]
+
+  - para: BasePrice
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['${}',[BasePrice]]
+
+  - para: CompleteOrder
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [ShowOrder, MakeChanges, SaveOrder, Pay, Skip]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "You have completed your pizza order. What do you want to do next?"
+    ui:
+      iterate: resetPush
+      ignoreValue: Skip
+    nlp:
+      gex: skip
+
+  - para: OptPrice
+    desc: Cost for the extra toppings if any
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['${}',[OptPrice]]
+
+  - para: OptChPrice
+    desc: Cost for extra cheese if any
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    ui:
+      class: [summary]
+      valueformat: ['${}',[OptChPrice]]
+
+
+  - para: BaseToppingsCt
+    desc: "Number of Toppings included in the base price"
+    dataType: int  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+#    ui:
+#      class: [summary]
+
+  - para: ExtToppings
+    desc: "Extra toppings, beyond allowed in base price"
+    dataType: int  #int, float, symbolic, arbit,
+    cardinality:  -1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,10)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+#    ui:
+#      class: [summary]
+
+  - para: OptBasePr
+    desc: "Base price for ea extra toppings. This is multiplied by OptFactor"
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value: 0.5 # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,5)
+    activityStatus: optional # defaults to: optional; others: required; excluded
+
+  - para: OptFactor
+    desc: "Factor by which optional toppings are priced based on size"
+    dataType: float  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue:  # if given, used during model completion
+    domain:  (0,100)
+    activityStatus: required # defaults to: optional; others: required; excluded
+
+  constraints:
+  - constr: "if Crust=Stuffed --> Cheese neq GoatCheese"
+    type: rule
+    exp: (if (cond(eq (para Crust) Stuffed)) then (assert(neq (para Cheese) GoatCheese)))
+  - constr: "if Cheese == GoatCheese --> Crust neq Stuffed --> "
+    type: rule
+    exp: (if (cond(eq (para Cheese) GoatCheese)) then (assert(neq (para Crust) Stuffed)))
+  - constr: "if Sauce=WhiteSauce --> Toppings cannot have [Meatballs, BBQChicken]"
+    type: rule
+    exp: (if (cond(member (para Sauce) [WhiteSauce, ExtraWhite])) then (assert(notcontains (para Toppings) [BBQChicken, Meatballs])))
+  - constr: "if Toppings contains [Meatballs, BBQChicken] --> Sauce NEQ White"
+    type: rule
+    exp: (if (cond(overlap (para Toppings) [BBQChicken, Meatballs])) then (assert(neq (para Sauce) White )))
+  - constr: "if Size=Xlarge --> Crust neq [Stuffed, PaperThin, ]"
+    type: rule
+    exp: (if (cond(eq (para Size) Xlarge)) then (assert(notmember (para Crust) [Stuffed, PaperThin])))
+  - constr: "if Crust=[Stuffed, PaperThin] --> Size  neq Xlarge"
+    type: rule
+    exp: (if (cond(member (para Crust) [Stuffed, PaperThin])) then (assert(neq (para Size) Xlarge)))
+  - constr: "if Size=Xlarge --> Only 5 toppings allowed"
+    type: rule
+    exp: (if (cond(eq (para Size) Xlarge)) then (assert(le (para Toppings_mvsize) 5)))
+  - constr: "if Crust=PaperThin --> Sauce cannot be extra size"
+    type: rule
+    exp: (if (cond(eq (para Crust) PaperThin)) then (assert(notmember (para Sauce) [ExtraMarinara, ExtraWhite])))
+  - constr: "if Sauce contains extra sauce --> Crust NEQ PaperThin"
+    type: rule
+    exp: (if (cond(member (para Sauce) [ExtraMarinara, ExtraWhite])) then (assert(neq (para Crust) PaperThin )))
+#  - constr: "TotPrice= BasePrice + OptPrice"
+#    type: rule #table, rule. More may be added later
+#    exp: (if then (assert(eq (para TotalPrice) (+ (para BasePrice)(para OptPrice)))))
+  - constr: "TotPrice= BasePrice + OptPrice + OptChPrice"
+    type: rule #table, rule. More may be added later
+    exp: (if then (assert(eq (para TotalPrice) (+ (para BasePrice)(para OptPrice)(para OptChPrice)))))
+  - constr: "if toppings > base --> ExtToppings=toppings - base toppings"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(gt (para Toppings_mvsize) (para BaseToppingsCt) ) ) then (assert(eq (para ExtToppings) (- (para Toppings_mvsize)(para BaseToppingsCt)))))
+  - constr: "if ExtToppings >0 --> OptPrice= ExtToppings opt * OptFactor * OptBasePr"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(gt (para ExtToppings) 0)) then (assert(eq (para OptPrice) (* (para ExtToppings)(para OptFactor)(para OptBasePr)))))
+  - constr: "if ExtraCheese --> OptChPrice= OptFactor * OptBasePr"
+    type: rule #table, rule. More may be added later
+    exp: (if (cond(eq  (para Cheese) ExtraCheese )) then (assert(eq (para OptChPrice) (* (para OptFactor)(para OptBasePr)))))
+  - constr: "table Size, BasePrice"
+    type: table
+    parameters: [(para Size), (para BasePrice)]
+    rows:
+    -  [Tiny, 6]
+    -  [Personal, 10]
+    -  [Small, 12]
+    -  [Medium, 15]
+    -  [Large, 20]
+    -  [Xlarge, 30]
+  - constr: "table Size, BaseToppingsCt"
+    type: table
+    parameters: [(para Size), (para BaseToppingsCt)]
+    rows:
+    -  [Tiny, 2]
+    -  [Personal, 2]
+    -  [Small, 3]
+    -  [Medium, 3]
+    -  [Large, 3]
+    -  [Xlarge, 4]
+  - constr: "table Size, OptFactor"
+    type: table
+    parameters: [(para Size), (para OptFactor)]
+    rows:
+    -  [Tiny, 1]
+    -  [Personal, 1]
+    -  [Small, 2]
+    -  [Medium, 3]
+    -  [Large, 4]
+    -  [Xlarge, 6]
+  - constr: "Msg for CompleteOrder=Quit"
+    type: rule
+    if: (eq(para CompleteOrder) Quit)
+    then:
+      - and: (assert(tellUser "Goodbye!! Please come back again."))
+      - and: (assert(contains (para _sys) Quit))
+  - constr: "CompleteOrder=Pay"
+    type: rule
+    if: (eq(para CompleteOrder) Pay)
+    then:
+      - and: (assert(tellUser "Payment processing not implemented yet. This is still a demo"))
+      - and: (assert(contains (para _sys) Quit))
+  - constr: "CompleteOrder=SaveOrder"
+    type: rule
+    if: (eq(para CompleteOrder) SaveOrder)
+    then:
+      - and: (assert(tellUser "Saving order not implemented yet. This is still a demo"))
+      - and: (assert(contains (para _sys) Quit))
+  - constr: "CompleteOrder=MakeChanges"
+    type: rule
+    if: (eq(para CompleteOrder) MakeChanges)
+    then:
+      - and: (assert(tellUser "You can change any part of the order simply by saying change foo or change foo to bar, where foo is something you selected, e.g., change large to medium"))
+  - constr: "CompleteOrder=ShowOrder"
+    type: rule
+    if: (eq(para CompleteOrder) ShowOrder)
+    then:
+      - and: (assert(tellUser "{} {} Pizza with {}, {}, and {}" (para Size) (para Crust) (para Cheese)(para Sauce) (para Toppings)))
+      - and: (assert(tellUser "Total Price ${}, Base Price ${}, Options ${} and Extra Cheese ${}" (para TotalPrice) (para BasePrice) (para OptPrice)(para OptChPrice)))
+  - constr: "CompleteOrder=Skip"
+    type: rule
+    if: (eq(para CompleteOrder) Skip)
+    then:
+      - and: (assert(tellUser "Goodbye!! Please come back again."))
+      - and: (assert(contains (para _sys) Quit))
+

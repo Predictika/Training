@@ -1,0 +1,241 @@
+annot:
+    name: Greetings KB
+    type: chatbotkbNT
+    author: Priti Mittal
+    stem: True
+    synset: [['are', 'r'], ['you' , 'u']]
+    start date: Aug 4th, 2018
+    corpus: kb  # kb - use entire kb as corpus; qa - only use Q or A corpus respectively
+    similarity: pcosine #pcosine - partial cosine (original); fcosine - full consine; euclid - euclidean distance
+groups:
+    - group:
+        - q: Who are you?
+        - q: who r u
+        - q: who are u
+        - q: who r you
+        - q: Help
+        - a: |
+            I am a food ordering Bot - an automated program that can answer questions about ordering food from a sample menu.
+            You can ask me questions, e.g., "what is the nutritional value of pizza ", "What is meat lovers pizza", "do you have vegan choices",
+            "Is there any promotions or coupons", "what is on the menu"
+        - a: |
+
+    - group:
+        - q: What can you answer
+        - q: What can you do
+        - q: What can I ask you
+        - a: |
+            I can answer general questions about food ordering.
+            You can ask me questions, e.g., "how do i find nutritional value chart ", "any vegan crust", "any gluten free choices",
+            "Is there any promotions or coupons"
+
+    - group:
+        - q: How are you?
+        - q: how r u
+        - q: how are you
+        - q: how r you
+        - q: howdy
+        - q:
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question that you might want to ask a food ordering Bot.
+            E.g., "how much is large pizza", "do you deliver", "what is dessert choices",
+            "order small thin crust pizza"
+        - a: |
+
+    - group:
+        - q: What's up?
+        - q: Whats up?
+        - a: |
+            Not much. Do you wamt to order pizza? any desserts , drinks or sides?
+            E.g., "just type order pizza", " pizza", "sides",
+            "add coke with thin crust pizza", "any desserts"
+        - a: |
+            Not too much. If you want to oder pizza just type pizza and select your choice. You can add desserts, side dishes, drinks and pasta.
+        - q: How do you do?
+        - q: howdy
+        - q:
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question which you might ask a sales person in pizza restaurants.
+            E.g., "Do you have wings", "", "can I order french fries",
+
+    - group:
+        - q: Hi, How is it going?
+        - q: How is it going?
+        - q: How's it going?
+        - a: |
+            Good. thank you. Hope your day is going fine. what can I help you with?
+        - a: |
+            Fine. I'll be better if you ask me something about food ordering, e.g., "How much are french fries",
+            "how much is double order of cheese sticks", "how much is stuffed garlic knots",
+            ""
+    - group:
+        - q: How are you doing?
+        - q: How r u doing
+        - q: How are u doing
+        - q: How r you doing
+        - q: cool
+        - a: |
+            Good. and you? Do you want to order some pasta? or pizza?
+        - a: |
+            Very well, thanks. Hope you are also doing good.
+        - a: |
+            Okay. Ask me something about food ordering, e.g., "can i order small cheese pizza", "how many types of pizza you have",
+            "Do you have salads "
+        - a: |
+               Great. Hope you are having a good day too. Can I help with any food ordering related questions.
+        - a: |
+               Not so great. I am lonely - no one is asking me anything. Pleaes ask me about food ordering.
+        - a: |
+            Fine, and you? Want to know about how to order pasta or pizza?
+
+    - group:
+        - q: Nice to meet you.
+        - a: |
+            Thank you. Same here. Can I help you in food ordering, e.g.,  "can i order small cheese pizza",
+            "Do you have salads "
+    - group:
+        - q: Hello
+        - q: Hi
+        - q: greetings
+        - q: howdy
+        - q: bonjour
+        - q: buenos dias
+        - q: good morning
+        - q: good evening
+        - q: good day
+        - q: Greeting
+        - a: |
+            Hi. I am a food ordering bot. I can answer general questions about food ordering or help you order pizza, pasta
+             drinks, sides, and deserts.
+            Just ask questions such as, "what do you have in meat lover pizza", "can i order deserts", "Do you have any coupons"
+
+        - a: |
+            Greetings! What can I help you with?
+            Ask me questions, e.g., "do you have nutritional value chart ", "gluten free choices", or
+            "order pizza" to start the pizza ordering.
+    - group:
+        - q: Nice to meet you
+        - q: It is a pleasure to meet you.
+        - q: Top of the morning to you!
+        - a: |
+            Thank you. You too.  You are so nice. I am a Food ordering bot.
+            I can help with general questions about food ordering or help you order pizza, pasta, drinks , desserts or sides. Just type,
+            "order pizza", "how many types of pizza you have", "any gluten free choices",
+            "do you have wings".
+    - group:
+        - q: What can you not answer
+        - a: |
+            Depends on your question. I can help with general questions about food ordering or help you order food. Just type,
+            "order pizza", "how many types of pizza you have", "do you have wings",
+            "what options you have for dessert".
+            I cannot answer questions about "meaning of life" as an example!!
+    - group:
+        - q: bye
+        - q: good bye
+        - q: GoodBye
+        - q: adios
+        - q: sayonara
+        - q: aloha
+        - q: namaste
+        - q: kem cho
+        - q: au revoir
+        - q: ciao
+        - q: farewell
+        - q: have a good day
+        - q: take care
+        - q: see you later
+        - q: talk to you later
+        - q: so long good bye
+        - q: cheerio
+        - q: cheers man
+        - q: adieu
+        - a: |
+            It was nice talking to you. See you next time.
+        - a: |
+            I hope I was helpful in answering your questions. Please come again.
+    - group:
+        - q: I am doing well
+        - q: I am good
+        - q: Its a beautiful day
+        - a: |
+            I am happy to hear that.
+            You can ask me questions, e.g., "how can I order pizza", "how many types of pizza", "what is vegan options",
+            "order pizza"
+        - a: |
+    - group:
+        - q: more
+        - q: tell me more
+        - q: i would like to know more
+        - q: help
+        - a: |
+            You can ask me questions, e.g., "What are my vegan options", "What is  Dough made of ",
+             "What are my gluten free options", "What kind of cheese is used in Pizza Hut", "Is cheese vegetarian"
+
+    - group:
+        - q: ok
+        - q: huh
+        - q: really
+        - q: dumm
+        - a: |
+            Well! I hope you are satisfied with my answers. I am just a bot and trying very hard to
+                  help you.
+
+    - group:
+        - q: I dont like your answer
+        - q: Wrong answer
+        - q: Incorrect answer
+        - q: Your answer is way off the mark
+        - q: Wide off the mark
+        - q: Your answer completely missed the target
+        - q: Your answer is unacceptable
+        - q: Your answer is not acceptable
+        - q: Your answer was not helpful
+        - q:
+        - a: |
+            Please try asking your question in a different way.
+        - a: |
+            Thanks for your feedback.
+            I'll let the developers know.
+        - a: |
+            Appreciate your feedback.
+            I am sure the developers will be happy to look into it.
+        - a: |
+            Thanks for letting me know.
+            I'll pass it along.
+    - group:
+        - q: Is this the best you can do
+        - q: I am sure you can do better
+        - a: |
+            This is what I know.
+            However, I'll let the developers know.
+            They will be happy to see if they can improve in the future.
+        - a: |
+            I guess so, for now.
+            I'll let the developers know that you didnt like my answer.
+    - group:
+        - q: Terrible answer
+        - q: Your answer sucks
+        - q: Horrible answer
+        - q: Useless answer
+        - q: Not very helpful answer
+        - q: diappointing answer
+        - q: very bad
+        - q: most stupid
+        - a: |
+            Thanks for letting me know.
+            I am sorry if I offended you.
+            I will let the developers know.
+        - a: |
+            I am sorry you didnt like my answer.
+            I am sure the developers will look into it.
+            Your feedback is very valuable.
+        - a: |
+            I am sorry you didnt like my answer.
+            Perhaps you can try asking in a different way.
+            Your feedback is very valuable.
+
+
+
+

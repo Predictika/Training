@@ -1,0 +1,318 @@
+annot:
+  author: Sanjay Mittal
+  name: canonbot
+  start date: Feb 23, 2018
+  type: ConfigKB
+  desc: "Bot for controliing canon cameras using CCAPI"
+  topModel: selectaction
+#import:
+#- from: "./BMWSelectCar_flex.yaml"
+#  models: all
+models:
+- model: selectaction
+  askUser:
+    welcomeMsg: "Welcome to the Canon Camera Bot."
+  desc: "Main model for guiding user to take some action"
+  parameters:
+  - para: UserAction
+    dataType: symbolic
+    domain:
+      - (model 'Shoot')
+#      - (model 'Open')
+#      - (model 'Close')
+#      - (model 'Delete Last')
+      - (model 'Zoom')
+#      - (model 'Zoom')
+#      - (model 'Pan')
+#      - (model 'Tilt')
+      - (model 'Change Video')
+      - (model 'Change Picture')
+      - (model 'Start Recording')
+      - (model 'Stop Recording')
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please type or say your command Type Quit to end session"
+      msgIfAssigned: "Please type or say your command. Type Quit to end session"
+    ui:
+      iterate: resetCut
+      ignoreValue: End
+
+  constraints:
+  - constr: "UserAction=End"
+    type: rule
+    if: (isIgnored(para UserAction) )
+    then:
+      - and: (assert(tellUser "Goodbye!! Thank you for using our service. Please come back again."))
+      - and: (assert(tellUser "You can start again by just describing what you want."))
+      - and: (assert(tellUser "E.g., or simply type start to be guided step by step"))
+      - and: (assert(contains (para _sys) Quit))
+
+- model: CameraCmd
+  parameters:
+    - para: Result
+      dataType: arbit
+
+  constraints:
+    - constr: 'Check if result <400 --> OK'
+      type: rule
+      if: #(lt(para Result) 400)
+      then: (assert(tellUser "Successfully Completed" (para _key) (para Result)))
+
+    - constr: "Check if result >=400 --> error"
+      type: rule
+      if: (ge (para Result) 400)
+      then: (assert(tellUserFormat "Sorry could not do {}. Pl check your camera." (para _key)))
+
+- model: 'Shoot'
+  baseModel: CameraCmd
+  nlp:
+    synonyms:
+      - 'Take picture'
+      - 'Click picture'
+      - 'Shoot Picture'
+      - 'Take photo'
+      - 'Click photo'
+      - 'Shoot photo'
+  parameters:
+  constraints:
+    - constr: "Issue shoot commnd"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Shooting a  picture"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'takepicture')))
+
+
+- model: 'Open'
+  baseModel: CameraCmd
+  nlp:
+    synonyms:
+      - 'Turn on camera'
+      - 'Open Camera'
+  parameters:
+  constraints:
+    - constr: "Open camera"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Opening camera"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'cameraon')))
+
+
+- model: 'Close'
+  baseModel: CameraCmd
+  nlp:
+    synonyms:
+      - 'Shut off camera'
+      - 'Turn off camera'
+      - 'Close camera'
+  parameters:
+  constraints:
+    - constr: "Close camera"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Closing camera"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'cameraoff')))
+
+
+- model: 'Delete Last'
+  baseModel: CameraCmd
+  nlp:
+    synonyms:
+      - 'Remove last'
+      - 'Eliminate last'
+  parameters:
+  constraints:
+    - constr: "Delete last picture"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Deleting last picture"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'deletepicture')))
+
+
+#- model: 'Zoom In'
+#  baseModel: CameraCmd
+#  constraints:
+#    - constr: "Zoom in commnd"
+#      type: rule
+#      if: (isAssigned(para _active))
+#      then:
+#        - and: (assert(tellUser "Zooming In camera." ))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'zoomin' )))
+#
+#
+#- model: 'Zoom Out'
+#  baseModel: CameraCmd
+#  constraints:
+#    - constr: "Zoom out commnd"
+#      type: rule
+#      if: (isAssigned(para _active))
+#      then:
+#        - and: (assert(tellUser "Zooming out camera." ))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'zoomout' )))
+
+- model: 'Zoom'
+  baseModel: CameraCmd
+  parameters:
+    - para: ZoomDirection
+      domain:
+        - In
+        - Out
+      activityStatus: required
+      askUser:
+        msg: "Do you want to zoom in or out"
+  constraints:
+    - constr: "Zoom in commnd"
+      type: rule
+      if: (eq (para ZoomDirection) In)
+      then:
+        - and: (assert(tellUserFormat "Zooming {} camera." (para ZoomDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'zoomin' )))
+
+    - constr: "Zoom out commnd"
+      type: rule
+      if: (eq (para ZoomDirection) Out)
+      then:
+        - and: (assert(tellUserFormat "Zooming {} camera." (para ZoomDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'zoomout' )))
+
+
+#- model: 'Pan'
+#  baseModel: CameraCmd
+#  parameters:
+#    - para: PanDirection
+#      domain:
+#        - Left
+#        - Right
+#      activityStatus: required
+#      askUser:
+#        msg: "Do you want to pan left or right"
+#  constraints:
+#    - constr: "Pan left commnd"
+#      type: rule
+#      if: (eq (para PanDirection) Left)
+#      then:
+#        - and: (assert(tellUserFormat "Panning camera {}." (para PanDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'panleft' )))
+#
+#    - constr: "Pan right commnd"
+#      type: rule
+#      if: (eq (para PanDirection) Right)
+#      then:
+#        - and: (assert(tellUserFormat "Panning camera {}." (para PanDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'panright' )))
+#
+#
+#- model: 'Tilt'
+#  baseModel: CameraCmd
+#  parameters:
+#    - para: TiltDirection
+#      domain:
+#        - Up
+#        - Down
+#      activityStatus: required
+#      askUser:
+#        msg: "Do you want to tilt up or down"
+#  constraints:
+#    - constr: "Tilt up commnd"
+#      type: rule
+#      if: (eq(para TiltDirection) Up)
+#      then:
+#        - and: (assert(tellUserFormat "Tilting camera {}." (para TiltDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'tiltup' )))
+#
+#    - constr: "Tilt down commnd"
+#      type: rule
+#      if: (eq(para TiltDirection) Down)
+#      then:
+#        - and: (assert(tellUserFormat "Tilting camera {}." (para TiltDirection)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'tiltdown' )))
+
+- model: 'Change Video'
+  nlp:
+    synonyms:
+      - 'Change movie'
+      - 'video mode'
+      - 'movie mode'
+  desc: "Change mode to video"
+  baseModel: CameraCmd
+  constraints:
+    - constr: "video mode"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUserFormat "Changing camera  to video mode." ))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'modevideo' )))
+
+- model: 'Change Picture'
+  nlp:
+    synonyms:
+      - 'Change photo'
+      - 'picture mode'
+      - 'photo mode'
+  desc: "Change mode to picture"
+  baseModel: CameraCmd
+  constraints:
+    - constr: "Picture mode"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUserFormat "Changing camera  to picture mode."))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'modepicture' )))
+
+- model: 'Start Recording'
+  baseModel: CameraCmd
+  parameters:
+  constraints:
+    - constr: "Start recording"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Starting video recording"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'startrecording')))
+
+- model: 'Stop Recording'
+  baseModel: CameraCmd
+  parameters:
+  constraints:
+    - constr: "Stop recording"
+      type: rule
+      if: (isAssigned(para _active))
+      then:
+        - and: (assert(tellUser "Starting video recording"))
+        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'stoprecording')))
+
+#- model: 'Change'
+#  desc: "Change mode to picture or video"
+#  baseModel: CameraCmd
+#  parameters:
+#    - para: Mode
+#      domain:
+#        - Picture
+#        - Video
+#      activityStatus: required
+#      askUser:
+#        msg: "Do you want camera in picture or video mode"
+#  constraints:
+#    - constr: "Picture mode"
+#      type: rule
+#      if: (eq(para Mode) Picture)
+#      then:
+#        - and: (assert(tellUserFormat "Changing camera  to {} mode." (para Mode)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'modepicture' )))
+#
+#    - constr: "video mode"
+#      type: rule
+#      if: (eq(para Mode) Video)
+#      then:
+#        - and: (assert(tellUserFormat "Changing camera  to {} mode." (para Mode)))
+#        - and: (assert(eq (para Result)(udfvals 'canonbot.UDFCannon.ExecuteCommand' 'modevideo' )))
+
+
+#- model: 'Shoot Picture'
+#  parameters:
+#  constraints:
+
+

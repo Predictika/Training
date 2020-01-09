@@ -1,0 +1,86 @@
+annot:
+  author: Sanjay Mittal
+  name: canonbotFAQ.yaml
+  start date: Feb. 23, 2019
+  type: KB
+  minCF: 0.6 # answers that match below this will return noMatchAns below
+  maxCF: 0.98 # answer CF will be pegged below this
+  noMatchAns: |
+            Sorry, I dont have a good match for your question.
+            Please try rephrasing or try with different words.
+            You can also type "hi", or "what can I ask" to get some sample questions.
+  stem: True
+  synset:
+    - ['Photo', 'Picture']
+    - ['shoot','click', 'take']
+    - ['video','movie']
+  desc: FAQ about using Canon Camera Bot
+groups:
+- group:
+  - q: How do i shoot a picture
+  - q: How do i take a picture
+  - q: How to click a picture
+  - a: Type or say shoot, or 'take picture'
+
+- group:
+  - q: How do I open the camera
+  - q: How do I turn power on
+  - a: Type or say 'open camera'
+
+- group:
+  - q: How do I close the camera
+  - q: How to power off the camera
+  - a: Type or say 'close camera'
+
+- group:
+  - q: how do i zoom in
+  - q: how do i zoom out
+  - a: Type or say 'zoom in' or 'zoom out'
+- group:
+  - q: How do i pan left
+  - q: How do i pan right
+  - a: Type or say 'pan left' or 'pan right'
+- group:
+  - q: how do i tilt up
+  - q: how do i tilt down
+  - a: Type or say 'tilt up' or 'tilt down'
+
+- group:
+  - q: How to delete last photo
+  - a: Say or type 'delete last'
+
+- group:
+  - q: How to change to video mode
+  - q: How to change to picture mode
+  - a: Say or type 'change picture', or 'change video'
+
+- group:
+    - q: Do you support the full CCAPI by canon
+    - q: How much of the CCAPI is supported
+    - q: Can i use the bot for all of CCAPI commands
+    - a: We only support a subset but will be adding more over time. To get full list type 'what commands are supported'
+
+- group:
+    - q: What commands are supported
+    - a: |
+        The following commands are currently supported.
+        Shoot, Open, Close, Zoom In, Zoom Out, Pan Left, Pan Right, Tilt Up, Tilt Down,
+        Delete Last, Change to Video, Change to Photo
+
+
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+
