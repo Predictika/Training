@@ -1,0 +1,33 @@
+annot:
+  author: Sanjay Mittal
+  name: mypizza.yaml
+  desc: "Personal variation of byopizza"
+  start date: Jan 14, 2020
+  type: ConfigKB
+  welcomeMsg: |
+          Welcome to Build-your-pizza bot
+          I am a simple bot for training purposes.
+          Just answer the questions to create your custom pizza.
+  topModel: "My Pizza"
+
+import:
+- from: "./byopizza.yaml"
+  models: all
+
+models:
+- model: "My Pizza"
+  baseModel: "CreateYourPizza"
+  parameters:
+    - para: Crust
+      domain: ['PaperThin', 'Thin', 'Thick', 'Pan', 'Stuffed', "Flavor Crusted"]
+  constraints:
+    - constr: "table Size, BasePrice"
+      type: table
+      parameters: [(para Size), (para BasePrice)]
+      rows:
+          - [Tiny, 8]
+          - [Personal, 12]
+          - [Small, 12]
+          - [Medium, 15]
+          - [Large, 20]
+          - [Xlarge, 30]
