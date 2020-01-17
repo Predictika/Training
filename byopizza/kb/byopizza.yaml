@@ -23,6 +23,10 @@ models:
       class: [summary]
     askUser: {msg: "Select the size of the pizza"}
 
+  - para: CrustFlavor
+    domain: [Doritos, Cheetos, Plain]
+    askUser:
+      msg: ["What kind of flavor for your {} crust pizza", [Crust]]
   - para: Crust
     dataType: symbolic  #int, float, symbolic, arbit,
     cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
@@ -32,6 +36,7 @@ models:
     activityStatus: required # defaults to: optional; others: required; excluded
     ui:
       class: [summary]
+      msgOnValue: ["Your {} pizza only comes in {} crust", [Size, Crust]]
     askUser:
       msg: "What kind of crust would you like for your pizza"
 
@@ -70,7 +75,7 @@ models:
       ignoreValue: Done
     askUser:
       msg: "Select toppings for the pizza"
-      msgIfAssigned: "Select more toppings. Done to end"
+      msgIfAssigned: ["So far you have {}. Select more toppings. Done to end", [Toppings]]
 
   - para: TotalPrice
     dataType: float  #int, float, symbolic, arbit,
@@ -96,18 +101,18 @@ models:
       class: [summary]
       valueformat: ['${}',[BasePrice]]
 
-  - para: CompleteOrder
-    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
-    domain: [ShowOrder, MakeChanges, SaveOrder, Pay, Skip]
-    activityStatus: required # defaults to: optional; others: required; excluded
-    askUser:
-      msg: "You have completed your pizza order. What do you want to do next?"
-    ui:
-      iterate: resetPush
-      ignoreValue: Skip
-    nlp:
-      gex: skip
-
+#  - para: CompleteOrder
+#    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+#    domain: [ShowOrder, MakeChanges, SaveOrder, Pay, Skip]
+#    activityStatus: required # defaults to: optional; others: required; excluded
+#    askUser:
+#      msg: "You have completed your pizza order. What do you want to do next?"
+#    ui:
+#      iterate: resetPush
+#      ignoreValue: Skip
+#    nlp:
+#      gex: skip
+#
   - para: OptPrice
     desc: Cost for the extra toppings if any
     dataType: float  #int, float, symbolic, arbit,
@@ -216,6 +221,18 @@ models:
   - constr: "if ExtraCheese --> OptChPrice= OptFactor * OptBasePr"
     type: rule #table, rule. More may be added later
     exp: (if (cond(eq  (para Cheese) ExtraCheese )) then (assert(eq (para OptChPrice) (* (para OptFactor)(para OptBasePr)))))
+# following can be used to make Sauce required based on other para (assuming Sauce was optional to start with)
+  - constr: "for stuffed  crust make CrustFlavor required"
+    type: rule
+    if: (eq(para Crust) Stuffed)
+    then: (assert(isRequirred(para CrustFlavor)))
+  - constr: "Size Large, XlArge --> make sauce required"
+    type: rule
+    if:
+      - and: (member (para Size) [Large, Xlarge])
+      - and: (member (para Crust) [Pan, Stuffed])
+    then:
+      - and: (assert(isRequired (para Sauce)))
   - constr: "table Size, BasePrice"
     type: table
     parameters: [(para Size), (para BasePrice)]
@@ -246,6 +263,14 @@ models:
     -  [Medium, 3]
     -  [Large, 4]
     -  [Xlarge, 6]
+  - constr: "Toppings done --> Show and Quit"
+    type: rule
+    if: (isIgnored(para Toppings))
+    then:
+      - and: (assert(tellUser "{} {} Pizza with {}, {}, and {}" (para Size) (para Crust) (para Cheese)(para Sauce) (para Toppings)))
+      - and: (assert(tellUser "Total Price ${}, Base Price ${}, Options ${} and Extra Cheese ${}" (para TotalPrice) (para BasePrice) (para OptPrice)(para OptChPrice)))
+      - and: (assert(tellUser "Goodbye!! Please come back again."))
+      - and: (assert(contains (para _sys) Quit))
   - constr: "Msg for CompleteOrder=Quit"
     type: rule
     if: (eq(para CompleteOrder) Quit)
@@ -282,3 +307,19 @@ models:
       - and: (assert(tellUser "Goodbye!! Please come back again."))
       - and: (assert(contains (para _sys) Quit))
 
+- model: "My Pizza"
+  baseModel: "CreateYourPizza"
+  parameters:
+    - para: Crust
+      domain: ['PaperThin', 'Thin', 'Thick', 'Pan', 'Stuffed', "Flavor Crusted"]
+  constraints:
+    - constr: "table Size, BasePrice"
+      type: table
+      parameters: [(para Size), (para BasePrice)]
+      rows:
+          - [Tiny, 8]
+          - [Personal, 12]
+          - [Small, 12]
+          - [Medium, 15]
+          - [Large, 20]
+          - [Xlarge, 30]

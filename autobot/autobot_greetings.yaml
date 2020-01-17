@@ -1,0 +1,196 @@
+annot:
+    name: Greetings KB
+    type: chatbotkbNT
+    author: Pravil Gupta
+    stem: True
+    minCF: 0.6
+    noMatchAns: |
+              Sorry, I dont have a good answer for your question.
+              Please try rephrasing or try with different words.
+              You can also type "hi", or "what can I ask" to get some sample questions.
+    synset: [['are', 'r'], ['you' , 'u']]
+    start date: Aug 19, 2016
+    corpus: kb  # kb - use entire kb as corpus; qa - only use Q or A corpus respectively
+    similarity: pcosine #pcosine - partial cosine (original); fcosine - full consine; euclid - euclidean distance
+groups:
+    - group:
+        - q: Who are you?
+        - q: who r u
+        - q: who are u
+        - q: who r you
+        - q: Help
+        - a: |
+            I am a BMW Dealership Bot - an automated program that can answer questions about BMW cars and buying them at your local dealership.
+            You can ask me questions, e.g., "Is BMW European or american", "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars", "i want to contact sales"
+        - a: |
+
+    - group:
+        - q: What can you answer
+        - q: What can you do
+        - q: What can I ask you
+        - q: how can you help
+        - q: what can you help with
+        - a: |
+            I can answer general questions about BMW Cars.
+            You can ask me questions, e.g., "How do I track my new BMW", "what is shimmering range color", "What are limited editions in bmw",
+            "what are fine touches in bmw", "i want to contact service"
+
+    - group:
+        - q: How are you?
+        - q: how r u
+        - q: how are you
+        - q: how r you
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question that you might want to ask a BMW Bot.
+            E.g., "What is Integral Active Steering", "What is driving assistance plus package", "M4 Convertible Edition 30 Jahre",
+            "BMW 5 Series features", "M2 Coupe Black Shadow Edition", "i want to search inventory"
+        - a: |
+
+    - group:
+        - q: What's up?
+        - q: Whats up?
+        - a: |
+            Not much. Do you have any questions about BMW Car?
+            E.g., "How do I track my new BMW", "What is driving assistance plus package", "What is Integral Active Steering",
+            "Does BMW have electrical cars", "what are fine touches in bmw"
+        - a: |
+            Not too much. Can I help with BMW car related questions such as, "How do I track my new BMW", "what are fine touches in bmw", "What is Integral Active Steering"
+    - group:
+        - q: How do you do?
+        - a: |
+            I am good. I hope you are having a good day.
+            Please ask me a question that you might want to ask a BMW Bot.
+            E.g., "How do I track my new BMW", "What is driving assistance plus package", "Does BMW have electrical cars",
+            "what are fine touches in bmw"
+    - group:
+        - q: Hi, How is it going?
+        - q: How is it going?
+        - q: How's it going?
+        - a: |
+               Good.
+        - a: |
+            Fine. I'll be better if you ask me something about BMW cars, e.g., "How do I track my new BMW",
+            "What is driving assistance plus package", "Does BMW have electrical cars",
+            "what are fine touches in bmw"
+    - group:
+        - q: Hello
+        - q: Hi
+        - q: greetings
+        - q: howdy
+        - q: bonjour
+        - q: buenos dias
+        - q: good morning
+        - q: good evening
+        - q: good day
+        - q: Greeting
+        - a: |
+            Hi. I am a BMW Bot - an automated program that can answer questions about BMW cars and buying it.
+            You can ask me questions, e.g., "Is BMW European or american", "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars"
+        - a: |
+            Greetings! What can I help you with?
+            Ask me questions,  e.g., "Is BMW European or american", "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars"
+    - group:
+        - q: Nice to meet you
+        - q: It is a pleasure to meet you.
+        - q: Top of the morning to you!
+        - a: |
+            Thank you. You too.  I am a BMW bot.
+            I can help with general questions about BMW cars. Just type,
+            "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars"
+    - group:
+        - q: bye
+        - q: good bye
+        - q: GoodBye
+        - q: adios
+        - q: sayonara
+        - q: aloha
+        - q: namaste
+        - q: kem cho
+        - q: au revoir
+        - q: ciao
+        - q: farewell
+        - q: have a good day
+        - q: take care
+        - q: see you later
+        - q: talk to you later
+        - q: so long good bye
+        - q: cheerio
+        - q: cheers man
+        - q: adieu
+        - a: |
+            It was nice talking to you. See you next time.
+        - a: |
+            I hope I was helpful in answering your questions. Please come again.
+    - group:
+        - q: I am doing well
+        - q: I am good
+        - q: Its a beautiful day
+        - a: |
+            I am happy to hear that.
+            You can ask me questions, e.g., "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars"
+        - a: |
+    - group:
+        - q: more
+        - q: tell me more
+        - q: i would like to know more
+        - q: help
+        - a: |
+            You can ask me questions, e.g., "How do I track my new BMW", "What other information is available in My BMW",
+            "Does BMW have electrical cars"
+    - group:
+        - q: I dont like your answer
+        - q: Wrong answer
+        - q: Incorrect answer
+        - q: Your answer is way off the mark
+        - q: Wide off the mark
+        - q: Your answer completely missed the target
+        - q: Your answer is unacceptable
+        - q: Your answer is not acceptable
+        - q: Your answer was not helpful
+        - q:
+        - a: |
+            Please try asking your question in a different way.
+        - a: |
+            Thanks for your feedback.
+            I'll let the developers know.
+        - a: |
+            Appreciate your feedback.
+            I am sure the developers will be happy to look into it.
+        - a: |
+            Thanks for letting me know.
+            I'll pass it along.
+    - group:
+        - q: Is this the best you can do
+        - q: I am sure you can do better
+        - a: |
+            This is what I know.
+            However, I'll let the developers know.
+            They will be happy to see if they can improve in the future.
+        - a: |
+            I guess so, for now.
+            I'll let the developers know that you didnt like my answer.
+    - group:
+        - q: Terrible answer
+        - q: Your answer sucks
+        - q: Horrible answer
+        - q: Useless answer
+        - q: Not very helpful answer
+        - q: diappointing answer
+        - a: |
+            Thanks for letting me know.
+            I am sorry if I offended you.
+            I will let the developers know.
+        - a: |
+            I am sorry you didnt like my answer.
+            I am sure the developers will look into it.
+            Your feedback is very valuable.
+        - a: |
+            I am sorry you didnt like my answer.
+            Perhaps you can try asking in a different way.
+            Your feedback is very valuable.

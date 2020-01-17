@@ -1,0 +1,314 @@
+annot:
+  author: Sanjay Mittal
+  name: BMWSelectCar_flex
+  start date: Oct 16, 2017
+  type: ConfigKB
+  desc: "BMW Select Car. Asks user to choose guided or feature based selection method"
+  topModel: SelectBMW
+import:
+- from: "./BMWBaseModels.yaml"
+  models: all
+- from: "./DealerActions.yaml"
+  models: all
+- buildFromCsv: "./bmwbodytop.csv"
+  models: all
+  saveVar: bmwcars
+# baseModel: "BMW CarModel" # specify a baseModel if the models to be created must be of this base class
+
+models:
+- model: SelectBMW
+  desc: 'Model for selecting a car'
+  askUser:
+    welcomeMsg: "Welcome to the BMW Selection Bot. Enter your criteria or follow the guided process."
+  parameters:
+  - para: FlexAsk
+    desc: "Asks user which kind of selection method to use"
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    activityStatus: required
+    domain: [Guided, FeatureBased]
+    askUser: {msg: "Choose the method for selecting your BMW car"}
+    ui:
+      class: [summary]
+
+  - para: Feature
+    desc: "Asks which feature to select on next"
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  -1
+    domain: [Family, BodyStyle, DriveTrain, Fuel, BaseMSRP, HorsePower]
+    activityStatus: optional
+    askUser:
+      msg: "Choose a feature for narrowing your search"
+    ui:
+      iterate: set
+      ignoreValue: Quit
+
+  - para: Family #name by which parameter is referred to in constraints. must be unique within a model
+    desc: "Family of BMW cars"
+    dataType: symbolic  #int, float, symbolic, arbit,
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    value:  # not required. if given will be assigned when model becomes active
+    defValue: 3Series # if given, used during model completion
+    domain: [2Series, 3Series, 4Series, 5Series, 6Series, 7Series,X1,X3,X4,X5,X6, M, "BMW i3", "BMW i8" ] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Select Family of BMW Cars"
+#      responsepara: CarModelsAvlb
+      msgOnValueSys: ['Your selection is only available in {} family of BMW cars ', [Family]]
+      msgOnValueUser: ['{} models in {} family meet your criteria. Cheapest are {}', [CarModelsAvlb, Family, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: BodyStyle #name by which parameter is referred to in constraints. must be unique within a model
+    domain: [Sedan, Coupe, Convertible, "Gran Coupe", "Sports Activity Vehicle", "Sports Activity Coupe", "Sports Wagon", "Gran Turismo"] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required
+    askUser:
+      msg: "Select Body Style"
+      msgOnValueSys: ['Your selection only comes as {}',[BodyStyle]]
+      msgOnValueUser: ['{} {} models meet your criteria. Cheapest are {}', [CarModelsAvlb, BodyStyle, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: BodyTop
+    domain: [SoftTop, HardTop] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    askUser:
+      msg: "Select Convertible Top"
+#      msgOnValueUser: ['{} models meet your criteria', [CarModelsAvlb]]
+      msgOnValueUser: ['{} models come with {}. Cheapest are {}', [CarModelsAvlb, BodyTop, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: DriveTrain #name by which parameter is referred to in constraints. must be unique within a model
+    domain: [xDrive, FrontWheel, RearWheel] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required
+    askUser:
+      msg: "Select Drive Train"
+      msgOnValueSys: ['Only BMWs with {} drive train meet your criteria.',[DriveTrain]]
+      msgOnValueUser: ['{} models come with {}. Cheapest are {}', [CarModelsAvlb, DriveTrain, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: Fuel #name by which parameter is referred to in constraints. must be unique within a model
+    domain: [Gasoline, Diesel, Electric, iPerformance] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required
+    askUser:
+      msg: "Select Type of Fuel"
+      msgOnValueSys: ['The remaining models are all {} powered',[Fuel]]
+      msgOnValueUser: ['{} models are {} powered. Cheapest are {}', [CarModelsAvlb, Fuel, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: HorsePower #name by which parameter is referred to in constraints. must be unique within a model
+    domain: ["Under 200HP", "200-350HP", "350-500HP", "Over 500HP"] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: required # defaults to: optional; others: required; excluded
+    nlp: {synonyms: [HP]}
+    askUser:
+      msg: "Select Horse Power range"
+      msgOnValueSys: ['All your remaining models have {}',[HorsePower]]
+      msgOnValueUser: ['{} models are {}. Cheapest are {}', [CarModelsAvlb, HorsePower, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: BaseMSRP #name by which parameter is referred to in constraints. must be unique within a model
+    domain: ["Under 40K", "40K - 60K", "60K-80K", "80K-100K", "100-130KK", "Over 130K"] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    desc: "Base MSRP range that user wants"
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Select Base MSRP (suggested retail price) range"
+      msgOnValueSys: ['The remaining models are priced in the range {}',[BaseMSRP]]
+      msgOnValueUser: ['{} models are priced {}. Cheapest are {}', [CarModelsAvlb, BaseMSRP, CarModelsFormatted]]
+    ui:
+      class: [summary]
+
+  - para: IntBaseMSRP
+    desc: "actual base MSRP of the selected model"
+    dataType: int
+    activityStatus: required
+    ui:
+      class: [summary]
+      valueformat: ['${:,}',[IntBaseMSRP]]
+    askUser:
+      msgOnValue: ['Base MSRP: ${:,}', [IntBaseMSRP]]
+      dontAsk: True
+
+  - para: CarModelsAvlb
+    dataType: int
+    cardinality: -1
+    askUser:
+      responsemsg: ['{} models meet your criteria', [CarModelsAvlb]]
+#      msgOnValue: ['{} models meet your criteria', [CarModelsAvlb]]
+
+  - para: AllCarModels
+    dataType: arbit
+    desc: "List of all avlb models"
+
+  - para: CarModelsList
+    dataType: arbit
+    desc: "List of Only 5 cheapest models"
+    askUser: {responsemsg: ['Cheapest 5 {} models available', [CarModelsList]]}
+
+  - para: CarModelsFormatted
+    desc: "A [] of strings one for ea model in CarModelsList"
+    dataType: arbit
+
+  - para: CarModel #name by which parameter is referred to in constraints. must be unique within a model
+    domainFromVar: bmwcars
+    activityStatus: required
+    askUser:
+      msg: "Select the car model"
+      msgOnValue: ['You selected BMW {}. It best matches your criteria.', ['CarModel:_key']]
+    ui:
+      class: [summary]
+
+  - para: FuelEfficiency #name by which parameter is referred to in constraints. must be unique within a model
+    domain: ["Low:19-25mpg", "Medium:25-32mpg", "High:Over32mpg"] # [] iof values for symbolic para; (min,max) for num para, None means unlimited
+    activityStatus: optional # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Select desired Fuel Efficiency range"
+      msgOnValueUser: ['{} models have fuel efficiency {}. Cheapest are {}', [CarModelsAvlb, FuelEfficiency, CarModelsList]]
+    ui:
+      class: [summary]
+
+
+  - para: CompleteSelection
+    cardinality:  1  # -1 (unlimited), 1 (single val), 0 (arbit), N (for bounded MV para)
+    domain: [ShowSelection, SaveIt, ConfigureOptions, (model 'Search Inventory'), (model 'Schedule Test Drive'), (model 'Sales Appointment'), Quit]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "You have selected your BMW. What do you want to do next?"
+    ui:
+      iterate: resetPush
+#      iterate: reassign
+      ignoreValue: Quit
+# Now choices are models so dont use gex: skip
+#    nlp:
+#      gex: skip
+
+  constraints:
+  - constr: "sort family"
+    type: rule
+    then: (assert(sortDomainAsc (para Family)))
+
+  - constr: "if FlexAsk=FeatureBased --> require Feature"
+    type: rule
+    if: (cond(eq (para FlexAsk) FeatureBased))
+    then: (assert(isrequired (para Feature)))
+
+  - constr: "CarModel:Family=Family"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:Family) (para Family))))
+
+  - constr: "CarModel:BodyStyle=BodyStyle"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:BodyStyle)(para BodyStyle) )))
+
+  - constr: "CarModel:BodyTop=BodyTop"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:BodyTop) (para BodyTop))))
+
+  - constr: "CarModel:BaseMSRP=BaseMSRP"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:BaseMSRP) (para BaseMSRP))))
+
+  - constr: "CarModel:HorsePower=HorsePower"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:HorsePower) (para HorsePower))))
+
+  - constr: "CarModel:DriveTrain=DriveTrain"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:DriveTrain)(para DriveTrain) )))
+
+  - constr: "CarModel:Fuel=Fuel"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:Fuel)(para Fuel) )))
+
+  - constr: "CarModel:IntBaseMSRP=IntBaseMSRP"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:IntBaseMSRP)(para IntBaseMSRP) )))
+
+  - constr: "CarModel:FuelEfficiency=FuelEfficiency"
+    type: rule #table, rule. More may be added later
+    exp: (if  then (assert(eqp (para CarModel:FuelEfficiency)(para FuelEfficiency) )))
+
+
+#  - constr: "BaseMSRP=Over 130K  --> CarModel in []"
+#    type: rule #table, rule. More may be added later
+#    exp: (if (cond(eq (para BaseMSRP) "Over 130K")) then (assert(member (para CarModel)
+#      [(model "BMW i8"),(model "ALPINA B7 xDrive"),(model "M760i xDrive Sedan")])))
+
+  - constr: "BodyStyle=Convertible  --> requires(BodyTop)"
+    type: rule #table, rule. More may be added later
+    doc: "this is just to show use of required activity constraint"
+    exp: (if (cond(eq (para BodyStyle) Convertible)) then (assert (isrequired (para BodyTop))))
+
+  - constr: "AllCarModels= domain(CarModel)"
+    type: rule
+    then: (assert(eq (para AllCarModels)  (domain (para CarModel))))
+
+  - constr: "CarModelsList= 5 cheapest models"
+    type: rule
+    exp: (if then (assert(eq (para CarModelsList)  (firstN(sortAsc(domain (para CarModel)) 'IntBaseMSRP')5))))
+
+  - constr: "CarModelsFormatted = Format CarModelsList"
+    type: rule
+    then: (assert(eq (para CarModelsFormatted)
+      (strjoin ", "(formatList (para CarModelsList) '{} - Base MSRP ${:,}' '_key' 'IntBaseMSRP'))))
+
+  - constr: "CarModelsAvlb = len(domain(CarModels))"
+    type: rule
+    doc: "this sets it to domnain of CarModels para"
+    exp: (if then (assert(eq (para CarModelsAvlb) (count (para AllCarModels)))))
+
+
+  - constr: "if CarModel is assigned --> CarModelsAvlb=1"
+    type: rule
+    exp: (if (isassigned (para CarModel)) then (assert(eq (para CarModelsAvlb) 1)))
+
+#  - constr: "CompleteSelection=Sales"
+#    type: rule
+#    if: (eq(para CompleteSelection) SalesAppt)
+#    then:
+#      - and: (assert(tellUser "Making appointment with nearest dealer coming soon."))
+  - constr: "CompleteSelection=ConfigureOptions"
+    type: rule
+    if: (eq(para CompleteSelection) ConfigureOptions)
+    then:
+      - and: (assert(tellUser "Configuring options for your selected BMW not available for now."))
+  - constr: "CompleteSelection=SaveIt"
+    type: rule
+    if: (eq(para CompleteSelection) SaveIt)
+    then:
+      - and: (assert(tellUser "Saving selection not implemented yet."))
+  - constr: "CompleteSelection=ScheduleTestDrive"
+    type: rule
+    if: (eq(para CompleteSelection) 'Schedule Test Drive')
+    then:
+      - and: (assert(eq (para CompleteSelection:CarModel) (para CarModel)))
+  - constr: "CompleteSelection=ShowSelection for all except Convertibles"
+    type: rule
+    if:
+      - and: (eq(para CompleteSelection) ShowSelection)
+      - and: (neq (para BodyStyle) Convertible)
+    then:
+      - and: (assert(tellUser "You selected BMW {}. " (para CarModel:_key)))
+      - and: (assert(tellUser "Its a {} {} {} {}" (para Family) (para Fuel) (para DriveTrain) (para BodyStyle)))
+      - and: (assert(tellUserFormat "It has a Base MSRP of ${:,}" (para IntBaseMSRP) ))
+  - constr: "CompleteSelection=ShowSelection AND Convertible"
+    type: rule
+    if:
+      - and: (eq(para CompleteSelection) ShowSelection)
+      - and: (eq (para BodyStyle) Convertible)
+    then:
+      - and: (assert(tellUser "You selected BMW {}. " (para CarModel:_key)))
+      - and: (assert(tellUser "Its a {} {} {} {} {}" (para Family) (para Fuel) (para DriveTrain)(para BodyTop) (para BodyStyle)))
+      - and: (assert(tellUserFormat "It has a Base MSRP of ${:,}" (para IntBaseMSRP) ))
+  - constr: "CompleteSelection=Quit"
+    type: rule
+    if: (eq(para CompleteSelection) Quit)
+    then:
+      - and: (assert(tellUser "Goodbye!! Thank you for selecting your BMW. Please come back again."))
+      - and: (assert(tellUser "You can start again by just describing what you want."))
+      - and: (assert(tellUser "i want a 3Series sedan, or select a hardtop convertible"))
+      - and: (assert(tellUser "or simply type start to be guided step by step"))
+      - and: (assert(contains (para _sys) Quit))
+

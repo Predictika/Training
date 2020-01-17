@@ -1,0 +1,37 @@
+annot:
+  author: Sanjay Mittal
+  name: autobot
+  start date: Dec 14, 2018
+  type: ConfigKB
+  desc: "Demo bot for Automotive or Dealer website"
+  topModel: SelectAction
+import:
+- from: "./BMWSelectCar_flex.yaml"
+  models: all
+models:
+- model: SelectAction
+  desc: "Main model for guiding user to take some action"
+  askUser:
+    welcomeMsg: "Welcome to the Auto Dealership Bot."
+  parameters:
+  - para: UserAction
+    domain: [(model SelectBMW), (model 'Search Inventory'), (model 'Trade-In Value'), (model 'Contact Sales'),
+      (model 'Contact Service'), (model 'Contact Parts'), (model 'Find Dealership'), Quit]
+    activityStatus: required # defaults to: optional; others: required; excluded
+    askUser:
+      msg: "Please tell us how we can help you. Type Quit to end session"
+      msgIfAssigned: "Please tell us how else we can help you. Type Quit to end session"
+    ui:
+      iterate: resetCut
+      ignoreValue: Quit
+
+  constraints:
+  - constr: "UserAction=Quit"
+    type: rule
+    if: (eq(para UserAction) Quit)
+    then:
+      - and: (assert(tellUser "Goodbye!! Thank you for using our service. Please come back again."))
+      - and: (assert(tellUser "You can start again by just describing what you want."))
+      - and: (assert(tellUser "i want a 3Series sedan, or select a hardtop convertible"))
+      - and: (assert(tellUser "or simply type start to be guided step by step"))
+      - and: (assert(contains (para _sys) Quit))

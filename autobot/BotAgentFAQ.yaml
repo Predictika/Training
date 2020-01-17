@@ -1,0 +1,149 @@
+annot:
+  author: Sanjay Mittal
+  name: BotAgentFAQ.yaml
+  start date: June 26, 2018
+  type: KB
+  minCF: 0.6 # answers that match below this will return noMatchAns below
+  maxCF: 0.98 # answer CF will be pegged below this
+  noMatchAns: |
+            Sorry, I dont have a good answer for your question.
+            Please try rephrasing or try with different words.
+            You can also type "hi", or "what can I ask" to get some sample questions.
+  stem: True
+  synset:
+    - ['choice', 'answer', 'selection', 'decision', 'answers', 'selections', 'decisions', 'input']
+    - ['undo' ,  'reset', 'reverse']
+    - ['remove', 'eliminate', 'expunge']
+    - ['revise', 'change', 'modify']
+    - ['summary', 'history', 'record']
+    - ['skip', 'ignore', 'avoid']
+  desc: FAQ about using Config based Bot Agents
+groups:
+- group:
+  - q: How do i get a summary
+  - q: How do we get a history
+  - q: How to get a record of all the decisions made so far
+  - q: How to get a record of all the choices made so far
+  - q: How to get a record of all my input so far
+  - q: help summary
+  - a: Type "summary" to get a history of all the input and key decisions made by the bot
+
+- group:
+  - q: How do I undo a choice
+  - q: How do I reset a choice
+  - q: Can I undo a choice
+  - q: Can do I reset a choice
+  - a: |
+      You can undo or reset a choice by typing, "undo parameter". E.g., "undo pizza size", "reset email"
+
+- group:
+  - q: How do I eliminate a choice
+  - q: How do I remove a choice from a set of choices
+  - q: Can I eliminate a choice
+  - q: Can I remove a choice from a set of choices
+  - a: |
+      You can remove a choice by typing, "remove choice". E.g., "remove olives", "remove olives from pizza toppings"
+
+- group:
+  - q: compare undo remove revise
+  - q: differrence between undo remove revise
+  - a: |
+      Remove - removes a choice so it wont be asked again in the same context
+      Undo - Undoes a selection so the user can be asked again or allow user to volunteer a different6 answer
+      Revise - Allows user to change the answer (or choiice) already made to another valid choice
+- group:
+  - q: How do we revise a prior choice
+  - q: How to change a prior choice
+  - q: How to modify prior input
+  - q: How to modify prior choice
+  - q: How to revise change prior input
+  - q: How to modify change revise prior input choice
+  - q: Help change
+  - q: Help revise
+  - q: Help modify
+  - q: Can I revise prior choice
+  - q: Can I change prior choice
+  - q: can I change my answer
+  - q: Can I change revise modify prior previous earlier choice input decision
+  - a: |
+      Type "change attribute" to change input given for some "attribute". E.g., "change age", or "change destination"
+      If there is no ambiguity then "change value" can work too where "value" was the input entered by user.
+      E.g., in a pizza order you can say "change large" where "large" is a value for pizza size.
+      If you also know the value you want to change to you can specify by saying, "change value to something",
+      e.g., "change large to medium", or "change London to Paris" in a travel bot.
+
+- group:
+  - q: how to avoid answering a question
+  - q: how to skip a question
+  - q: how to ignore question
+  - q: can i skip question
+  - q: can i avoid answering a question
+  - a: Just type 'skip' to skip a question
+
+- group:
+  - q: How to quit in the middle of the session
+  - q: How to terminate session prematurely
+  - q: help quit
+  - a: Simply type "quit" or "end" to end the session.
+
+- group:
+  - q: How to start a new session
+  - q: How to begin new session
+  - q: help start
+  - a: |
+      Type "start" or "begin" or other intent words that might be relevant to the bot application
+      such as "plan", "buy", "select", "configure", etc.
+
+- group:
+  - q: What are the choices for a parameter
+  - q: What is the domain of a parameter
+  - q: What is the value of parameter
+  - q: What is the value of attribute
+  - q: what are the choices for a parameter
+  - q: what are the answers to a question
+  - a: |
+      Type "value of attribute". E.g., "value of body style" in a car selection bot.
+      Or ype "choices for attribute" or "domain of attribute". E.g., "choices for destination"
+
+- group:
+  - q: What is guided mode
+  - a: In guided mode the bot will ask you a series of questions to help you select.
+
+- group:
+  - q: What is feature based
+  - q: What is feature mode
+  - q: what is FeatureBased mode
+  - a: |
+      The bot will ask you to select one of the features and then ask you to select a desired value
+      for that feature. This process will continue until you reach the desired goal.
+
+- group:
+  - q: done
+  - a: |
+      Often done is used to end a repetitive selection. However, when the bot has not asked a question
+      then done does not do anything.
+
+- group:
+  - q: quit
+  - q: end
+  - q: exit
+  - a: |
+      When you are in the middle of a business process such as ordering food, selecting a product, insurance claim etc.
+      Typing quit, end, or exit will end the process. After that you can start a new action or ask general questions.
+
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+#
+#- group:
+#  - q:
+#  - a:
+
