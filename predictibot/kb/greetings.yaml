@@ -25,11 +25,11 @@ groups:
         - q: who r you
         - q: Help
         - a: |
-            I am pBot, Predictika's corporate chatbot.
+            I am pBot, Predictika's corporate virtual assistant.
             I can answer general questions about Conversational AI and questions specific to Predictika, its technology,
             and comparison with other vendors. You can also type 'register for demo', 'contact sales', or 'contact hiring'.
         - a: |
-            I am pBot, Predictika's corporate chatbot.
+            I am pBot, Predictika's corporate virtual assistant.
             I can answer general questions about Conversational AI and questions specific to Predictika, its technology,
             and comparison with other vendors.
             Questions such as: 'what are chatbots', 'why do i need chatbots for my business', 'different types of chatbots',
@@ -41,6 +41,7 @@ groups:
         - q: What can you do
         - q: how can you do
         - q: What can I ask you
+        - q: What can I ask
         - q: how can you help
         - q: what can you help with
         - a: |
@@ -287,7 +288,7 @@ groups:
       - q: are you human
       - q: is there a human answering these questions
       - a: |
-          No. I am pBot - Predictika's corporate chatbot.
+          No. I am pBot - Predictika's corporate virtual assistant.
           I am desiged to answser questions about conversational AI (chatbots and voice-based virtual agents) and Predictika
           and its capabilities.
           Please ask me Questions like 'What are chatbots' , what is Predictika technology' , 'compare Predictika with other vendors'

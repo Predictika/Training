@@ -273,10 +273,11 @@ models:
     if: (isignored (para DietaryRestriction))
     then: (assert(contains (para Order:*all*:Items:DietaryRestriction) (para DietaryRestriction)))
 
-  - constr: "_start=NoInputs --> require DietaryRestriction"
-    type: rule
-    if: (eq (para _start) NoInputs)
-    then: (assert(isrequired (para DietaryRestriction)))
+# uncomment below once DietRest code is ready
+#  - constr: "_start=NoInputs --> require DietaryRestriction"
+#    type: rule
+#    if: (eq (para _start) NoInputs)
+#    then: (assert(isrequired (para DietaryRestriction)))
 
 # add constraints to filter out other menu items based on DietaryRestriction
   - constr: "eliminate all Order items based on Diet"

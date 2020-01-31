@@ -5,8 +5,9 @@ annot:
   type: ConfigKB
   welcomeMsg: |
             Hi, Welcome to Predictika.
-            We are a Conversational AI company so we have a bot only web site.
+            We are a Conversational AI company so we have a bot centric web site.
             Anything you want to know about us, our technology, our customers ask our bot.
+            Follow the step-by-step guidance OR just type your question any time.
             Our bots will get better with every interaction.
   noMatchAns: |
             Sorry, I dont have a good answer for your question.
@@ -154,7 +155,7 @@ models:
       - (model "Contact Founder")
       - (model "Provide Feedback")
     askUser:
-      msg: "How I can help you. You can ask general questions any time."
+      msg: "How I can help you. You can also ask other questions any time."
       msgIfAssigned: "Would you like to do anything else? Select Done to quit."
     ui:
       iterate: bag # reset  once, set
@@ -328,7 +329,7 @@ models:
 #    then: (assert(init (para FirstName) (firstName (para UserName))))
 
 - model: "Action Base Model"
-  desc: "Defines all the para but does not actrivate them"
+  desc: "Defines all the para but does not activate them"
   parameters:
 #  - para: 'UserName'
 #    desc: 'User Name'
@@ -435,7 +436,7 @@ models:
       - 'Advertising or Marketing Company'
       - 'Healthcare or Medical Practice'
       - 'Telecom Services Provider'
-      - 'SMB Service Providedr'
+      - 'SMB Service Provider'
       - 'Technology Company'
       - 'Non-Profit'
       - 'Government Agency'
@@ -472,6 +473,14 @@ models:
     dataType: int
     value: 1
     activityStatus: required
+    askUser:
+      dontAsk: True
+
+  - para: EmailSent
+    desc: "Guard para set to 1 or more once an email sent as part of this user action, to avoid sending another email"
+    cardinality: -1
+    dataType: int
+    value: 0
     askUser:
       dontAsk: True
 
@@ -610,6 +619,7 @@ models:
       - 'Facebook Messenger'
       - 'Alexa'
       - 'Google Assistant'
+      - "Cloud Voice"
 # add these to domain of DemoPlatform as they become supported
 #      - 'Slack'
 #      - 'Twitter'
@@ -619,8 +629,8 @@ models:
       msg: "Where do you want to run the demo bot?"
       msgOnSkip: ['You cannot skip this question but you can cancel {} action. Just type cancel',[_key]]
       canSkip: False
-    nlp:
-      gex: skip
+#    nlp:
+#      gex: skip
     ui:
         class: [summary]
 
@@ -641,17 +651,30 @@ models:
     if: (cond(member 'All Bots' (para 'DemoBots')))
     then: (assert(isIgnored (para 'DemoBots')))
 
+# Constraint to send email to predictika with user request for demo approval
   - constr: "if User Enters all the values "
     type: rule
-    if: (cond (isassigned(para DemoBots) (para EmailAddress) (para DemoPlatform)))
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond (isassigned(para DemoBots) (para EmailAddress) (para DemoPlatform)))
     then:
       - and: (assert(tellUser "Hi, Thank you for registering to see {} on {}" (para DemoBots)(para DemoPlatform) ))
       - and: (assert(tellUser "Please look for an email from webmaster@predictika.com to {} with a link to the selected demo bot (s)" (para EmailAddress)  ))
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
-# TBD. Constraint to send email to predictika with user request for demo approval
-
+      - and: (assert(emailpdtk "Register for demo"
+                (strformat "email:{}\n bots:{}\n platforms:{}\n user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress) (para DemoBots) (para DemoPlatform)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+# incr should be passed a 2nd arg. however we allow a default of 1. this simply tests that
+      - and: (assert(incr(para EmailSent)))
 # TBD Msg that not enough known to schedule demo
 
 - model: 'Contact Sales'
@@ -667,6 +690,7 @@ models:
   - constr: "DecisionTimeFrame is known and under a year"
     type: rule
     if:
+      - and: (eq(para EmailSent) 0)
       - and: (cond(neq (para DecisionTimeFrame) 'Indefinite'))
       - and: (cond(isAssigned (para EmailAddress)))
     then:
@@ -674,8 +698,17 @@ models:
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization)
               (para IndustryVertical) (para OtherOrganization)))
-
-# TBD. Constraint to send email to predictika with user request for sales contact request
+      - and: (assert(emailpdtk "Contact Sales"
+                (strformat "email:{}\n user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
   - constr: "Time frame not known"
     type: rule
@@ -685,7 +718,34 @@ models:
       - and: (assert(tellUser "Type 'register for demo' or 'register for white paper' to learn more about our capabilities"))
       - and: (assert(tellUser "You can also ask me questions about predictika, technology, appications, or how we compare with others"))
       - and: (assert (tellUser "Please 'contact sales' when you are ready"))
-# Log user interest for future
+      - and: (assert(emailpdtk "Sales Lead"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+
+  - constr: "Time frame not known and email not sent yet"
+    type: rule
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond(eq (para DecisionTimeFrame) 'Indefinite'))
+    then:
+      - and: (assert(emailpdtk "Sales Lead"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
   - constr: "Time frame not set"
     type: rule
@@ -698,7 +758,26 @@ models:
       - and: (assert(tellUser "Type 'register for demo' or 'register for white paper' to learn more about our capabilities"))
       - and: (assert(tellUser "You can also ask me questions about predictika, technology, appications, or how we compare with others"))
       - and: (assert (tellUser "Please 'contact sales' when you are ready"))
-# Log user interest for future
+
+  - constr: "Time frame not set and email not sent yet"
+    type: rule
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond(isAssigned (para EmailAddress)))
+      - and: (isIgnored (para DecisionTimeFrame))
+      - and: (cond(not(isAssigned (para DecisionTimeFrame))))
+    then:
+      - and: (assert(emailpdtk "Sales Lead"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
 
 - model: 'Register Developer'
@@ -713,14 +792,27 @@ models:
 
   - constr: "add to waiting list"
     type: rule
-    if: (cond(isAssigned (para EmailAddress)))
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond(isAssigned (para EmailAddress)))
+      - and: (isAsked(para DecisionTimeFrame))
     then:
       - and: (assert (tellUser "Thank your for your interest in joining our developer program."))
       - and: (assert (tellUser "We will review your interest in becoming a developer and be in touch soon."))
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
-#      - and: (assert(tellUser "We will add your email to our list and be in touch when we open up our program."))
+      - and: (assert(emailpdtk "Register Developer"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 # TBD. Constraint to send email to predictika with user request for developer waiting list signup request
 
 # by the time this constraint runs, user has been asked about email twice. no need to ask again
@@ -746,16 +838,28 @@ models:
   constraints:
   - constr: "add to waiting list"
     type: rule
-    if: (cond(isAssigned (para EmailAddress)))
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond(isAssigned (para EmailAddress)))
     then:
       - and: (assert (tellUser "Thank your for your interest in getting a copy of our forthcoming white paper."))
       - and: (assert(tellUser "We have added your email to our list and will send you a link to our WP once it is ready."))
       # ignore remaining para if not already asked
-      - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
+      - and: (assert(isIgnored(para 'UserName')(para PhoneNumber)(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
-# TBD. Constraint to send email to predictika with user request for WP waiting list signup request
+      - and: (assert(emailpdtk "Register for White Paper"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n vertical:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para IndustryVertical) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
-# by the time this constraint runs, user hzas been asked about email twice. no need to ask again
+# by the time this constraint runs, user has been asked about email twice. no need to ask again
 #  - constr: "no email address"
 #    type: rule
 #    if:
@@ -821,14 +925,24 @@ models:
     then: (assert(isRequired (para DecisionTimeFrame)))
   - constr: "Hiring Msg"
     type: rule
-    if: (cond(isAssigned (para LinkedInProfile)))
+    if:
+      - and: (eq(para EmailSent) 0)
+      - and: (cond(isAssigned (para LinkedInProfile)))
     then:
       - and: (assert(tellUser "Thanks for sharing your LinkedIn profile. Someone will review your background and will be in touch as appropriate"))
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
-
-# TBD. Constraint to send email to predictika with user request for hiring interest
+      - and: (assert(emailpdtk "Hiring Lead or Interestred in Job at PDTK"
+                (strformat "email:{}\n  user:{}\n phone:{}\n job interest:{}\n linkedIn:{}\n  decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para JobInterest)   "")
+                  (firstval (para LinkedInProfile) "")
+                  (firstval (para DecisionTimeFrame) "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
   - constr: "Missing LinkedIn Profile"
     type: rule
@@ -880,9 +994,10 @@ models:
       - and: (cond(isAssigned(para DiscussionTopic)))
       - and: (cond(isAssigned (para EmailAddress)))
     then: (assert(isRequired (para DecisionTimeFrame)))
-  - constr: "Topic, email assigned, and  time frame set asked (assigned OR ignored)"
+  - constr: "Topic, email assigned, and  time frame  asked (assigned OR ignored)"
     type: rule
     if:
+      - and: (eq(para EmailSent) 0)
       - and: (cond(isAssigned(para DiscussionTopic)))
       - and: (cond(isAssigned (para EmailAddress)))
       - and: (cond(isAsked (para DecisionTimeFrame)))
@@ -891,6 +1006,18 @@ models:
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
+      - and: (assert(emailpdtk "Contact Founder"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n topic:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para DiscussionTopic) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
+
 #  - constr: "Topic, email set, time frame ignored"
 #    type: rule
 #    if:
@@ -903,6 +1030,7 @@ models:
   - constr: "Topic not set but email set"
     type: rule
     if:
+      - and: (eq(para EmailSent) 0)
       - and: (cond(isIgnored(para DiscussionTopic)))
       - and: (not(isAssigned (para DiscussionTopic)))
       - and: (cond(isAssigned (para EmailAddress)))
@@ -912,7 +1040,17 @@ models:
       # ignore remaining para if not already asked
       - and: (assert(isIgnored(para OrganizationName) (para RoleOrganization) (para DecisionTimeFrame)
               (para IndustryVertical) (para OtherOrganization)))
-# TBD. Constraint to send email to predictika with user request for founder contact
+      - and: (assert(emailpdtk "Contact Founder"
+                (strformat "email:{}\n  user:{}\n phone:{}\n org:{}\n role:{}\n topic:{}\n decision TF:{}"
+                  (para EmailAddress)
+                  (firstval (para 'UserName') "")
+                  (firstval (para PhoneNumber)  "")
+                  (firstval  (para OrganizationName)   "")
+                  (firstval (para RoleOrganization) "")
+                  (firstval (para DiscussionTopic) "")
+                  (firstval  (para DecisionTimeFrame)   "")
+                )))
+      - and: (assert(incr(para EmailSent)1))
 
   - constr: "No Topic, No Email"
     type: rule
@@ -952,4 +1090,7 @@ models:
     if: (cond(isAssigned (para FeedbackMsg)))
     then:
       - and: (assert(tellUser "Thanks for your feedback. I will pass it to our developers"))
-# TBD. Constraint to send email to predictika with user feedback
+      - and: (assert(emailpdtk "User Feedback"
+                (strformat "feedback:{}"
+                  (para FeedbackMsg)
+                )))
